@@ -20,6 +20,7 @@ function Sidebar() {
   const sidebarRadius = "20px";
   const sidebarMargins = "0px";
   const variantChange = "0.2s linear";
+
   return (
     <Box display={{ sm: "none", xl: "block" }} position="fixed">
       <Box
