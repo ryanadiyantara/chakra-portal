@@ -5,10 +5,8 @@ import Login from "./pages/login";
 import ForgotPassword from "./pages/forgotpassword";
 import Dashboard from "./pages/dashboard";
 import EmployeeDirectory from "./pages/employeedirectory";
-// ESS
 import ChangePassword from "./pages/ess.changepassword";
 import LeaveApplication from "./pages/ess.leaveapplication";
-// HR
 import MasterDepartment from "./pages/hr.masterdepartment";
 import MasterPosition from "./pages/hr.masterposition";
 import ManageEvent from "./pages/hr.manageevent";
