@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import { IoMoon } from "react-icons/io5";
 import { LuSun } from "react-icons/lu";
 
-import Background from "../components/Background";
-import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -12,8 +10,6 @@ const MasterDepartment = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   return (
     <>
-      <Background />
-      <Sidebar />
       <Box
         w={{
           base: "100%",
