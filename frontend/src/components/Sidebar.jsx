@@ -1,5 +1,16 @@
 import React from "react";
-import { Box, VStack, Button, Flex, Link, Text, Icon, useColorModeValue } from "@chakra-ui/react";
+import {
+  Box,
+  VStack,
+  Button,
+  Flex,
+  Link,
+  Text,
+  Icon,
+  useColorModeValue,
+  Stack,
+  useColorMode,
+} from "@chakra-ui/react";
 import { NavLink, useLocation } from "react-router-dom";
 
 import {
@@ -12,10 +23,14 @@ import {
 } from "./Icons/Icons";
 import IconBox from "./Icons/IconBox";
 
+import Logo1 from "../assets/img/logo1.png";
+import Logo2 from "../assets/img/logo2.png";
+import { HSeparator } from "./Separator";
+
 function Sidebar() {
   const routes = [
     {
-      name: "DASHBOARD",
+      name: "",
       category: "dashboard",
       views: [
         { path: "/dashboard", name: "Dashboard", icon: <HomeIcon /> },
@@ -31,7 +46,7 @@ function Sidebar() {
       ],
     },
     {
-      name: "HR",
+      name: "HUMAN RESOURCE",
       category: "hr",
       views: [
         { path: "/hr/masterdepartment", name: "Master Department", icon: <SupportIcon /> },
@@ -45,10 +60,13 @@ function Sidebar() {
     },
   ];
 
+  const { colorMode } = useColorMode();
+
   const activeBg = useColorModeValue("white", "navy.700");
-  const inactiveBg = useColorModeValue("white", "navy.700");
+  const inactiveBg = useColorModeValue("white", "navy.800");
   const activeColor = useColorModeValue("gray.700", "white");
   const inactiveColor = useColorModeValue("gray.400", "white");
+  const hoverBg = useColorModeValue("gray.200", "navy.700");
 
   const sidebarBg = useColorModeValue("white", "navy.800");
 
@@ -67,22 +85,38 @@ function Sidebar() {
         my={{
           sm: "16px",
         }}
-        h="calc(100vh - 32px)"
+        height="calc(100vh - 32px)"
+        sx={{
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+          scrollbarWidth: "none",
+        }}
+        overflowY="auto"
         ps="20px"
         pe="20px"
         m="0px"
         filter="drop-shadow(0px 5px 14px rgba(0, 0, 0, 0.05))"
         borderRadius="20px"
       >
+        <Box pt={"25px"} mb="12px">
+          <Stack direction="row" spacing="12px" align="center" justify="center">
+            {colorMode === "light" ? (
+              <img src={Logo1} alt="Logo" />
+            ) : (
+              <img src={Logo2} alt="Logo" />
+            )}
+          </Stack>
+          <HSeparator my="26px" />
+        </Box>
+
         <VStack align="start" spacing={4} w="100%">
           {routes.map((route, index) => (
             <Box key={index} w="full">
-              {route.name !== "DASHBOARD" && (
-                <Text fontWeight="bold" mb={2}>
-                  {route.name}
-                </Text>
-              )}
-              <VStack align="start" spacing={2} pl={route.name !== "DASHBOARD" ? 4 : 0} w="100%">
+              <Text fontWeight="bold" mb={2} pl={3}>
+                {route.name}
+              </Text>
+              <VStack align="start" spacing={2} w="100%">
                 {route.views.map((view, viewIndex) => {
                   const isActive = location.pathname === view.path;
 
@@ -105,7 +139,7 @@ function Sidebar() {
                             : "none"
                         }
                         w="100%"
-                        _hover={{ bg: isActive ? activeBg : "gray.200" }}
+                        _hover={{ bg: isActive ? activeBg : hoverBg }}
                         _active={{
                           bg: isActive ? activeBg : "inherit",
                           transform: "none",
