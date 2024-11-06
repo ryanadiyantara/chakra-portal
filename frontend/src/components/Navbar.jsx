@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   useColorModeValue,
@@ -11,10 +11,20 @@ import {
   ListItem,
   Link,
   Flex,
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerCloseButton,
+  DrawerBody,
+  Button,
+  useColorMode,
 } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
+import { SettingsIcon } from "./Icons/Icons";
+import { HSeparator } from "./Separator";
 
 function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
   const routes = [
     { path: "/dashboard", name: "Dashboard", category: "" },
     { path: "/employeedirectory", name: "Employee Directory", category: "" },
@@ -30,6 +40,11 @@ function Navbar() {
   ];
   const location = useLocation();
   const activeRoute = routes.find((route) => route.path === location.pathname);
+
+  const handleOpenDrawer = () => setIsOpen(true);
+  const handleCloseDrawer = () => setIsOpen(false);
+
+  const { colorMode, toggleColorMode } = useColorMode();
 
   return (
     <Flex
@@ -76,6 +91,7 @@ function Navbar() {
         px="30px"
         pb="20px"
       >
+        {/* Nahbar Kiri, Done */}
         <Box mb={{ sm: "8px", md: "0px" }}>
           <Breadcrumb>
             <BreadcrumbItem color={"white"}>
@@ -119,31 +135,70 @@ function Navbar() {
           </Link>
         </Box>
 
-        <List display="flex">
-          <ListItem
-            me={{
-              base: "20px",
-              md: "44px",
-            }}
-          >
-            <Link
-              color="gray.400"
-              href="https://www.linkedin.com/in/muchammad-ryan-adiyantara-817377225/"
-            >
-              LinkedIn
-            </Link>
-          </ListItem>
-          <ListItem
-            me={{
-              base: "20px",
-              md: "44px",
-            }}
-          >
-            <Link color="gray.400" href="https://www.instagram.com/ryandyntr/">
-              Instagram
-            </Link>
-          </ListItem>
-        </List>
+        {/* Navbar Kanan belum Done, tambah menu settings 
+        yang isi nya ada logout sama ubah tema light dark, 
+        kemudian notif yang gada fungsi nya dlu sementara */}
+
+        <Flex
+          pe={{ sm: "0px", md: "16px" }}
+          w={{ sm: "100%", md: "auto" }}
+          alignItems="center"
+          flexDirection="row"
+        >
+          <SettingsIcon
+            cursor="pointer"
+            ms={{ base: "16px", xl: "0px" }}
+            me="16px"
+            onClick={handleOpenDrawer}
+            w="18px"
+            h="18px"
+          />
+        </Flex>
+
+        <Drawer isOpen={isOpen} onClose={handleCloseDrawer}>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerCloseButton />
+              <Text fontSize="xl" fontWeight="bold" mt="16px">
+                Chakra Portal Options
+              </Text>
+              <HSeparator />
+            </DrawerHeader>
+            <DrawerBody>
+              <Flex flexDirection="column">
+                <Flex justifyContent="space-between" alignItems="center" mb="24px">
+                  <Text fontSize="md" fontWeight="600" mb="4px">
+                    Dark/Light
+                  </Text>
+                  <Button
+                    onClick={toggleColorMode}
+                    color={colorMode === "light" ? "Dark" : "Light"}
+                  >
+                    Toggle {colorMode === "light" ? "Dark" : "Light"}
+                  </Button>
+                </Flex>
+                <HSeparator />
+                <Box mt="24px">
+                  <Link href="#" w="100%">
+                    <Button
+                      w="100%"
+                      bg={useColorModeValue("white", "transparent")}
+                      border="1px solid"
+                      borderColor={useColorModeValue("gray.700", "white")}
+                      color={useColorModeValue("gray.700", "white")}
+                      fontSize="xs"
+                      variant="no-effects"
+                      px="20px"
+                      mb="16px"
+                    >
+                      <Text textDecoration="none">Log Out</Text>
+                    </Button>
+                  </Link>
+                </Box>
+              </Flex>
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
       </Flex>
     </Flex>
   );
