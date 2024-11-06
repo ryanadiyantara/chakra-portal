@@ -5,6 +5,7 @@ const Footer = () => {
   return (
     <>
       <Flex
+        as="footer"
         flexDirection={{
           base: "column",
           xl: "row",
@@ -16,6 +17,7 @@ const Footer = () => {
         justifyContent="space-between"
         px="30px"
         pb="20px"
+        w="100%"
       >
         <Text
           color="gray.400"

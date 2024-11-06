@@ -26,7 +26,7 @@ const MasterDepartment = () => {
         transitionTimingFunction="linear, linear, ease"
       >
         <Navbar />
-        <VStack spacing={2} alignItems={"center"}>
+        <VStack minHeight="95vh" spacing={2} alignItems={"center"}>
           <Text
             fontSize={{ base: "22", sm: "28" }}
             fontWeight={"bold"}
