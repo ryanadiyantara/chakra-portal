@@ -16,24 +16,20 @@ import { useLocation } from "react-router-dom";
 
 function Navbar() {
   const routes = [
-    { path: "/dashboard", name: "Dashboard" },
-    { path: "/employeedirectory", name: "Employee Directory" },
-    { path: "/ess/changepassword", name: "Change Password" },
-    { path: "/ess/leaveapplication", name: "Leave Application" },
-    { path: "/hr/masterdepartment", name: "Master Department" },
-    { path: "/hr/masterposition", name: "Master Position" },
-    { path: "/hr/manageevent", name: "Manage Event" },
-    { path: "/hr/manageemployee", name: "Manage Employee" },
-    { path: "/hr/employeeterminated", name: "Employee Terminated" },
-    { path: "/hr/attendancesummary", name: "Attendance Summary" },
-    { path: "/hr/leaveapproval", name: "Leave Approval" },
+    { path: "/dashboard", name: "Dashboard", category: "" },
+    { path: "/employeedirectory", name: "Employee Directory", category: "" },
+    { path: "/ess/changepassword", name: "Change Password", category: "Employee Self Service" },
+    { path: "/ess/leaveapplication", name: "Leave Application", category: "Employee Self Service" },
+    { path: "/hr/masterdepartment", name: "Master Department", category: "Human Resource" },
+    { path: "/hr/masterposition", name: "Master Position", category: "Human Resource" },
+    { path: "/hr/manageevent", name: "Manage Event", category: "Human Resource" },
+    { path: "/hr/manageemployee", name: "Manage Employee", category: "Human Resource" },
+    { path: "/hr/employeeterminated", name: "Employee Terminated", category: "Human Resource" },
+    { path: "/hr/attendancesummary", name: "Attendance Summary", category: "Human Resource" },
+    { path: "/hr/leaveapproval", name: "Leave Approval", category: "Human Resource" },
   ];
   const location = useLocation();
   const activeRoute = routes.find((route) => route.path === location.pathname);
-  const sidebarBg = useColorModeValue("#FFFFFF", "#111C44");
-  const sidebarRadius = "20px";
-  const sidebarMargins = "0px";
-  const variantChange = "0.2s linear";
 
   return (
     <Flex
@@ -83,18 +79,21 @@ function Navbar() {
         <Box mb={{ sm: "8px", md: "0px" }}>
           <Breadcrumb>
             <BreadcrumbItem color={"white"}>
-              <BreadcrumbLink href="#" color={"white"}>
+              <BreadcrumbLink href="/dashboard" color={"white"}>
                 Pages
               </BreadcrumbLink>
             </BreadcrumbItem>
 
+            {activeRoute.category && (
+              <BreadcrumbItem color="white">
+                <BreadcrumbLink href="/dashboard" color="white">
+                  {activeRoute.category}
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            )}
+
             <BreadcrumbItem color={"white"}>
-              <BreadcrumbLink href="#" color={"white"}>
-                TESTTTTT
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem color={"white"}>
-              <BreadcrumbLink href="#" color={"white"}>
+              <BreadcrumbLink href={activeRoute.path} color={"white"}>
                 {activeRoute ? activeRoute.name : "Page Not Found"}
               </BreadcrumbLink>
             </BreadcrumbItem>
