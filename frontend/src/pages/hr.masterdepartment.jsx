@@ -1,4 +1,18 @@
-import { Box, Button, Text, useColorMode, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Table,
+  Tbody,
+  Text,
+  Th,
+  Thead,
+  Tr,
+  useColorMode,
+  useColorModeValue,
+  VStack,
+} from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { IoMoon } from "react-icons/io5";
 import { LuSun } from "react-icons/lu";
@@ -6,8 +20,14 @@ import { LuSun } from "react-icons/lu";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
+import { tablesTableData } from "../components/variables/general";
+import TablesTableRow from "../components/TablesTableRow";
+
 const MasterDepartment = () => {
   const { colorMode, toggleColorMode } = useColorMode();
+  const textColor = useColorModeValue("gray.700", "white");
+  const borderColor = useColorModeValue("gray.200", "gray.600");
+
   return (
     <>
       <Box
@@ -26,60 +46,80 @@ const MasterDepartment = () => {
         transitionTimingFunction="linear, linear, ease"
       >
         <Navbar />
-        <VStack minHeight="95vh" spacing={2} alignItems={"center"}>
-          <Text
-            fontSize={{ base: "22", sm: "28" }}
-            fontWeight={"bold"}
-            textTransform={"uppercase"}
-            textAlign={"center"}
-            bgGradient={"linear(to-r, cyan.400, blue.500)"}
-            bgClip={"text"}
+
+        <HStack
+          flexDirection={{
+            base: "column",
+            xl: "row",
+          }}
+          justifyContent="space-between"
+          px="40px"
+          pb="30px"
+          w="100%"
+          spacing="30px"
+          alignItems="start"
+          minHeight="85vh"
+        >
+          <VStack
+            spacing={2}
+            alignItems={"left"}
+            w="100%"
+            background="white"
+            px="20px"
+            py="20px"
+            borderRadius="16px"
           >
-            Master Department
-          </Text>
-          <Link to={"/login"}>
-            <Button>Login</Button>
-          </Link>
-          <Link to={"/login/forgotpassword"}>
-            <Button>Forgot Password</Button>
-          </Link>
-          <Link to={"/dashboard"}>
-            <Button>Dashboard</Button>
-          </Link>
-          <Link to={"/employeedirectory"}>
-            <Button>Employee Directory</Button>
-          </Link>
-          <Link to={"/ess/changepassword"}>
-            <Button>Change Password</Button>
-          </Link>
-          <Link to={"/ess/leaveapplication"}>
-            <Button>Leave Application</Button>
-          </Link>
-          <Link to={"/hr/masterdepartment"}>
-            <Button>Master Department</Button>
-          </Link>
-          <Link to={"/hr/masterposition"}>
-            <Button>Master Position</Button>
-          </Link>
-          <Link to={"/hr/manageevent"}>
-            <Button>Manage Event</Button>
-          </Link>
-          <Link to={"/hr/manageemployee"}>
-            <Button>Manage Employee</Button>
-          </Link>
-          <Link to={"/hr/employeeterminated"}>
-            <Button>Employee Terminated</Button>
-          </Link>
-          <Link to={"/hr/attendancesummary"}>
-            <Button>Attendance Summary</Button>
-          </Link>
-          <Link to={"/hr/leaveapproval"}>
-            <Button>Leave Approval</Button>
-          </Link>
-          <Button onClick={toggleColorMode}>
-            {colorMode === "light" ? <IoMoon /> : <LuSun zize="20" />}
-          </Button>
-        </VStack>
+            <Box overflowX={{ sm: "scroll", xl: "hidden" }} pb="0px">
+              <Box p="6px 0px 22px 0px">
+                <Text fontSize="xl" color={textColor} fontWeight="bold">
+                  Authors Table
+                </Text>
+              </Box>
+              <Box>
+                <Table variant="simple" color={textColor}>
+                  <Thead>
+                    <Tr my=".8rem" pl="0px" color="gray.400">
+                      <Th pl="0px" borderColor={borderColor} color="gray.400">
+                        Author
+                      </Th>
+                      <Th borderColor={borderColor} color="gray.400">
+                        Function
+                      </Th>
+                      <Th borderColor={borderColor} color="gray.400">
+                        Status
+                      </Th>
+                      <Th borderColor={borderColor} color="gray.400">
+                        Employed
+                      </Th>
+                      <Th borderColor={borderColor}></Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {tablesTableData.map((row, index, arr) => {
+                      return (
+                        <TablesTableRow
+                          name={row.name}
+                          logo={row.logo}
+                          email={row.email}
+                          subdomain={row.subdomain}
+                          domain={row.domain}
+                          status={row.status}
+                          date={row.date}
+                          isLast={index === arr.length - 1 ? true : false}
+                          key={index}
+                        />
+                      );
+                    })}
+                  </Tbody>
+                </Table>
+              </Box>
+            </Box>
+          </VStack>
+          <VStack background="bisque" w="260px">
+            <Text>Test Kalau kalau kalau</Text>
+          </VStack>
+        </HStack>
+
         <Footer />
       </Box>
     </>

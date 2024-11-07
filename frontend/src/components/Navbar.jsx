@@ -48,7 +48,7 @@ function Navbar() {
 
   return (
     <Flex
-      position="absolute"
+      position="static"
       boxShadow="none"
       bg="none"
       borderColor="transparent"
@@ -66,17 +66,9 @@ function Navbar() {
       minH="75px"
       justifyContent={{ xl: "center" }}
       lineHeight="25.6px"
-      mx="auto"
+      px="40px"
       mt="22px"
       pb="8px"
-      px={{
-        sm: "15px",
-        md: "30px",
-      }}
-      ps={{
-        xl: "12px",
-      }}
-      pt="8px"
       top="18px"
       w={{ sm: "calc(100vw - 30px)", xl: "calc(100vw - 75px - 275px)" }}
     >
@@ -88,10 +80,8 @@ function Navbar() {
         }}
         alignItems={{ xl: "center" }}
         justifyContent="space-between"
-        px="30px"
-        pb="20px"
       >
-        {/* Nahbar Kiri, Done */}
+        {/* Navbar Kiri, Done */}
         <Box mb={{ sm: "8px", md: "0px" }}>
           <Breadcrumb>
             <BreadcrumbItem color={"white"}>
