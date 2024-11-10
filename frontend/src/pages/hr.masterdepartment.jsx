@@ -24,51 +24,78 @@ import Footer from "../components/Footer";
 
 import { useDepartmentStore } from "../store/department";
 
-// Delete Later..
-// import { tablesTableData } from "../components/variables/general";
-
 const MasterDepartment = () => {
   // BE
   const toast = useToast();
+
   const { departments, createDepartment, fetchDepartments, updateDepartment, deleteDepartment } =
     useDepartmentStore();
+
   const [newDepartment, setNewDepartment] = useState({
     department_name: "",
   });
-  const handleAddDepartment = async () => {
-    const { success, message } = await createDepartment(newDepartment);
-    if (!success) {
-      toast({
-        title: "Error",
-        description: message,
-        status: "error",
-        isClosable: true,
-      });
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingDepartmentId, setEditingDepartmentId] = useState(null);
+
+  const handleSubmit = async () => {
+    if (isEditing && editingDepartmentId) {
+      // Update department
+      const { success, message } = await updateDepartment(editingDepartmentId, newDepartment);
+      if (success) {
+        toast({
+          title: "Success",
+          description: "Department updated successfully",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: message,
+          status: "error",
+          isClosable: true,
+        });
+      }
+      setIsEditing(false);
+      setEditingDepartmentId(null);
     } else {
-      toast({
-        title: "Success",
-        description: message,
-        status: "success",
-        isClosable: true,
-      });
+      // Create new department
+      const { success, message } = await createDepartment(newDepartment);
+      if (success) {
+        toast({
+          title: "Success",
+          description: message,
+          status: "success",
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: message,
+          status: "error",
+          isClosable: true,
+        });
+      }
     }
     setNewDepartment({ department_name: "" });
   };
-  useEffect(() => {
-    fetchDepartments();
-  }, [fetchDepartments]);
-  console.log("departments", departments);
+
+  const handleEditClick = (department) => {
+    setNewDepartment({ department_name: department.department_name });
+    setIsEditing(true);
+    setEditingDepartmentId(department._id);
+  };
+
+  const handleCancelEdit = () => {
+    setNewDepartment({ department_name: "" });
+    setIsEditing(false);
+    setEditingDepartmentId(null);
+  };
+
   const handleDeleteDepartment = async (pid) => {
     const { success, message } = await deleteDepartment(pid);
-    if (!success) {
-      toast({
-        title: "Error",
-        description: message,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    } else {
+    if (success) {
       toast({
         title: "Success",
         description: message,
@@ -76,15 +103,25 @@ const MasterDepartment = () => {
         duration: 3000,
         isClosable: true,
       });
+    } else {
+      toast({
+        title: "Error",
+        description: message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
+
+  useEffect(() => {
+    fetchDepartments();
+  }, [fetchDepartments]);
 
   // FE
   const textColor = useColorModeValue("gray.700", "white");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const bgForm = useColorModeValue("white", "navy.800");
-  const titleColor = useColorModeValue("gray.700", "white");
-  const bgStatus = useColorModeValue("gray.400", "navy.900");
 
   return (
     <>
@@ -156,32 +193,26 @@ const MasterDepartment = () => {
                     {departments.map((department) => (
                       <Tr key={department._id}>
                         <Td minWidth={{ sm: "250px" }} pl="0px" borderColor={borderColor} py={5}>
-                          <Text fontSize="md" color={titleColor} fontWeight="bold" minWidth="100%">
+                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
                             {department._id}
                           </Text>
                         </Td>
                         <Td borderColor={borderColor}>
-                          <Text fontSize="md" color={titleColor} fontWeight="bold" minWidth="100%">
+                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
                             {department.department_name}
                           </Text>
                         </Td>
-
-                        {/* <Td borderColor={borderColor}>
-                        <Flex direction="column">
-                          <Text fontSize="md" color={textColor} fontWeight="bold">
-                            ABC
-                          </Text>
-                          <Text fontSize="sm" color="gray.400" fontWeight="normal">
-                            DEF
-                          </Text>
-                        </Flex>
-                      </Td> */}
 
                         {/* Action */}
                         <Td borderColor={borderColor}>
                           <Flex direction="row" p="0px" alignItems="center" gap="4">
                             {/* Button for Edit */}
-                            <Flex alignItems="center" gap="1" as="button">
+                            <Flex
+                              alignItems="center"
+                              gap="1"
+                              as="button"
+                              onClick={() => handleEditClick(department)}
+                            >
                               <FaPen size="14" color={textColor} />
                               <Text fontSize="14px" color={textColor} fontWeight="bold">
                                 EDIT
@@ -220,10 +251,9 @@ const MasterDepartment = () => {
                 borderRadius="15px"
                 p="40px"
                 bg={bgForm}
-                boxShadow={useColorModeValue("0px 5px 14px rgba(0, 0, 0, 0.05)", "unset")}
               >
                 <Text fontSize="xl" color={textColor} fontWeight="bold" mb="22px">
-                  Add New Department
+                  {isEditing ? "Edit Department" : "Add New Department"}
                 </Text>
                 <FormControl>
                   <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
@@ -242,17 +272,43 @@ const MasterDepartment = () => {
                       setNewDepartment({ ...newDepartment, department_name: e.target.value })
                     }
                   />
-                  <Button
+                  {/* <Button
                     fontSize="14px"
                     variant="dark"
                     fontWeight="bold"
                     w="100%"
                     h="45"
                     mb="24px"
-                    onClick={handleAddDepartment}
+                    onClick={handleSubmit}
                   >
-                    Submit
+                    {isEditing ? "Update" : "Submit"}
+                  </Button> */}
+
+                  <Button
+                    fontSize="14px"
+                    variant="dark"
+                    fontWeight="bold"
+                    w="100%"
+                    h="45"
+                    mt="24px"
+                    onClick={handleSubmit}
+                  >
+                    {isEditing ? "Update" : "Submit"}
                   </Button>
+                  {isEditing && (
+                    <Button
+                      fontSize="14px"
+                      variant="solid"
+                      fontWeight="bold"
+                      w="100%"
+                      h="45"
+                      mt="4"
+                      onClick={handleCancelEdit}
+                      colorScheme="gray"
+                    >
+                      Cancel
+                    </Button>
+                  )}
                 </FormControl>
               </Flex>
             </Flex>
