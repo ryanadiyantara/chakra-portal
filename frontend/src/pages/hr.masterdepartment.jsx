@@ -185,7 +185,6 @@ const MasterDepartment = () => {
                       <Th borderColor={borderColor} color="gray.400">
                         Action
                       </Th>
-                      <Th borderColor={borderColor}></Th>
                     </Tr>
                   </Thead>
 
