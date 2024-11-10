@@ -2,13 +2,10 @@ import React, { useState } from "react";
 import {
   Box,
   useColorModeValue,
-  Heading,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   Text,
-  List,
-  ListItem,
   Link,
   Flex,
   Drawer,
@@ -81,7 +78,6 @@ function Navbar() {
         alignItems={{ xl: "center" }}
         justifyContent="space-between"
       >
-        {/* Navbar Kiri, Done */}
         <Box mb={{ sm: "8px", md: "0px" }}>
           <Breadcrumb>
             <BreadcrumbItem color={"white"}>
@@ -124,10 +120,6 @@ function Navbar() {
             {activeRoute ? activeRoute.name : "Page Not Found"}
           </Link>
         </Box>
-
-        {/* Navbar Kanan belum Done, tambah menu settings 
-        yang isi nya ada logout sama ubah tema light dark, 
-        kemudian notif yang gada fungsi nya dlu sementara */}
 
         <Flex
           pe={{ sm: "0px", md: "16px" }}

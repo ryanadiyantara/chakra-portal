@@ -272,17 +272,6 @@ const MasterDepartment = () => {
                       setNewDepartment({ ...newDepartment, department_name: e.target.value })
                     }
                   />
-                  {/* <Button
-                    fontSize="14px"
-                    variant="dark"
-                    fontWeight="bold"
-                    w="100%"
-                    h="45"
-                    mb="24px"
-                    onClick={handleSubmit}
-                  >
-                    {isEditing ? "Update" : "Submit"}
-                  </Button> */}
 
                   <Button
                     fontSize="14px"
