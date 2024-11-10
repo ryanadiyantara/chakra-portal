@@ -1,13 +1,4 @@
-import {
-  Avatar,
-  Badge,
-  Button,
-  Flex,
-  Td,
-  Text,
-  Tr,
-  useColorModeValue
-} from "@chakra-ui/react";
+import { Avatar, Badge, Button, Flex, Td, Text, Tr, useColorModeValue } from "@chakra-ui/react";
 import React from "react";
 
 function TablesTableRow(props) {
@@ -28,12 +19,7 @@ function TablesTableRow(props) {
         <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
           <Avatar src={logo} w="50px" borderRadius="12px" me="18px" />
           <Flex direction="column">
-            <Text
-              fontSize="md"
-              color={titleColor}
-              fontWeight="bold"
-              minWidth="100%"
-            >
+            <Text fontSize="md" color={titleColor} fontWeight="bold" minWidth="100%">
               {name}
             </Text>
             <Text fontSize="sm" color="gray.400" fontWeight="normal">
@@ -71,12 +57,7 @@ function TablesTableRow(props) {
       </Td>
       <Td borderColor={borderColor} borderBottom={isLast ? "none" : null}>
         <Button p="0px" bg="transparent" variant="no-effects">
-          <Text
-            fontSize="md"
-            color="gray.400"
-            fontWeight="bold"
-            cursor="pointer"
-          >
+          <Text fontSize="md" color="gray.400" fontWeight="bold" cursor="pointer">
             Edit
           </Text>
         </Button>

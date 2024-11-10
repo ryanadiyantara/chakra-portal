@@ -5,38 +5,57 @@ import {
   FormControl,
   FormLabel,
   HStack,
-  Icon,
   Input,
-  Switch,
   Table,
   Tbody,
   Text,
   Th,
   Thead,
   Tr,
-  useColorMode,
+  useToast,
   useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
-import { FaApple, FaFacebook, FaGoogle } from "react-icons/fa";
-
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
+import { useDepartmentStore } from "../store/department";
+// Delete Later..
 import { tablesTableData } from "../components/variables/general";
 import TablesTableRow from "../components/TablesTableRow";
 
 const MasterDepartment = () => {
-  const { colorMode, toggleColorMode } = useColorMode();
+  // BE
+  const [newDepartment, setNewDepartment] = useState({
+    department_name: "",
+  });
+  const toast = useToast();
+  const { createDepartment } = useDepartmentStore();
+  const handleAddDepartment = async () => {
+    const { success, message } = await createDepartment(newDepartment);
+    if (!success) {
+      toast({
+        title: "Error",
+        description: message,
+        status: "error",
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Success",
+        description: message,
+        status: "success",
+        isClosable: true,
+      });
+    }
+    setNewDepartment({ department_name: "" });
+  };
+
+  // FE
   const textColor = useColorModeValue("gray.700", "white");
   const borderColor = useColorModeValue("gray.200", "gray.600");
-
   const bgForm = useColorModeValue("white", "navy.800");
-  const titleColor = useColorModeValue("gray.700", "blue.500");
-  const colorIcons = useColorModeValue("gray.700", "white");
-  const bgIcons = useColorModeValue("trasnparent", "navy.700");
-  const bgIconsHover = useColorModeValue("gray.50", "whiteAlpha.100");
 
   return (
     <>
@@ -57,6 +76,7 @@ const MasterDepartment = () => {
       >
         <Navbar />
 
+        {/* Content */}
         <HStack
           flexDirection={{
             base: "column",
@@ -70,6 +90,7 @@ const MasterDepartment = () => {
           alignItems="start"
           minHeight="85vh"
         >
+          {/* Table Data */}
           <VStack
             spacing={2}
             alignItems={"left"}
@@ -126,6 +147,7 @@ const MasterDepartment = () => {
             </Box>
           </VStack>
 
+          {/* Input Form */}
           <VStack w="400px">
             <Flex alignItems="center" justifyContent="center" mb="60px">
               <Flex
@@ -137,151 +159,38 @@ const MasterDepartment = () => {
                 bg={bgForm}
                 boxShadow={useColorModeValue("0px 5px 14px rgba(0, 0, 0, 0.05)", "unset")}
               >
-                <Text
-                  fontSize="xl"
-                  color={textColor}
-                  fontWeight="bold"
-                  textAlign="center"
-                  mb="22px"
-                >
-                  Register With
-                </Text>
-                <HStack spacing="15px" justify="center" mb="22px">
-                  <Flex
-                    justify="center"
-                    align="center"
-                    w="75px"
-                    h="75px"
-                    borderRadius="8px"
-                    border={useColorModeValue("1px solid", "0px")}
-                    borderColor="gray.200"
-                    cursor="pointer"
-                    transition="all .25s ease"
-                    bg={bgIcons}
-                    _hover={{ bg: bgIconsHover }}
-                  >
-                    <Link href="#">
-                      <Icon as={FaFacebook} color={colorIcons} w="30px" h="30px" />
-                    </Link>
-                  </Flex>
-                  <Flex
-                    justify="center"
-                    align="center"
-                    w="75px"
-                    h="75px"
-                    borderRadius="8px"
-                    border={useColorModeValue("1px solid", "0px")}
-                    borderColor="gray.200"
-                    cursor="pointer"
-                    transition="all .25s ease"
-                    bg={bgIcons}
-                    _hover={{ bg: bgIconsHover }}
-                  >
-                    <Link href="#">
-                      <Icon
-                        as={FaApple}
-                        color={colorIcons}
-                        w="30px"
-                        h="30px"
-                        _hover={{ filter: "brightness(120%)" }}
-                      />
-                    </Link>
-                  </Flex>
-                  <Flex
-                    justify="center"
-                    align="center"
-                    w="75px"
-                    h="75px"
-                    borderRadius="8px"
-                    border={useColorModeValue("1px solid", "0px")}
-                    borderColor="gray.200"
-                    cursor="pointer"
-                    transition="all .25s ease"
-                    bg={bgIcons}
-                    _hover={{ bg: bgIconsHover }}
-                  >
-                    <Link href="#">
-                      <Icon
-                        as={FaGoogle}
-                        color={colorIcons}
-                        w="30px"
-                        h="30px"
-                        _hover={{ filter: "brightness(120%)" }}
-                      />
-                    </Link>
-                  </Flex>
-                </HStack>
-                <Text fontSize="lg" color="gray.400" fontWeight="bold" textAlign="center" mb="22px">
-                  or
+                <Text fontSize="xl" color={textColor} fontWeight="bold" mb="22px">
+                  Add New Department
                 </Text>
                 <FormControl>
                   <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Name
+                    Department Name
                   </FormLabel>
                   <Input
-                    variant="auth"
                     fontSize="sm"
                     ms="4px"
                     type="text"
-                    placeholder="Your full name"
                     mb="24px"
                     size="lg"
+                    placeholder="Department name"
+                    name="department_name"
+                    value={newDepartment.department_name}
+                    onChange={(e) =>
+                      setNewDepartment({ ...newDepartment, department_name: e.target.value })
+                    }
                   />
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Email
-                  </FormLabel>
-                  <Input
-                    variant="auth"
-                    fontSize="sm"
-                    ms="4px"
-                    type="email"
-                    placeholder="Your email address"
-                    mb="24px"
-                    size="lg"
-                  />
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Password
-                  </FormLabel>
-                  <Input
-                    variant="auth"
-                    fontSize="sm"
-                    ms="4px"
-                    type="password"
-                    placeholder="Your password"
-                    mb="24px"
-                    size="lg"
-                  />
-                  <FormControl display="flex" alignItems="center" mb="24px">
-                    <Switch id="remember-login" colorScheme="blue" me="10px" />
-                    <FormLabel htmlFor="remember-login" mb="0" fontWeight="normal">
-                      Remember me
-                    </FormLabel>
-                  </FormControl>
                   <Button
-                    fontSize="10px"
+                    fontSize="14px"
                     variant="dark"
                     fontWeight="bold"
                     w="100%"
                     h="45"
                     mb="24px"
+                    onClick={handleAddDepartment}
                   >
-                    SIGN UP
+                    Submit
                   </Button>
                 </FormControl>
-                <Flex
-                  flexDirection="column"
-                  justifyContent="center"
-                  alignItems="center"
-                  maxW="100%"
-                  mt="0px"
-                >
-                  <Text color={textColor} fontWeight="medium">
-                    Already have an account?
-                    <Link color={titleColor} as="span" ms="5px" href="#" fontWeight="bold">
-                      Sign In
-                    </Link>
-                  </Text>
-                </Flex>
               </Flex>
             </Flex>
           </VStack>
