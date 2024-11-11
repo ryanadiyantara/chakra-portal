@@ -165,6 +165,7 @@ const MasterDepartment = () => {
             px="20px"
             py="20px"
             borderRadius="16px"
+            bg={bgForm}
           >
             <Box overflowX={{ sm: "scroll", xl: "hidden" }} pb="0px">
               <Box p="6px 0px 22px 0px">
