@@ -2,10 +2,11 @@ import { create } from "zustand";
 
 export const usePositionStore = create((set) => ({
   positions: [],
+  departments: [],
   setPosition: (positions) => set({ positions }),
 
   createPosition: async (newPosition) => {
-    if (!newPosition.position) {
+    if (!newPosition.position_name || !newPosition.department_id) {
       return { success: false, message: "Please fill in all fields." };
     }
     const res = await fetch("/api/positions", {
@@ -56,5 +57,11 @@ export const usePositionStore = create((set) => ({
       positions: state.positions.map((position) => (position._id === pid ? data.data : position)),
     }));
     return { success: true, message: data.message };
+  },
+
+  getDepartmentData: async () => {
+    const res = await fetch("/api/departments");
+    const data = await res.json();
+    set({ departments: data.data });
   },
 }));
