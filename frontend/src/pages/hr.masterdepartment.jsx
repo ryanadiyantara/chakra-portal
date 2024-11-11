@@ -28,11 +28,14 @@ const MasterDepartment = () => {
   // BE
   const { departments, createDepartment, fetchDepartment, updateDepartment, deleteDepartment } =
     useDepartmentStore();
+
   const [newDepartment, setNewDepartment] = useState({
     department_name: "",
   });
+
   const [isEditing, setIsEditing] = useState(false);
   const [editingDepartmentId, setEditingDepartmentId] = useState(null);
+
   const handleSubmit = async () => {
     if (isEditing && editingDepartmentId) {
       // Update department
@@ -76,16 +79,19 @@ const MasterDepartment = () => {
     }
     setNewDepartment({ department_name: "" });
   };
+
   const handleEditClick = (department) => {
     setNewDepartment({ department_name: department.department_name });
     setIsEditing(true);
     setEditingDepartmentId(department._id);
   };
+
   const handleCancelEdit = () => {
     setNewDepartment({ department_name: "" });
     setIsEditing(false);
     setEditingDepartmentId(null);
   };
+
   const handleDeleteDepartment = async (pid) => {
     const { success, message } = await deleteDepartment(pid);
     if (success) {
@@ -145,7 +151,7 @@ const MasterDepartment = () => {
           justifyContent="space-between"
           px={{ base: "30px", xl: "40px" }}
           w="100%"
-          spacing={{ base: "20px", xl: "30px" }} // Kurangi jarak antar-elemen di layar kecil
+          spacing={{ base: "20px", xl: "30px" }}
           alignItems="start"
           minHeight="85vh"
         >
