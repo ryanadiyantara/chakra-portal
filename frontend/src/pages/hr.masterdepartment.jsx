@@ -26,17 +26,13 @@ import { useDepartmentStore } from "../store/department";
 
 const MasterDepartment = () => {
   // BE
-  const toast = useToast();
-
-  const { departments, createDepartment, fetchDepartments, updateDepartment, deleteDepartment } =
+  const { departments, createDepartment, fetchDepartment, updateDepartment, deleteDepartment } =
     useDepartmentStore();
-
   const [newDepartment, setNewDepartment] = useState({
     department_name: "",
   });
   const [isEditing, setIsEditing] = useState(false);
   const [editingDepartmentId, setEditingDepartmentId] = useState(null);
-
   const handleSubmit = async () => {
     if (isEditing && editingDepartmentId) {
       // Update department
@@ -80,19 +76,16 @@ const MasterDepartment = () => {
     }
     setNewDepartment({ department_name: "" });
   };
-
   const handleEditClick = (department) => {
     setNewDepartment({ department_name: department.department_name });
     setIsEditing(true);
     setEditingDepartmentId(department._id);
   };
-
   const handleCancelEdit = () => {
     setNewDepartment({ department_name: "" });
     setIsEditing(false);
     setEditingDepartmentId(null);
   };
-
   const handleDeleteDepartment = async (pid) => {
     const { success, message } = await deleteDepartment(pid);
     if (success) {
@@ -115,10 +108,11 @@ const MasterDepartment = () => {
   };
 
   useEffect(() => {
-    fetchDepartments();
-  }, [fetchDepartments]);
+    fetchDepartment();
+  }, [fetchDepartment]);
 
   // FE
+  const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const bgForm = useColorModeValue("white", "navy.800");
@@ -149,10 +143,9 @@ const MasterDepartment = () => {
             xl: "row",
           }}
           justifyContent="space-between"
-          px="40px"
-          pb="30px"
+          px={{ base: "30px", xl: "40px" }}
           w="100%"
-          spacing="30px"
+          spacing={{ base: "20px", xl: "30px" }} // Kurangi jarak antar-elemen di layar kecil
           alignItems="start"
           minHeight="85vh"
         >
@@ -162,7 +155,7 @@ const MasterDepartment = () => {
             alignItems={"left"}
             w="100%"
             background="white"
-            px="20px"
+            px={{ base: "10px", xl: "20px" }}
             py="20px"
             borderRadius="16px"
             bg={bgForm}

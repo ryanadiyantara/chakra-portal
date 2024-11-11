@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 export const useDepartmentStore = create((set) => ({
   departments: [],
-  setDepartments: (departments) => set({ departments }),
+  setDepartment: (departments) => set({ departments }),
 
   createDepartment: async (newDepartment) => {
     if (!newDepartment.department_name) {
@@ -20,7 +20,7 @@ export const useDepartmentStore = create((set) => ({
     return { success: true, message: "Department created successfully" };
   },
 
-  fetchDepartments: async () => {
+  fetchDepartment: async () => {
     const res = await fetch("/api/departments");
     const data = await res.json();
     set({ departments: data.data });
