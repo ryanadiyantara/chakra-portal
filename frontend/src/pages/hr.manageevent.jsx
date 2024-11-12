@@ -228,7 +228,7 @@ const ManageEvent = () => {
                       <Tr key={event._id}>
                         <Td pl="0px" borderColor={borderColor} py={5}>
                           <Image
-                            src={event.poster}
+                            src="/uploads/event/shenhe.png"
                             alt={event.poster}
                             boxSize="200px"
                             objectFit="cover"
