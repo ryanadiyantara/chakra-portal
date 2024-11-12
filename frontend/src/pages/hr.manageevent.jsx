@@ -16,6 +16,7 @@ import {
   useColorModeValue,
   VStack,
   Td,
+  Image,
 } from "@chakra-ui/react";
 import { FaPen, FaTrash } from "react-icons/fa";
 import React, { useState, useEffect } from "react";
@@ -225,10 +226,16 @@ const ManageEvent = () => {
                   <Tbody>
                     {events.map((event) => (
                       <Tr key={event._id}>
-                        <Td minWidth={{ sm: "250px" }} pl="0px" borderColor={borderColor} py={5}>
-                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                            {event.poster}
-                          </Text>
+                        <Td pl="0px" borderColor={borderColor} py={5}>
+                          <Image
+                            src={event.poster}
+                            alt={event.poster}
+                            boxSize="200px"
+                            objectFit="cover"
+                            borderRadius="lg"
+                            width="200px"
+                            height="100px"
+                          />
                         </Td>
                         <Td borderColor={borderColor}>
                           <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
