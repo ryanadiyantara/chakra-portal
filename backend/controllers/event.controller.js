@@ -21,9 +21,7 @@ export const createEvents = async (req, res) => {
     !event.event_startDate ||
     !event.event_endDate
   ) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Please provide all fields" });
+    return res.status(400).json({ success: false, message: "Please provide all fields" });
   }
 
   const newEvent = new Event(event);
@@ -43,9 +41,7 @@ export const updateEvents = async (req, res) => {
   const event = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Invalid Event Id" });
+    return res.status(404).json({ success: false, message: "Invalid Event Id" });
   }
 
   try {
@@ -63,9 +59,7 @@ export const deleteEvents = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Invalid Event Id" });
+    return res.status(404).json({ success: false, message: "Invalid Event Id" });
   }
 
   try {
