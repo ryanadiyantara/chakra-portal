@@ -4,7 +4,7 @@ import Upload from "../models/uploads.model.js";
 // Konfigurasi penyimpanan multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Folder untuk menyimpan file
+    cb(null, "frontend/public/uploads/event"); // Folder untuk menyimpan file
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
