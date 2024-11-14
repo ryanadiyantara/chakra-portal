@@ -26,20 +26,6 @@ export const useDepartmentStore = create((set) => ({
     set({ departments: data.data });
   },
 
-  deleteDepartment: async (pid) => {
-    const res = await fetch(`/api/departments/${pid}`, {
-      method: "DELETE",
-    });
-    const data = await res.json();
-    if (!data.success) return { success: false, message: data.message };
-
-    // update the ui immediately, without needing a refresh
-    set((state) => ({
-      departments: state.departments.filter((department) => department._id !== pid),
-    }));
-    return { success: true, message: data.message };
-  },
-
   updateDepartment: async (pid, updatedDepartment) => {
     const res = await fetch(`/api/departments/${pid}`, {
       method: "PUT",
@@ -56,6 +42,20 @@ export const useDepartmentStore = create((set) => ({
       departments: state.departments.map((department) =>
         department._id === pid ? data.data : department
       ),
+    }));
+    return { success: true, message: data.message };
+  },
+
+  deleteDepartment: async (pid) => {
+    const res = await fetch(`/api/departments/${pid}`, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+    if (!data.success) return { success: false, message: data.message };
+
+    // update the ui immediately, without needing a refresh
+    set((state) => ({
+      departments: state.departments.filter((department) => department._id !== pid),
     }));
     return { success: true, message: data.message };
   },

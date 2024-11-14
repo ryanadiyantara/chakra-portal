@@ -27,20 +27,6 @@ export const usePositionStore = create((set) => ({
     set({ positions: data.data });
   },
 
-  deletePosition: async (pid) => {
-    const res = await fetch(`/api/positions/${pid}`, {
-      method: "DELETE",
-    });
-    const data = await res.json();
-    if (!data.success) return { success: false, message: data.message };
-
-    // update the ui immediately, without needing a refresh
-    set((state) => ({
-      positions: state.positions.filter((position) => position._id !== pid),
-    }));
-    return { success: true, message: data.message };
-  },
-
   updatePosition: async (pid, updatedPosition) => {
     const res = await fetch(`/api/positions/${pid}`, {
       method: "PUT",
@@ -55,6 +41,20 @@ export const usePositionStore = create((set) => ({
     // update the ui immediately, without needing a refresh
     set((state) => ({
       positions: state.positions.map((position) => (position._id === pid ? data.data : position)),
+    }));
+    return { success: true, message: data.message };
+  },
+
+  deletePosition: async (pid) => {
+    const res = await fetch(`/api/positions/${pid}`, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+    if (!data.success) return { success: false, message: data.message };
+
+    // update the ui immediately, without needing a refresh
+    set((state) => ({
+      positions: state.positions.filter((position) => position._id !== pid),
     }));
     return { success: true, message: data.message };
   },

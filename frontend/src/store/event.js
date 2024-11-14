@@ -16,8 +16,8 @@ export const useEventStore = create((set) => ({
     }
 
     const formData = new FormData();
-    formData.append("file", newEvent.poster);
     formData.append("event_name", newEvent.event_name);
+    formData.append("file", newEvent.poster);
     formData.append("event_startDate", newEvent.event_startDate);
     formData.append("event_endDate", newEvent.event_endDate);
     formData.append("description", newEvent.description);
@@ -38,20 +38,6 @@ export const useEventStore = create((set) => ({
     const res = await fetch("/api/events");
     const data = await res.json();
     set({ events: data.data });
-  },
-
-  deleteEvent: async (pid) => {
-    const res = await fetch(`/api/events/${pid}`, {
-      method: "DELETE",
-    });
-    const data = await res.json();
-    if (!data.success) return { success: false, message: data.message };
-
-    // update the ui immediately, without needing a refresh
-    set((state) => ({
-      events: state.events.filter((event) => event._id !== pid),
-    }));
-    return { success: true, message: data.message };
   },
 
   updateEvent: async (pid, updatedEvent) => {
@@ -83,6 +69,20 @@ export const useEventStore = create((set) => ({
     // update the ui immediately, without needing a refresh
     set((state) => ({
       events: state.events.map((event) => (event._id === pid ? data.data : event)),
+    }));
+    return { success: true, message: data.message };
+  },
+
+  deleteEvent: async (pid) => {
+    const res = await fetch(`/api/events/${pid}`, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+    if (!data.success) return { success: false, message: data.message };
+
+    // update the ui immediately, without needing a refresh
+    set((state) => ({
+      events: state.events.filter((event) => event._id !== pid),
     }));
     return { success: true, message: data.message };
   },
