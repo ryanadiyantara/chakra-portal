@@ -60,23 +60,36 @@ export const createEvents = async (req, res) => {
 };
 
 export const updateEvents = async (req, res) => {
-  const { id } = req.params;
+  upload(req, res, async (err) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ success: false, message: "File upload failed", error: err.message });
+    }
 
-  const event = req.body;
+    const { id } = req.params;
+    const event = req.body;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ success: false, message: "Invalid Event Id" });
-  }
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ success: false, message: "Invalid Event Id" });
+    }
 
-  try {
-    const updatedEvent = await Event.findByIdAndUpdate(id, event, {
-      new: true,
-    });
-    res.status(200).json({ success: true, data: updatedEvent });
-  } catch (error) {
-    console.log("Error in Deleting events:", error.message);
-    res.status(500).json({ success: false, message: "Server Error" });
-  }
+    if (req.file) {
+      const filePath = path.relative("frontend/public", req.file.path);
+
+      event.poster_path = filePath;
+    }
+
+    try {
+      const updatedEvent = await Event.findByIdAndUpdate(id, event, {
+        new: true,
+      });
+      res.status(200).json({ success: true, data: updatedEvent });
+    } catch (error) {
+      console.log("Error in Deleting events:", error.message);
+      res.status(500).json({ success: false, message: "Server Error" });
+    }
+  });
 };
 
 export const deleteEvents = async (req, res) => {

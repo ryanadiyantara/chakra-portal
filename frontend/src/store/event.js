@@ -55,13 +55,28 @@ export const useEventStore = create((set) => ({
   },
 
   updateEvent: async (pid, updatedEvent) => {
+    if (
+      !updatedEvent.event_name ||
+      !updatedEvent.poster ||
+      !updatedEvent.event_startDate ||
+      !updatedEvent.event_endDate ||
+      !updatedEvent.description
+    ) {
+      return { success: false, message: "Please fill in all fields." };
+    }
+
+    const formData = new FormData();
+    formData.append("file", updatedEvent.poster);
+    formData.append("event_name", updatedEvent.event_name);
+    formData.append("event_startDate", updatedEvent.event_startDate);
+    formData.append("event_endDate", updatedEvent.event_endDate);
+    formData.append("description", updatedEvent.description);
+
     const res = await fetch(`/api/events/${pid}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedEvent),
+      body: formData,
     });
+
     const data = await res.json();
     if (!data.success) return { success: false, message: data.message };
 
