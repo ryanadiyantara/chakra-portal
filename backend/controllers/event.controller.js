@@ -86,7 +86,7 @@ export const updateEvents = async (req, res) => {
       });
       res.status(200).json({ success: true, data: updatedEvent });
     } catch (error) {
-      console.log("Error in Deleting events:", error.message);
+      console.log("Error in Updating events:", error.message);
       res.status(500).json({ success: false, message: "Server Error" });
     }
   });

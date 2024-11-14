@@ -54,7 +54,7 @@ export const updateAttendanceRecords = async (req, res) => {
     );
     res.status(200).json({ success: true, data: updatedAttendanceRecord });
   } catch (error) {
-    console.log("Error in Deleting attendance records:", error.message);
+    console.log("Error in Updating attendance records:", error.message);
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };

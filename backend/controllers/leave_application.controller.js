@@ -54,7 +54,7 @@ export const updateLeaveApplications = async (req, res) => {
     );
     res.status(200).json({ success: true, data: updatedLeaveApplication });
   } catch (error) {
-    console.log("Error in Deleting leave applications:", error.message);
+    console.log("Error in Updating leave applications:", error.message);
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };

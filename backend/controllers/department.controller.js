@@ -44,7 +44,7 @@ export const updateDepartments = async (req, res) => {
     });
     res.status(200).json({ success: true, data: updatedDepartment });
   } catch (error) {
-    console.log("Error in Deleting departments:", error.message);
+    console.log("Error in Updating departments:", error.message);
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };
