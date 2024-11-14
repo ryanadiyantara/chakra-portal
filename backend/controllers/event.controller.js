@@ -3,28 +3,6 @@ import multer from "multer";
 import path from "path";
 import Event from "../models/event.model.js";
 
-export const getEvents = async (req, res) => {
-  try {
-    const events = await Event.find({});
-    res.status(200).json({ success: true, data: events });
-  } catch (error) {
-    console.log("Error in Fetching events:", error.message);
-    res.status(404).json({ success: false, message: "Server Error" });
-  }
-};
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "frontend/public/uploads/event");
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + "-" + file.originalname);
-  },
-});
-
-const upload = multer({ storage }).single("file");
-
 export const createEvents = async (req, res) => {
   upload(req, res, async (err) => {
     if (err) {
@@ -58,6 +36,28 @@ export const createEvents = async (req, res) => {
     }
   });
 };
+
+export const getEvents = async (req, res) => {
+  try {
+    const events = await Event.find({});
+    res.status(200).json({ success: true, data: events });
+  } catch (error) {
+    console.log("Error in Fetching events:", error.message);
+    res.status(404).json({ success: false, message: "Server Error" });
+  }
+};
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "frontend/public/uploads/event");
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage }).single("file");
 
 export const updateEvents = async (req, res) => {
   upload(req, res, async (err) => {

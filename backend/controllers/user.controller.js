@@ -1,16 +1,6 @@
 import mongoose from "mongoose";
 import User from "../models/user.model.js";
 
-export const getUsers = async (req, res) => {
-  try {
-    const users = await User.find({});
-    res.status(200).json({ success: true, data: users });
-  } catch (error) {
-    console.log("Error in Fetching users:", error.message);
-    res.status(404).json({ success: false, message: "Server Error" });
-  }
-};
-
 export const createUsers = async (req, res) => {
   const user = req.body; // user will send this data
 
@@ -23,9 +13,7 @@ export const createUsers = async (req, res) => {
     !user.profilePicture ||
     !user.startDate
   ) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Please provide all fields" });
+    return res.status(400).json({ success: false, message: "Please provide all fields" });
   }
 
   const newUser = new User(user);
@@ -36,6 +24,16 @@ export const createUsers = async (req, res) => {
   } catch (error) {
     console.error("Error in Create user:", error, message);
     res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+export const getUsers = async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.status(200).json({ success: true, data: users });
+  } catch (error) {
+    console.log("Error in Fetching users:", error.message);
+    res.status(404).json({ success: false, message: "Server Error" });
   }
 };
 
@@ -54,7 +52,7 @@ export const updateUsers = async (req, res) => {
     });
     res.status(200).json({ success: true, data: updatedUser });
   } catch (error) {
-    console.log("Error in Deleting users:", error.message);
+    console.log("Error in Updating users:", error.message);
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };
