@@ -10,7 +10,6 @@ import attendanceRecordRoutes from "./routes/attendance_record.route.js";
 import eventRoutes from "./routes/event.route.js";
 import departmentRoutes from "./routes/department.route.js";
 import positionRoutes from "./routes/position.route.js";
-import fileUploadRoutes from "./routes/file_upload.route.js";
 
 dotenv.config();
 
@@ -27,7 +26,6 @@ app.use("/api/attendancerecords", attendanceRecordRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/departments", departmentRoutes);
 app.use("/api/positions", positionRoutes);
-app.use("/api/uploads", fileUploadRoutes);
 
 // if (process.env.NODE_ENV === "production") {
 //   app.use(express.static(path.join(__dirname, "/frontend/dist")));

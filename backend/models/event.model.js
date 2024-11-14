@@ -6,7 +6,7 @@ const eventsSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    poster: {
+    poster_path: {
       type: String,
       required: true,
     },
