@@ -16,7 +16,7 @@ export const useEventStore = create((set) => ({
     }
 
     const formData = new FormData();
-    formData.append("file", newEvent.poster); // Tambahkan file dengan key "file"
+    formData.append("file", newEvent.poster);
     formData.append("event_name", newEvent.event_name);
     formData.append("event_startDate", newEvent.event_startDate);
     formData.append("event_endDate", newEvent.event_endDate);

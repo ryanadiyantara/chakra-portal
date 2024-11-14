@@ -42,7 +42,6 @@ const ManageEvent = () => {
 
   const handleFileChange = (e) => {
     setNewEvent({ ...newEvent, poster: e.target.files[0] });
-    setFileName(file ? file.name : "");
   };
 
   const handleSubmit = async () => {
@@ -121,6 +120,8 @@ const ManageEvent = () => {
       event_endDate: "",
       description: "",
     });
+
+    document.querySelector('input[type="file"]').value = "";
     setIsEditing(false);
     setEditingEventId(null);
   };
