@@ -15,15 +15,21 @@ export const useEventStore = create((set) => ({
       return { success: false, message: "Please fill in all fields." };
     }
 
+    const formData = new FormData();
+    formData.append("file", newEvent.poster); // Tambahkan file dengan key "file"
+    formData.append("event_name", newEvent.event_name);
+    formData.append("event_startDate", newEvent.event_startDate);
+    formData.append("event_endDate", newEvent.event_endDate);
+    formData.append("description", newEvent.description);
+
     const res = await fetch("/api/events", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newEvent),
+      body: formData,
     });
+
     const data = await res.json();
     if (!data.success) return { success: false, message: data.message };
+
     set((state) => ({ events: [...state.events, data.data] }));
     return { success: true, message: "Event created successfully" };
   },

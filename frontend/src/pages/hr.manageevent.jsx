@@ -40,6 +40,11 @@ const ManageEvent = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editingEventId, setEditingEventId] = useState(null);
 
+  const handleFileChange = (e) => {
+    setNewEvent({ ...newEvent, poster: e.target.files[0] });
+    setFileName(file ? file.name : "");
+  };
+
   const handleSubmit = async () => {
     if (isEditing && editingEventId) {
       // Update event
@@ -88,6 +93,8 @@ const ManageEvent = () => {
       event_endDate: "",
       description: "",
     });
+
+    document.querySelector('input[type="file"]').value = "";
   };
 
   const formatDate = (date) => {
@@ -97,7 +104,7 @@ const ManageEvent = () => {
   const handleEditClick = (event) => {
     setNewEvent({
       event_name: event.event_name,
-      poster: event.poster,
+      poster: event.poster_path,
       event_startDate: formatDate(event.event_startDate),
       event_endDate: formatDate(event.event_endDate),
       description: event.description,
@@ -107,7 +114,13 @@ const ManageEvent = () => {
   };
 
   const handleCancelEdit = () => {
-    setNewEvent({ event_name: "" });
+    setNewEvent({
+      event_name: "",
+      poster: "",
+      event_startDate: "",
+      event_endDate: "",
+      description: "",
+    });
     setIsEditing(false);
     setEditingEventId(null);
   };
@@ -342,13 +355,17 @@ const ManageEvent = () => {
                   <Input
                     fontSize="sm"
                     ms="4px"
-                    type="text"
+                    type="file"
                     mb="24px"
                     size="lg"
-                    placeholder="Poster"
                     name="poster"
-                    value={newEvent.poster}
-                    onChange={(e) => setNewEvent({ ...newEvent, poster: e.target.value })}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "8px 12px", // Optional: for better spacing and appearance
+                    }}
+                    onChange={handleFileChange}
                   />
                   <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                     Start Date
