@@ -8,6 +8,7 @@ export const useDepartmentStore = create((set) => ({
     if (!newDepartment.department_name) {
       return { success: false, message: "Please fill in all fields." };
     }
+
     const res = await fetch("/api/departments", {
       method: "POST",
       headers: {
@@ -15,6 +16,7 @@ export const useDepartmentStore = create((set) => ({
       },
       body: JSON.stringify(newDepartment),
     });
+
     const data = await res.json();
     set((state) => ({ departments: [...state.departments, data.data] }));
     return { success: true, message: "Department created successfully" };
@@ -27,6 +29,10 @@ export const useDepartmentStore = create((set) => ({
   },
 
   updateDepartment: async (pid, updatedDepartment) => {
+    if (!updatedDepartment.department_name) {
+      return { success: false, message: "Please fill in all fields." };
+    }
+
     const res = await fetch(`/api/departments/${pid}`, {
       method: "PUT",
       headers: {
@@ -34,6 +40,7 @@ export const useDepartmentStore = create((set) => ({
       },
       body: JSON.stringify(updatedDepartment),
     });
+
     const data = await res.json();
     if (!data.success) return { success: false, message: data.message };
 

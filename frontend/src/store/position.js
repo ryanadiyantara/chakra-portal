@@ -9,6 +9,7 @@ export const usePositionStore = create((set) => ({
     if (!newPosition.position_name || !newPosition.department_id) {
       return { success: false, message: "Please fill in all fields." };
     }
+
     const res = await fetch("/api/positions", {
       method: "POST",
       headers: {
@@ -16,6 +17,7 @@ export const usePositionStore = create((set) => ({
       },
       body: JSON.stringify(newPosition),
     });
+
     const data = await res.json();
     set((state) => ({ positions: [...state.positions, data.data] }));
     return { success: true, message: "Position created successfully" };
@@ -28,6 +30,10 @@ export const usePositionStore = create((set) => ({
   },
 
   updatePosition: async (pid, updatedPosition) => {
+    if (!updatedPosition.position_name || !updatedPosition.department_id) {
+      return { success: false, message: "Please fill in all fields." };
+    }
+
     const res = await fetch(`/api/positions/${pid}`, {
       method: "PUT",
       headers: {
@@ -35,6 +41,7 @@ export const usePositionStore = create((set) => ({
       },
       body: JSON.stringify(updatedPosition),
     });
+
     const data = await res.json();
     if (!data.success) return { success: false, message: data.message };
 

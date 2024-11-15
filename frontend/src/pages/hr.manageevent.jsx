@@ -37,6 +37,7 @@ const ManageEvent = () => {
     description: "",
   });
 
+  const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingEventId, setEditingEventId] = useState(null);
 
@@ -44,7 +45,22 @@ const ManageEvent = () => {
     setNewEvent({ ...newEvent, poster: e.target.files[0] });
   };
 
+  const formatDate = (date) => {
+    return new Date(date).toISOString().split("T")[0];
+  };
+
   const handleSubmit = async () => {
+    const currentErrors = {};
+
+    if (!newEvent.event_name) currentErrors.event_name = "Event name is required";
+    if (!newEvent.poster) currentErrors.poster = "Poster is required";
+    if (!newEvent.event_startDate) currentErrors.event_startDate = "Start date is required";
+    if (!newEvent.event_endDate) currentErrors.event_endDate = "End date is required";
+    if (!newEvent.description) currentErrors.description = "Description is required";
+
+    setErrors(currentErrors);
+    if (Object.keys(currentErrors).length > 0);
+
     if (isEditing && editingEventId) {
       // Update event
       const { success, message } = await updateEvent(editingEventId, newEvent);
@@ -56,6 +72,8 @@ const ManageEvent = () => {
           duration: 3000,
           isClosable: true,
         });
+        setIsEditing(false);
+        setEditingEventId(null);
       } else {
         toast({
           title: "Error",
@@ -64,8 +82,6 @@ const ManageEvent = () => {
           isClosable: true,
         });
       }
-      setIsEditing(false);
-      setEditingEventId(null);
     } else {
       // Create new event
       const { success, message } = await createEvent(newEvent);
@@ -76,6 +92,14 @@ const ManageEvent = () => {
           status: "success",
           isClosable: true,
         });
+        setNewEvent({
+          event_name: "",
+          poster: "",
+          event_startDate: "",
+          event_endDate: "",
+          description: "",
+        });
+        document.querySelector('input[type="file"]').value = "";
       } else {
         toast({
           title: "Error",
@@ -85,19 +109,6 @@ const ManageEvent = () => {
         });
       }
     }
-    setNewEvent({
-      event_name: "",
-      poster: "",
-      event_startDate: "",
-      event_endDate: "",
-      description: "",
-    });
-
-    document.querySelector('input[type="file"]').value = "";
-  };
-
-  const formatDate = (date) => {
-    return new Date(date).toISOString().split("T")[0];
   };
 
   const handleEditClick = (event) => {
@@ -108,6 +119,7 @@ const ManageEvent = () => {
       event_endDate: formatDate(event.event_endDate),
       description: event.description,
     });
+    setErrors({});
     setIsEditing(true);
     setEditingEventId(event._id);
   };
@@ -120,8 +132,8 @@ const ManageEvent = () => {
       event_endDate: "",
       description: "",
     });
-
     document.querySelector('input[type="file"]').value = "";
+    setErrors({});
     setIsEditing(false);
     setEditingEventId(null);
   };
@@ -151,6 +163,7 @@ const ManageEvent = () => {
     fetchEvent();
   }, [fetchEvent]);
 
+  // Fix soon
   const handleDateChange = (e) => {
     const { name, value } = e.target;
     if (name === "event_endDate" && new Date(value) < new Date(newEvent.event_startDate)) {
@@ -349,6 +362,7 @@ const ManageEvent = () => {
                     name="event_name"
                     value={newEvent.event_name}
                     onChange={(e) => setNewEvent({ ...newEvent, event_name: e.target.value })}
+                    borderColor={errors.event_name ? "red.500" : "gray.200"}
                   />
                   <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                     Poster
@@ -367,6 +381,7 @@ const ManageEvent = () => {
                       padding: "8px 12px", // Optional: for better spacing and appearance
                     }}
                     onChange={handleFileChange}
+                    borderColor={errors.poster ? "red.500" : "gray.200"}
                   />
                   <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                     Start Date
@@ -381,6 +396,7 @@ const ManageEvent = () => {
                     name="event_startDate"
                     value={newEvent.event_startDate}
                     onChange={handleDateChange}
+                    borderColor={errors.event_startDate ? "red.500" : "gray.200"}
                   />
                   <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                     End Date
@@ -395,6 +411,7 @@ const ManageEvent = () => {
                     name="event_endDate"
                     value={newEvent.event_endDate}
                     onChange={handleDateChange}
+                    borderColor={errors.event_endDate ? "red.500" : "gray.200"}
                   />
                   <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                     Description
@@ -409,6 +426,7 @@ const ManageEvent = () => {
                     name="description"
                     value={newEvent.description}
                     onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
+                    borderColor={errors.description ? "red.500" : "gray.200"}
                   />
 
                   <Button

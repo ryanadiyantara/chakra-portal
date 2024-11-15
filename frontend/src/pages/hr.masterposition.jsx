@@ -42,10 +42,19 @@ const MasterPosition = () => {
     department_id: "",
   });
 
+  const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingPositionId, setEditingPositionId] = useState(null);
 
   const handleSubmit = async () => {
+    const currentErrors = {};
+
+    if (!newPosition.position_name) currentErrors.position_name = "Position name is required";
+    if (!newPosition.department_id) currentErrors.department_id = "Department name is required";
+
+    setErrors(currentErrors);
+    if (Object.keys(currentErrors).length > 0);
+
     if (isEditing && editingPositionId) {
       // Update position
       const { success, message } = await updatePosition(editingPositionId, newPosition);
@@ -57,6 +66,9 @@ const MasterPosition = () => {
           duration: 3000,
           isClosable: true,
         });
+        setIsEditing(false);
+        setEditingPositionId(null);
+        setNewPosition({ position_name: "", department_id: "" });
       } else {
         toast({
           title: "Error",
@@ -65,8 +77,6 @@ const MasterPosition = () => {
           isClosable: true,
         });
       }
-      setIsEditing(false);
-      setEditingPositionId(null);
     } else {
       // Create new position
       const { success, message } = await createPosition(newPosition);
@@ -77,6 +87,7 @@ const MasterPosition = () => {
           status: "success",
           isClosable: true,
         });
+        setNewPosition({ position_name: "", department_id: "" });
       } else {
         toast({
           title: "Error",
@@ -86,7 +97,6 @@ const MasterPosition = () => {
         });
       }
     }
-    setNewPosition({ position_name: "", department_id: "" });
   };
 
   const handleEditClick = (position) => {
@@ -94,12 +104,14 @@ const MasterPosition = () => {
       position_name: position.position_name,
       department_id: position.department_id,
     });
+    setErrors({});
     setIsEditing(true);
     setEditingPositionId(position._id);
   };
 
   const handleCancelEdit = () => {
     setNewPosition({ position_name: "", department_id: "" });
+    setErrors({});
     setIsEditing(false);
     setEditingPositionId(null);
   };
@@ -296,6 +308,7 @@ const MasterPosition = () => {
                     onChange={(e) =>
                       setNewPosition({ ...newPosition, position_name: e.target.value })
                     }
+                    borderColor={errors.position_name ? "red.500" : "gray.200"}
                   />
                   <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                     Department Name
@@ -306,11 +319,12 @@ const MasterPosition = () => {
                     mb="24px"
                     size="lg"
                     placeholder="Select Department"
-                    name="department_name"
+                    name="department_id"
                     value={newPosition.department_id}
                     onChange={(e) =>
                       setNewPosition({ ...newPosition, department_id: e.target.value })
                     }
+                    borderColor={errors.department_id ? "red.500" : "gray.200"}
                   >
                     {departments.map((department) => (
                       <option key={department._id} value={department._id}>

@@ -33,10 +33,19 @@ const MasterDepartment = () => {
     department_name: "",
   });
 
+  const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingDepartmentId, setEditingDepartmentId] = useState(null);
 
   const handleSubmit = async () => {
+    const currentErrors = {};
+
+    if (!newDepartment.department_name)
+      currentErrors.department_name = "Department name is required";
+
+    setErrors(currentErrors);
+    if (Object.keys(currentErrors).length > 0);
+
     if (isEditing && editingDepartmentId) {
       // Update department
       const { success, message } = await updateDepartment(editingDepartmentId, newDepartment);
@@ -48,6 +57,9 @@ const MasterDepartment = () => {
           duration: 3000,
           isClosable: true,
         });
+        setIsEditing(false);
+        setEditingDepartmentId(null);
+        setNewDepartment({ department_name: "" });
       } else {
         toast({
           title: "Error",
@@ -56,8 +68,6 @@ const MasterDepartment = () => {
           isClosable: true,
         });
       }
-      setIsEditing(false);
-      setEditingDepartmentId(null);
     } else {
       // Create new department
       const { success, message } = await createDepartment(newDepartment);
@@ -68,6 +78,7 @@ const MasterDepartment = () => {
           status: "success",
           isClosable: true,
         });
+        setNewDepartment({ department_name: "" });
       } else {
         toast({
           title: "Error",
@@ -77,17 +88,18 @@ const MasterDepartment = () => {
         });
       }
     }
-    setNewDepartment({ department_name: "" });
   };
 
   const handleEditClick = (department) => {
     setNewDepartment({ department_name: department.department_name });
+    setErrors({});
     setIsEditing(true);
     setEditingDepartmentId(department._id);
   };
 
   const handleCancelEdit = () => {
     setNewDepartment({ department_name: "" });
+    setErrors({});
     setIsEditing(false);
     setEditingDepartmentId(null);
   };
@@ -270,6 +282,7 @@ const MasterDepartment = () => {
                     onChange={(e) =>
                       setNewDepartment({ ...newDepartment, department_name: e.target.value })
                     }
+                    borderColor={errors.department_name ? "red.500" : "gray.200"}
                   />
 
                   <Button
