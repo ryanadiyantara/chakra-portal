@@ -202,7 +202,7 @@ const MasterPosition = () => {
                   <Thead>
                     <Tr my=".8rem" pl="0px" color="gray.400">
                       <Th pl="0px" borderColor={borderColor} color="gray.400">
-                        Position ID
+                        No.
                       </Th>
                       <Th borderColor={borderColor} color="gray.400">
                         Position Name
@@ -217,15 +217,15 @@ const MasterPosition = () => {
                   </Thead>
 
                   <Tbody>
-                    {positions.map((position) => {
+                    {positions.map((position, index) => {
                       const department = departments.find(
                         (dept) => dept._id === position.department_id
                       );
                       return (
                         <Tr key={position._id}>
-                          <Td minWidth={{ sm: "250px" }} pl="0px" borderColor={borderColor} py={5}>
+                          <Td width={{ sm: "50px" }} pl="0px" borderColor={borderColor} py={5}>
                             <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {position._id}
+                              {index + 1}
                             </Text>
                           </Td>
                           <Td borderColor={borderColor}>

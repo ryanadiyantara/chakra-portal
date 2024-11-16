@@ -189,7 +189,7 @@ const MasterDepartment = () => {
                   <Thead>
                     <Tr my=".8rem" pl="0px" color="gray.400">
                       <Th pl="0px" borderColor={borderColor} color="gray.400">
-                        Department ID
+                        No.
                       </Th>
                       <Th borderColor={borderColor} color="gray.400">
                         Department Name
@@ -201,11 +201,11 @@ const MasterDepartment = () => {
                   </Thead>
 
                   <Tbody>
-                    {departments.map((department) => (
+                    {departments.map((department, index) => (
                       <Tr key={department._id}>
-                        <Td minWidth={{ sm: "250px" }} pl="0px" borderColor={borderColor} py={5}>
+                        <Td width={{ sm: "50px" }} pl="0px" borderColor={borderColor} py={5}>
                           <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                            {department._id}
+                            {index + 1}
                           </Text>
                         </Td>
                         <Td borderColor={borderColor}>
