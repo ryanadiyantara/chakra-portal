@@ -385,7 +385,7 @@ const ManageEvent = () => {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      padding: "8px 12px", // Optional: for better spacing and appearance
+                      padding: "8px 12px",
                     }}
                     onChange={handleFileChange}
                     borderColor={errors.poster ? "red.500" : "gray.200"}
