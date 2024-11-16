@@ -72,6 +72,13 @@ const ManageEvent = () => {
           duration: 3000,
           isClosable: true,
         });
+        setNewEvent({
+          event_name: "",
+          poster: "",
+          event_startDate: "",
+          event_endDate: "",
+          description: "",
+        });
         setIsEditing(false);
         setEditingEventId(null);
       } else {
