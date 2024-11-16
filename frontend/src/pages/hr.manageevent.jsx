@@ -72,6 +72,8 @@ const ManageEvent = () => {
           duration: 3000,
           isClosable: true,
         });
+        setIsEditing(false);
+        setEditingEventId(null);
         setNewEvent({
           event_name: "",
           poster: "",
@@ -79,8 +81,6 @@ const ManageEvent = () => {
           event_endDate: "",
           description: "",
         });
-        setIsEditing(false);
-        setEditingEventId(null);
       } else {
         toast({
           title: "Error",
