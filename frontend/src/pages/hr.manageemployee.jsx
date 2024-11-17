@@ -407,7 +407,6 @@ const ManageEmployee = () => {
           </VStack>
 
           {/* Input Form */}
-
           <VStack w="400px">
             <Flex alignItems="center" justifyContent="center" mb="60px">
               <Flex

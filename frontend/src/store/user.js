@@ -84,7 +84,11 @@ export const useUserStore = create((set) => ({
   },
 
   terminatedUser: async (pid) => {
+    const now = new Date();
+    const formattedDate = now.toISOString();
+
     const formData = new FormData();
+    formData.append("endDate", formattedDate);
     formData.append("na", true);
 
     const res = await fetch(`/api/users/${pid}`, {
