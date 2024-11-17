@@ -35,7 +35,7 @@ const ManageEmployee = () => {
     createUser,
     fetchUser,
     updateUser,
-    deleteUser,
+    terminatedUser,
     getDepartmentData,
     getPositionData,
   } = useUserStore();
@@ -169,12 +169,12 @@ const ManageEmployee = () => {
     setEditingUserId(null);
   };
 
-  const handleDeleteUser = async (pid) => {
-    const { success, message } = await deleteUser(pid);
+  const handleTerminatedUser = async (pid) => {
+    const { success, message } = await terminatedUser(pid);
     if (success) {
       toast({
         title: "Success",
-        description: message,
+        description: "User terminated successfully",
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -277,112 +277,129 @@ const ManageEmployee = () => {
                   </Thead>
 
                   <Tbody>
-                    {users.map((user) => {
-                      const department = departments.find(
-                        (dept) => dept._id === user.department_id
-                      );
-                      const position = positions.find((post) => post._id === user.position_id);
-                      return (
-                        <Tr key={user._id}>
-                          <Td
-                            borderColor={borderColor}
-                            width={{ base: "100px", xl: "200px" }}
-                            p="0px"
-                          >
-                            <Flex direction="row">
-                              <Image
-                                src={"/" + user.profilePicture}
-                                alt={user.profilePicture}
-                                boxSize="50px"
-                                objectFit="cover"
-                                borderRadius="lg"
-                                width="40px"
-                                height="40px"
-                                mr="10px"
-                              />
-                              <Flex direction="column" width={{ base: "auto", sm: "150px" }}>
+                    {users
+                      .filter((user) => !user.na)
+                      .map((user) => {
+                        const department = departments.find(
+                          (dept) => dept._id === user.department_id
+                        );
+                        const position = positions.find((post) => post._id === user.position_id);
+                        return (
+                          <Tr key={user._id}>
+                            <Td
+                              borderColor={borderColor}
+                              width={{ base: "100px", xl: "200px" }}
+                              p="0px"
+                            >
+                              <Flex direction="row">
+                                <Image
+                                  src={"/" + user.profilePicture}
+                                  alt={user.profilePicture}
+                                  boxSize="50px"
+                                  objectFit="cover"
+                                  borderRadius="lg"
+                                  width="40px"
+                                  height="40px"
+                                  mr="10px"
+                                />
+                                <Flex direction="column" width={{ base: "auto", sm: "150px" }}>
+                                  <Text fontSize="md" color={textColor} fontWeight="bold">
+                                    {user.user_name}
+                                  </Text>
+                                  <Text fontSize="sm" color="gray.400" fontWeight="normal">
+                                    {user.email}
+                                  </Text>
+                                </Flex>
+                              </Flex>
+                            </Td>
+                            <Td borderColor={borderColor}>
+                              <Flex direction="column">
                                 <Text fontSize="md" color={textColor} fontWeight="bold">
-                                  {user.user_name}
+                                  {department ? department.department_name : "Department not found"}
                                 </Text>
                                 <Text fontSize="sm" color="gray.400" fontWeight="normal">
-                                  {user.email}
+                                  {position ? position.position_name : "Position not found"}
                                 </Text>
                               </Flex>
-                            </Flex>
-                          </Td>
-                          <Td borderColor={borderColor}>
-                            <Flex direction="column">
-                              <Text fontSize="md" color={textColor} fontWeight="bold">
-                                {department ? department.department_name : "Department not found"}
-                              </Text>
-                              <Text fontSize="sm" color="gray.400" fontWeight="normal">
-                                {position ? position.position_name : "Position not found"}
-                              </Text>
-                            </Flex>
-                          </Td>
-                          <Td borderColor={borderColor}>
-                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              Nanti Employee ID
-                            </Text>
-                          </Td>
-                          <Td borderColor={borderColor}>
-                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {new Date(user.dateBirth)
-                                .toLocaleDateString("en-GB", {
-                                  weekday: "long",
-                                  day: "2-digit",
-                                  month: "long",
-                                  year: "numeric",
-                                })
-                                .replace(" ", ", ")}
-                            </Text>
-                          </Td>
-                          <Td borderColor={borderColor}>
-                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {new Date(user.startDate)
-                                .toLocaleDateString("en-GB", {
-                                  weekday: "long",
-                                  day: "2-digit",
-                                  month: "long",
-                                  year: "numeric",
-                                })
-                                .replace(" ", ", ")}
-                            </Text>
-                          </Td>
-
-                          {/* Action */}
-                          <Td borderColor={borderColor}>
-                            <Flex direction="row" p="0px" alignItems="center" gap="4">
-                              {/* Button for Edit */}
-                              <Flex
-                                alignItems="center"
-                                gap="1"
-                                as="button"
-                                onClick={() => handleEditClick(user)}
+                            </Td>
+                            <Td borderColor={borderColor}>
+                              <Text
+                                fontSize="md"
+                                color={textColor}
+                                fontWeight="bold"
+                                minWidth="100%"
                               >
-                                <FaPen size="14" color={textColor} />
-                                <Text fontSize="14px" color={textColor} fontWeight="bold">
-                                  EDIT
-                                </Text>
-                              </Flex>
-
-                              {/* Button for Delete */}
-                              <Flex
-                                alignItems="center"
-                                gap="1"
-                                as="button"
-                                onClick={() => handleDeleteUser(user._id)}
+                                Nanti Employee ID
+                              </Text>
+                            </Td>
+                            <Td borderColor={borderColor}>
+                              <Text
+                                fontSize="md"
+                                color={textColor}
+                                fontWeight="bold"
+                                minWidth="100%"
                               >
-                                <FaTrash size="14" color="#E53E3E" />
-                                <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
-                                  TERMINATED
-                                </Text>
+                                {new Date(user.dateBirth)
+                                  .toLocaleDateString("en-GB", {
+                                    weekday: "long",
+                                    day: "2-digit",
+                                    month: "long",
+                                    year: "numeric",
+                                  })
+                                  .replace(" ", ", ")}
+                              </Text>
+                            </Td>
+                            <Td borderColor={borderColor}>
+                              <Text
+                                fontSize="md"
+                                color={textColor}
+                                fontWeight="bold"
+                                minWidth="100%"
+                              >
+                                {new Date(user.startDate)
+                                  .toLocaleDateString("en-GB", {
+                                    weekday: "long",
+                                    day: "2-digit",
+                                    month: "long",
+                                    year: "numeric",
+                                  })
+                                  .replace(" ", ", ")}
+                              </Text>
+                            </Td>
+
+                            {/* Action */}
+                            <Td borderColor={borderColor}>
+                              <Flex direction="row" p="0px" alignItems="center" gap="4">
+                                {/* Button for Edit */}
+                                <Flex
+                                  alignItems="center"
+                                  gap="1"
+                                  as="button"
+                                  onClick={() => handleEditClick(user)}
+                                >
+                                  <FaPen size="14" color={textColor} />
+                                  <Text fontSize="14px" color={textColor} fontWeight="bold">
+                                    EDIT
+                                  </Text>
+                                </Flex>
+
+                                {/* Button for Delete */}
+                                <Flex
+                                  alignItems="center"
+                                  gap="1"
+                                  as="button"
+                                  onClick={() => handleTerminatedUser(user._id)}
+                                >
+                                  <FaTrash size="14" color="#E53E3E" />
+                                  <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
+                                    TERMINATED
+                                  </Text>
+                                </Flex>
                               </Flex>
-                            </Flex>
-                          </Td>
-                        </Tr>
-                      );
-                    })}
+                            </Td>
+                          </Tr>
+                        );
+                      })}
                   </Tbody>
                 </Table>
               </Box>

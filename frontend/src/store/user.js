@@ -83,10 +83,15 @@ export const useUserStore = create((set) => ({
     return { success: true, message: data.message };
   },
 
-  deleteUser: async (pid) => {
+  terminatedUser: async (pid) => {
+    const formData = new FormData();
+    formData.append("na", true);
+
     const res = await fetch(`/api/users/${pid}`, {
-      method: "DELETE",
+      method: "PUT",
+      body: formData,
     });
+
     const data = await res.json();
     if (!data.success) return { success: false, message: data.message };
 
