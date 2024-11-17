@@ -339,14 +339,11 @@ const ManageEmployee = () => {
                                 fontWeight="bold"
                                 minWidth="100%"
                               >
-                                {new Date(user.dateBirth)
-                                  .toLocaleDateString("en-GB", {
-                                    weekday: "long",
-                                    day: "2-digit",
-                                    month: "long",
-                                    year: "numeric",
-                                  })
-                                  .replace(" ", ", ")}
+                                {new Date(user.dateBirth).toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "long",
+                                  year: "numeric",
+                                })}
                               </Text>
                             </Td>
                             <Td borderColor={borderColor}>
@@ -356,14 +353,11 @@ const ManageEmployee = () => {
                                 fontWeight="bold"
                                 minWidth="100%"
                               >
-                                {new Date(user.startDate)
-                                  .toLocaleDateString("en-GB", {
-                                    weekday: "long",
-                                    day: "2-digit",
-                                    month: "long",
-                                    year: "numeric",
-                                  })
-                                  .replace(" ", ", ")}
+                                {new Date(user.startDate).toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "long",
+                                  year: "numeric",
+                                })}
                               </Text>
                             </Td>
 
