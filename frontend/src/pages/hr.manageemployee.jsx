@@ -196,6 +196,10 @@ const ManageEmployee = () => {
     getPositionData();
   }, [fetchUser, getDepartmentData, getPositionData]);
 
+  const filteredPositions = positions.filter(
+    (position) => position.department_id === newUser.department_id
+  );
+
   // FE
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
@@ -493,8 +497,9 @@ const ManageEmployee = () => {
                     value={newUser.position_id}
                     onChange={(e) => setNewUser({ ...newUser, position_id: e.target.value })}
                     borderColor={errors.position_id ? "red.500" : "gray.200"}
+                    isDisabled={!newUser.department_id}
                   >
-                    {positions.map((position) => (
+                    {filteredPositions.map((position) => (
                       <option key={position._id} value={position._id}>
                         {position.position_name}
                       </option>
