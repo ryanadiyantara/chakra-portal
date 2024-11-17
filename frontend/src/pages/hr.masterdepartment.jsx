@@ -201,51 +201,54 @@ const MasterDepartment = () => {
                   </Thead>
 
                   <Tbody>
-                    {departments.map((department, index) => (
-                      <Tr key={department._id}>
-                        <Td width={{ sm: "50px" }} pl="0px" borderColor={borderColor} py={5}>
-                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                            {index + 1}
-                          </Text>
-                        </Td>
-                        <Td borderColor={borderColor}>
-                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                            {department.department_name}
-                          </Text>
-                        </Td>
+                    {departments
+                      .filter((department) => !department.na)
+                      .filter((department) => !department.del)
+                      .map((department, index) => (
+                        <Tr key={department._id}>
+                          <Td width={{ sm: "50px" }} pl="0px" borderColor={borderColor} py={5}>
+                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                              {index + 1}
+                            </Text>
+                          </Td>
+                          <Td borderColor={borderColor}>
+                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                              {department.department_name}
+                            </Text>
+                          </Td>
 
-                        {/* Action */}
-                        <Td borderColor={borderColor}>
-                          <Flex direction="row" p="0px" alignItems="center" gap="4">
-                            {/* Button for Edit */}
-                            <Flex
-                              alignItems="center"
-                              gap="1"
-                              as="button"
-                              onClick={() => handleEditClick(department)}
-                            >
-                              <FaPen size="14" color={textColor} />
-                              <Text fontSize="14px" color={textColor} fontWeight="bold">
-                                EDIT
-                              </Text>
-                            </Flex>
+                          {/* Action */}
+                          <Td borderColor={borderColor}>
+                            <Flex direction="row" p="0px" alignItems="center" gap="4">
+                              {/* Button for Edit */}
+                              <Flex
+                                alignItems="center"
+                                gap="1"
+                                as="button"
+                                onClick={() => handleEditClick(department)}
+                              >
+                                <FaPen size="14" color={textColor} />
+                                <Text fontSize="14px" color={textColor} fontWeight="bold">
+                                  EDIT
+                                </Text>
+                              </Flex>
 
-                            {/* Button for Delete */}
-                            <Flex
-                              alignItems="center"
-                              gap="1"
-                              as="button"
-                              onClick={() => handleDeleteDepartment(department._id)}
-                            >
-                              <FaTrash size="14" color="#E53E3E" />
-                              <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
-                                DELETE
-                              </Text>
+                              {/* Button for Delete */}
+                              <Flex
+                                alignItems="center"
+                                gap="1"
+                                as="button"
+                                onClick={() => handleDeleteDepartment(department._id)}
+                              >
+                                <FaTrash size="14" color="#E53E3E" />
+                                <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
+                                  DELETE
+                                </Text>
+                              </Flex>
                             </Flex>
-                          </Flex>
-                        </Td>
-                      </Tr>
-                    ))}
+                          </Td>
+                        </Tr>
+                      ))}
                   </Tbody>
                 </Table>
               </Box>

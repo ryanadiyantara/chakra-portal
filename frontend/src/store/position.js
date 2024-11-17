@@ -53,9 +53,15 @@ export const usePositionStore = create((set) => ({
   },
 
   deletePosition: async (pid) => {
+    const formData = new FormData();
+    formData.append("na", true);
+    formData.append("del", true);
+
     const res = await fetch(`/api/positions/${pid}`, {
-      method: "DELETE",
+      method: "PUT",
+      body: formData,
     });
+
     const data = await res.json();
     if (!data.success) return { success: false, message: data.message };
 
