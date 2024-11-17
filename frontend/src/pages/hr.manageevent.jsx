@@ -150,7 +150,7 @@ const ManageEvent = () => {
     if (success) {
       toast({
         title: "Success",
-        description: message,
+        description: "Event deleted successfully",
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -258,83 +258,86 @@ const ManageEvent = () => {
                   </Thead>
 
                   <Tbody>
-                    {events.map((event) => (
-                      <Tr key={event._id}>
-                        <Td pl="0px" borderColor={borderColor} py={5}>
-                          <Image
-                            src={"/" + event.poster_path}
-                            alt={event.poster_path}
-                            boxSize="200px"
-                            objectFit="cover"
-                            borderRadius="lg"
-                            width="200px"
-                            height="100px"
-                          />
-                        </Td>
-                        <Td borderColor={borderColor}>
-                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                            {event.event_name}
-                          </Text>
-                        </Td>
-                        <Td borderColor={borderColor}>
-                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                            {new Date(event.event_startDate)
-                              .toLocaleDateString("en-GB", {
-                                weekday: "long",
-                                day: "2-digit",
-                                month: "long",
-                                year: "numeric",
-                              })
-                              .replace(" ", ", ")}{" "}
-                            {" - "}
-                            {new Date(event.event_endDate)
-                              .toLocaleDateString("en-GB", {
-                                weekday: "long",
-                                day: "2-digit",
-                                month: "long",
-                                year: "numeric",
-                              })
-                              .replace(" ", ", ")}
-                          </Text>
-                        </Td>
-                        <Td borderColor={borderColor}>
-                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                            {event.description}
-                          </Text>
-                        </Td>
+                    {events
+                      .filter((event) => !event.na)
+                      .filter((event) => !event.del)
+                      .map((event) => (
+                        <Tr key={event._id}>
+                          <Td pl="0px" borderColor={borderColor} py={5}>
+                            <Image
+                              src={"/" + event.poster_path}
+                              alt={event.poster_path}
+                              boxSize="200px"
+                              objectFit="cover"
+                              borderRadius="lg"
+                              width="200px"
+                              height="100px"
+                            />
+                          </Td>
+                          <Td borderColor={borderColor}>
+                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                              {event.event_name}
+                            </Text>
+                          </Td>
+                          <Td borderColor={borderColor}>
+                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                              {new Date(event.event_startDate)
+                                .toLocaleDateString("en-GB", {
+                                  weekday: "long",
+                                  day: "2-digit",
+                                  month: "long",
+                                  year: "numeric",
+                                })
+                                .replace(" ", ", ")}{" "}
+                              {" - "}
+                              {new Date(event.event_endDate)
+                                .toLocaleDateString("en-GB", {
+                                  weekday: "long",
+                                  day: "2-digit",
+                                  month: "long",
+                                  year: "numeric",
+                                })
+                                .replace(" ", ", ")}
+                            </Text>
+                          </Td>
+                          <Td borderColor={borderColor}>
+                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                              {event.description}
+                            </Text>
+                          </Td>
 
-                        {/* Action */}
-                        <Td borderColor={borderColor}>
-                          <Flex direction="row" p="0px" alignItems="center" gap="4">
-                            {/* Button for Edit */}
-                            <Flex
-                              alignItems="center"
-                              gap="1"
-                              as="button"
-                              onClick={() => handleEditClick(event)}
-                            >
-                              <FaPen size="14" color={textColor} />
-                              <Text fontSize="14px" color={textColor} fontWeight="bold">
-                                EDIT
-                              </Text>
-                            </Flex>
+                          {/* Action */}
+                          <Td borderColor={borderColor}>
+                            <Flex direction="row" p="0px" alignItems="center" gap="4">
+                              {/* Button for Edit */}
+                              <Flex
+                                alignItems="center"
+                                gap="1"
+                                as="button"
+                                onClick={() => handleEditClick(event)}
+                              >
+                                <FaPen size="14" color={textColor} />
+                                <Text fontSize="14px" color={textColor} fontWeight="bold">
+                                  EDIT
+                                </Text>
+                              </Flex>
 
-                            {/* Button for Delete */}
-                            <Flex
-                              alignItems="center"
-                              gap="1"
-                              as="button"
-                              onClick={() => handleDeleteEvent(event._id)}
-                            >
-                              <FaTrash size="14" color="#E53E3E" />
-                              <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
-                                DELETE
-                              </Text>
+                              {/* Button for Delete */}
+                              <Flex
+                                alignItems="center"
+                                gap="1"
+                                as="button"
+                                onClick={() => handleDeleteEvent(event._id)}
+                              >
+                                <FaTrash size="14" color="#E53E3E" />
+                                <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
+                                  DELETE
+                                </Text>
+                              </Flex>
                             </Flex>
-                          </Flex>
-                        </Td>
-                      </Tr>
-                    ))}
+                          </Td>
+                        </Tr>
+                      ))}
                   </Tbody>
                 </Table>
               </Box>

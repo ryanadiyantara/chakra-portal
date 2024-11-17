@@ -74,9 +74,15 @@ export const useEventStore = create((set) => ({
   },
 
   deleteEvent: async (pid) => {
+    const formData = new FormData();
+    formData.append("na", true);
+    formData.append("del", true);
+
     const res = await fetch(`/api/events/${pid}`, {
-      method: "DELETE",
+      method: "PUT",
+      body: formData,
     });
+
     const data = await res.json();
     if (!data.success) return { success: false, message: data.message };
 
