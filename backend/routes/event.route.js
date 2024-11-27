@@ -5,8 +5,11 @@ import {
   updateEvents,
   deleteEvents,
 } from "../controllers/event.controller.js";
+// import verifyJWT from "../middleware/verifyJWT.js";
 
 const router = express.Router();
+
+// router.use(verifyJWT);
 
 router.get("/", getEvents);
 router.post("/", createEvents);

@@ -39,8 +39,7 @@ const usersSchema = new mongoose.Schema(
     },
     user_password: {
       type: String,
-      required: false,
-      default: "chakra1234",
+      required: true,
     },
     na: {
       type: Boolean,

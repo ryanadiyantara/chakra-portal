@@ -1,9 +1,11 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 // import path from "path";
 
 import { connectDB } from "./config/db.js";
 
+import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
 import leaveApplicationRoutes from "./routes/leave_application.route.js";
 import attendanceRecordRoutes from "./routes/attendance_record.route.js";
@@ -18,7 +20,10 @@ const PORT = process.env.PORT || 5000;
 
 // const __dirname = path.resolve();
 
+app.use(cookieParser());
 app.use(express.json()); //allows us to accept JSON data in the req.body
+
+app.use("/api/auth", authRoutes);
 
 app.use("/api/users", userRoutes);
 app.use("/api/leaveapplications", leaveApplicationRoutes);

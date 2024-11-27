@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import multer from "multer";
 import path from "path";
+import bcrypt from "bcrypt";
 import User from "../models/user.model.js";
 
 const storage = multer.diskStorage({
@@ -43,6 +44,9 @@ export const createUsers = async (req, res) => {
     const filePath = path.relative("frontend/public", req.file.path);
 
     user.profilePicture = filePath;
+
+    const hashedPwd = await bcrypt.hash("chakra1234", 10); // salt rounds
+    user.user_password = hashedPwd;
 
     const newUser = new User(user);
 
