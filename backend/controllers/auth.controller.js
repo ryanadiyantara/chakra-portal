@@ -31,23 +31,24 @@ export const login = asyncHandler(async (req, res) => {
       },
     },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "1d" }
+    { expiresIn: "30s" }
   );
 
   const refreshToken = jwt.sign({ email: foundUser.email }, process.env.REFRESH_TOKEN_SECRET, {
     expiresIn: "1d",
   });
 
-  // Create secure cookie with refresh token
   res.cookie("jwt", refreshToken, {
-    httpOnly: true, // accessible only by web server
-    secure: false, // https
-    sameSite: "None", // cross-site cookie
-    maxAge: 7 * 24 * 60 * 60 * 1000, // cookie expiry: set to match rT
+    httpOnly: true,
+    secure: false,
+    sameSite: "None",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
-  // Send accessToken containing email
-  res.json({ accessToken });
+  res.json({
+    success: true,
+    accessToken: accessToken,
+  });
 });
 
 export const refresh = async (req, res) => {
