@@ -5,11 +5,11 @@ import {
   updateDepartments,
   deleteDepartments,
 } from "../controllers/department.controller.js";
-// import verifyJWT from "../middleware/verifyJWT.js";
+import verifyJWT from "../middleware/verifyJWT.js";
 
 const router = express.Router();
 
-// router.use(verifyJWT);
+router.use(verifyJWT);
 
 router.get("/", getDepartments);
 router.post("/", createDepartments);
