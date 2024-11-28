@@ -14,7 +14,6 @@ export const login = asyncHandler(async (req, res) => {
 
   const foundUser = await User.findOne({ email }).exec();
 
-  //   if (!foundUser || foundUser.na) {
   if (!foundUser) {
     return res.status(401).json({ success: false, message: "Unauthorized" });
   }
