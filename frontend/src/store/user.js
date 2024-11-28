@@ -117,4 +117,25 @@ export const useUserStore = create((set) => ({
     const data = await res.json();
     set({ positions: data.data });
   },
+
+  loginUser: async (newUser) => {
+    if (!newUser.email || !newUser.user_password) {
+      return { success: false, message: "Please fill in all fields." };
+    }
+
+    const res = await fetch("/api/auth", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newUser),
+      credentials: "include",
+    });
+
+    const data = await res.json();
+    if (!data.success) return { success: false, message: data.message };
+
+    set((state) => ({ users: [...state.users, data.data] }));
+    return { success: true, message: "Login successfully" };
+  },
 }));
