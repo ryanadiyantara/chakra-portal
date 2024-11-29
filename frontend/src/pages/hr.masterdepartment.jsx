@@ -109,7 +109,7 @@ const MasterDepartment = () => {
     if (success) {
       toast({
         title: "Success",
-        description: message,
+        description: "Department deleted successfully",
         status: "success",
         duration: 3000,
         isClosable: true,

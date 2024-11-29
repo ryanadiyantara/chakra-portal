@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+const token = localStorage.getItem("accessToken");
+
 export const useDepartmentStore = create((set) => ({
   departments: [],
   setDepartment: (departments) => set({ departments }),
@@ -13,6 +15,7 @@ export const useDepartmentStore = create((set) => ({
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(newDepartment),
     });
@@ -23,7 +26,13 @@ export const useDepartmentStore = create((set) => ({
   },
 
   fetchDepartment: async () => {
-    const res = await fetch("/api/departments");
+    const res = await fetch("/api/departments", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
     const data = await res.json();
     set({ departments: data.data });
   },
@@ -37,6 +46,7 @@ export const useDepartmentStore = create((set) => ({
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(updatedDepartment),
     });
@@ -54,13 +64,18 @@ export const useDepartmentStore = create((set) => ({
   },
 
   deleteDepartment: async (pid) => {
-    const formData = new FormData();
-    formData.append("na", true);
-    formData.append("del", true);
+    const deletedDepartment = {
+      na: true,
+      del: true,
+    };
 
     const res = await fetch(`/api/departments/${pid}`, {
       method: "PUT",
-      body: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(deletedDepartment),
     });
 
     const data = await res.json();
