@@ -121,7 +121,7 @@ const MasterPosition = () => {
     if (success) {
       toast({
         title: "Success",
-        description: message,
+        description: "Position deleted successfully",
         status: "success",
         duration: 3000,
         isClosable: true,
