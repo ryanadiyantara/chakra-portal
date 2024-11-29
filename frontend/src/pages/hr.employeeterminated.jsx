@@ -18,10 +18,18 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 import { useUserStore } from "../store/user";
+import { useEffect } from "react";
 
 const EmployeeTerminated = () => {
   // BE
-  const { users, departments, positions } = useUserStore();
+  const { users, departments, positions, fetchUser, getDepartmentData, getPositionData } =
+    useUserStore();
+
+  useEffect(() => {
+    fetchUser();
+    getDepartmentData();
+    getPositionData();
+  }, [fetchUser, getDepartmentData, getPositionData]);
 
   // FE
   const textColor = useColorModeValue("gray.700", "white");
