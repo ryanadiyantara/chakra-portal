@@ -33,7 +33,6 @@ export const usePositionStore = create((set) => ({
         Authorization: `Bearer ${token}`,
       },
     });
-
     const data = await res.json();
     set({ positions: data.data });
   },

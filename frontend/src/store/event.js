@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+const token = localStorage.getItem("accessToken");
+
 export const useEventStore = create((set) => ({
   events: [],
   setEvent: (events) => set({ events }),
@@ -24,6 +26,9 @@ export const useEventStore = create((set) => ({
 
     const res = await fetch("/api/events", {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: formData,
     });
 
@@ -35,7 +40,12 @@ export const useEventStore = create((set) => ({
   },
 
   fetchEvent: async () => {
-    const res = await fetch("/api/events");
+    const res = await fetch("/api/events", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const data = await res.json();
     set({ events: data.data });
   },
@@ -60,6 +70,9 @@ export const useEventStore = create((set) => ({
 
     const res = await fetch(`/api/events/${pid}`, {
       method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: formData,
     });
 
@@ -74,13 +87,18 @@ export const useEventStore = create((set) => ({
   },
 
   deleteEvent: async (pid) => {
-    const formData = new FormData();
-    formData.append("na", true);
-    formData.append("del", true);
+    const deletedEvent = {
+      na: true,
+      del: true,
+    };
 
     const res = await fetch(`/api/events/${pid}`, {
       method: "PUT",
-      body: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(deletedEvent),
     });
 
     const data = await res.json();

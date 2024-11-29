@@ -32,7 +32,6 @@ export const useDepartmentStore = create((set) => ({
         Authorization: `Bearer ${token}`,
       },
     });
-
     const data = await res.json();
     set({ departments: data.data });
   },

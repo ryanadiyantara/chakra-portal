@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+const token = localStorage.getItem("accessToken");
+
 export const useUserStore = create((set) => ({
   users: [],
   positions: [],
@@ -30,6 +32,9 @@ export const useUserStore = create((set) => ({
 
     const res = await fetch("/api/users", {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: formData,
     });
 
@@ -41,7 +46,12 @@ export const useUserStore = create((set) => ({
   },
 
   fetchUser: async () => {
-    const res = await fetch("/api/users");
+    const res = await fetch("/api/users", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const data = await res.json();
     set({ users: data.data });
   },
@@ -70,6 +80,9 @@ export const useUserStore = create((set) => ({
 
     const res = await fetch(`/api/users/${pid}`, {
       method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: formData,
     });
 
@@ -93,6 +106,9 @@ export const useUserStore = create((set) => ({
 
     const res = await fetch(`/api/users/${pid}`, {
       method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       body: formData,
     });
 
@@ -107,17 +123,28 @@ export const useUserStore = create((set) => ({
   },
 
   getDepartmentData: async () => {
-    const res = await fetch("/api/departments");
+    const res = await fetch("/api/departments", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const data = await res.json();
     set({ departments: data.data });
   },
 
   getPositionData: async () => {
-    const res = await fetch("/api/positions");
+    const res = await fetch("/api/positions", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const data = await res.json();
     set({ positions: data.data });
   },
 
+  // Auth
   loginUser: async (newUser) => {
     if (!newUser.email || !newUser.user_password) {
       return { success: false, message: "Please fill in all fields." };

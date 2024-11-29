@@ -478,11 +478,14 @@ const ManageEmployee = () => {
                     onChange={(e) => setNewUser({ ...newUser, department_id: e.target.value })}
                     borderColor={errors.department_id ? "red.500" : "gray.200"}
                   >
-                    {departments.map((department) => (
-                      <option key={department._id} value={department._id}>
-                        {department.department_name}
-                      </option>
-                    ))}
+                    {departments
+                      .filter((department) => !department.na)
+                      .filter((department) => !department.del)
+                      .map((department) => (
+                        <option key={department._id} value={department._id}>
+                          {department.department_name}
+                        </option>
+                      ))}
                   </Select>
                   <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                     Position
@@ -499,11 +502,14 @@ const ManageEmployee = () => {
                     borderColor={errors.position_id ? "red.500" : "gray.200"}
                     isDisabled={!newUser.department_id}
                   >
-                    {filteredPositions.map((position) => (
-                      <option key={position._id} value={position._id}>
-                        {position.position_name}
-                      </option>
-                    ))}
+                    {filteredPositions
+                      .filter((position) => !position.na)
+                      .filter((position) => !position.del)
+                      .map((position) => (
+                        <option key={position._id} value={position._id}>
+                          {position.position_name}
+                        </option>
+                      ))}
                   </Select>
                   <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                     Profile Picture
