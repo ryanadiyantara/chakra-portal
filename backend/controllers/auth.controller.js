@@ -31,11 +31,11 @@ export const login = asyncHandler(async (req, res) => {
       },
     },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "30s" }
+    { expiresIn: "1h" }
   );
 
   const refreshToken = jwt.sign({ email: foundUser.email }, process.env.REFRESH_TOKEN_SECRET, {
-    expiresIn: "1d",
+    expiresIn: "1h",
   });
 
   res.cookie("jwt", refreshToken, {
@@ -66,12 +66,12 @@ export const refresh = async (req, res) => {
     asyncHandler(async (err, decoded) => {
       if (err) {
         console.error("Token verification error:", err.message);
-        return res.status(403).json({ success: false, message: "Forbidden controller" });
+        return res.status(403).json({ success: false, message: "Forbidden" });
       }
 
       const foundUser = await User.findOne({ email: decoded.email }).exec();
 
-      if (!foundUser) return res.status(401).json({ message: "Unauthorized b" });
+      if (!foundUser) return res.status(401).json({ message: "Unauthorized" });
 
       const accessToken = jwt.sign(
         {
@@ -80,7 +80,7 @@ export const refresh = async (req, res) => {
           },
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "15m" }
+        { expiresIn: "1h" }
       );
 
       res.json({ accessToken });

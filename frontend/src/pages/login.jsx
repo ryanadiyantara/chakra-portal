@@ -36,7 +36,7 @@ const Login = () => {
 
     setErrors(currentErrors);
     if (Object.keys(currentErrors).length > 0) {
-      return; // Stop further execution
+      return;
     }
 
     const { success, message } = await loginUser(newUser);

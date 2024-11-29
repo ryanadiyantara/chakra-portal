@@ -1,5 +1,5 @@
 import { Box, useColorModeValue } from "@chakra-ui/react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 import Login from "./pages/login";
 import ForgotPassword from "./pages/forgotpassword";
@@ -14,6 +14,7 @@ import ManageEmployee from "./pages/hr.manageemployee";
 import EmployeeTerminated from "./pages/hr.employeeterminated";
 import AttendanceSummary from "./pages/hr.attendancesummary";
 import LeaveApproval from "./pages/hr.leaveapproval";
+
 import Sidebar from "./components/Sidebar";
 import Background from "./components/Background";
 
@@ -24,6 +25,8 @@ function App() {
         <Background />
         <Sidebar />
         <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
+
           <Route path="/login" element={<Login />} />
           <Route path="/login/forgotpassword" element={<ForgotPassword />} />
           <Route path="/dashboard" element={<Dashboard />} />
