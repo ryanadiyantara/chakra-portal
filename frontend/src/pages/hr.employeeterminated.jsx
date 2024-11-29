@@ -12,7 +12,6 @@ import {
   VStack,
   Td,
   Image,
-  Center,
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
