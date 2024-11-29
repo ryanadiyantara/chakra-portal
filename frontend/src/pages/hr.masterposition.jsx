@@ -344,11 +344,14 @@ const MasterPosition = () => {
                     }
                     borderColor={errors.department_id ? "red.500" : "gray.200"}
                   >
-                    {departments.map((department) => (
-                      <option key={department._id} value={department._id}>
-                        {department.department_name}
-                      </option>
-                    ))}
+                    {departments
+                      .filter((department) => !department.na)
+                      .filter((department) => !department.del)
+                      .map((department) => (
+                        <option key={department._id} value={department._id}>
+                          {department.department_name}
+                        </option>
+                      ))}
                   </Select>
 
                   <Button

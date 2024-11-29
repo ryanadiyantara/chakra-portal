@@ -5,11 +5,11 @@ import {
   updatePositions,
   deletePositions,
 } from "../controllers/position.controller.js";
-// import verifyJWT from "../middleware/verifyJWT.js";
+import verifyJWT from "../middleware/verifyJWT.js";
 
 const router = express.Router();
 
-// router.use(verifyJWT);
+router.use(verifyJWT);
 
 router.get("/", getPositions);
 router.post("/", createPositions);

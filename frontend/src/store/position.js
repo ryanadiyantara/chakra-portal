@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+const token = localStorage.getItem("accessToken");
+
 export const usePositionStore = create((set) => ({
   positions: [],
   departments: [],
@@ -14,6 +16,7 @@ export const usePositionStore = create((set) => ({
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(newPosition),
     });
@@ -24,7 +27,13 @@ export const usePositionStore = create((set) => ({
   },
 
   fetchPosition: async () => {
-    const res = await fetch("/api/positions");
+    const res = await fetch("/api/positions", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
     const data = await res.json();
     set({ positions: data.data });
   },
@@ -38,6 +47,7 @@ export const usePositionStore = create((set) => ({
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(updatedPosition),
     });
@@ -53,13 +63,18 @@ export const usePositionStore = create((set) => ({
   },
 
   deletePosition: async (pid) => {
-    const formData = new FormData();
-    formData.append("na", true);
-    formData.append("del", true);
+    const deletedPosition = {
+      na: true,
+      del: true,
+    };
 
     const res = await fetch(`/api/positions/${pid}`, {
       method: "PUT",
-      body: formData,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(deletedPosition),
     });
 
     const data = await res.json();
@@ -73,7 +88,12 @@ export const usePositionStore = create((set) => ({
   },
 
   getDepartmentData: async () => {
-    const res = await fetch("/api/departments");
+    const res = await fetch("/api/departments", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const data = await res.json();
     set({ departments: data.data });
   },
