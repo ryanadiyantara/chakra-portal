@@ -38,6 +38,12 @@ export const useUserStore = create((set) => ({
       body: formData,
     });
 
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem("accessToken");
+      window.location.href = `/login?message=Session expired, please log in again`;
+      return;
+    }
+
     const data = await res.json();
     if (!data.success) return { success: false, message: data.message };
 
@@ -52,6 +58,13 @@ export const useUserStore = create((set) => ({
         Authorization: `Bearer ${token}`,
       },
     });
+
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem("accessToken");
+      window.location.href = `/login?message=Session expired, please log in again`;
+      return;
+    }
+
     const data = await res.json();
     set({ users: data.data });
   },
@@ -86,6 +99,12 @@ export const useUserStore = create((set) => ({
       body: formData,
     });
 
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem("accessToken");
+      window.location.href = `/login?message=Session expired, please log in again`;
+      return;
+    }
+
     const data = await res.json();
     if (!data.success) return { success: false, message: data.message };
 
@@ -112,6 +131,12 @@ export const useUserStore = create((set) => ({
       body: formData,
     });
 
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem("accessToken");
+      window.location.href = `/login?message=Session expired, please log in again`;
+      return;
+    }
+
     const data = await res.json();
     if (!data.success) return { success: false, message: data.message };
 
@@ -129,6 +154,13 @@ export const useUserStore = create((set) => ({
         Authorization: `Bearer ${token}`,
       },
     });
+
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem("accessToken");
+      window.location.href = `/login?message=Session expired, please log in again`;
+      return;
+    }
+
     const data = await res.json();
     set({ departments: data.data });
   },
@@ -140,6 +172,13 @@ export const useUserStore = create((set) => ({
         Authorization: `Bearer ${token}`,
       },
     });
+
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem("accessToken");
+      window.location.href = `/login?message=Session expired, please log in again`;
+      return;
+    }
+
     const data = await res.json();
     set({ positions: data.data });
   },

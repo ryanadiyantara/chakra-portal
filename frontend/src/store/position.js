@@ -21,6 +21,12 @@ export const usePositionStore = create((set) => ({
       body: JSON.stringify(newPosition),
     });
 
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem("accessToken");
+      window.location.href = `/login?message=Session expired, please log in again`;
+      return;
+    }
+
     const data = await res.json();
     set((state) => ({ positions: [...state.positions, data.data] }));
     return { success: true, message: "Position created successfully" };
@@ -33,6 +39,13 @@ export const usePositionStore = create((set) => ({
         Authorization: `Bearer ${token}`,
       },
     });
+
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem("accessToken");
+      window.location.href = `/login?message=Session expired, please log in again`;
+      return;
+    }
+
     const data = await res.json();
     set({ positions: data.data });
   },
@@ -50,6 +63,12 @@ export const usePositionStore = create((set) => ({
       },
       body: JSON.stringify(updatedPosition),
     });
+
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem("accessToken");
+      window.location.href = `/login?message=Session expired, please log in again`;
+      return;
+    }
 
     const data = await res.json();
     if (!data.success) return { success: false, message: data.message };
@@ -76,6 +95,12 @@ export const usePositionStore = create((set) => ({
       body: JSON.stringify(deletedPosition),
     });
 
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem("accessToken");
+      window.location.href = `/login?message=Session expired, please log in again`;
+      return;
+    }
+
     const data = await res.json();
     if (!data.success) return { success: false, message: data.message };
 
@@ -93,6 +118,13 @@ export const usePositionStore = create((set) => ({
         Authorization: `Bearer ${token}`,
       },
     });
+
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem("accessToken");
+      window.location.href = `/login?message=Session expired, please log in again`;
+      return;
+    }
+
     const data = await res.json();
     set({ departments: data.data });
   },

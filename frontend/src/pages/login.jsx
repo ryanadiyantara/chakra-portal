@@ -11,10 +11,10 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import { useUserStore } from "../store/user";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Login = () => {
   // BE
@@ -62,6 +62,20 @@ const Login = () => {
       });
     }
   };
+
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const loginMessage = searchParams.get("message");
+    if (loginMessage) {
+      toast({
+        title: "Error",
+        description: loginMessage,
+        status: "error",
+        isClosable: true,
+      });
+    }
+  }, [searchParams]);
 
   // FE
   const toast = useToast();

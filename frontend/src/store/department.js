@@ -20,6 +20,12 @@ export const useDepartmentStore = create((set) => ({
       body: JSON.stringify(newDepartment),
     });
 
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem("accessToken");
+      window.location.href = `/login?message=Session expired, please log in again`;
+      return;
+    }
+
     const data = await res.json();
     set((state) => ({ departments: [...state.departments, data.data] }));
     return { success: true, message: "Department created successfully" };
@@ -32,6 +38,13 @@ export const useDepartmentStore = create((set) => ({
         Authorization: `Bearer ${token}`,
       },
     });
+
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem("accessToken");
+      window.location.href = `/login?message=Session expired, please log in again`;
+      return;
+    }
+
     const data = await res.json();
     set({ departments: data.data });
   },
@@ -49,6 +62,12 @@ export const useDepartmentStore = create((set) => ({
       },
       body: JSON.stringify(updatedDepartment),
     });
+
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem("accessToken");
+      window.location.href = `/login?message=Session expired, please log in again`;
+      return;
+    }
 
     const data = await res.json();
     if (!data.success) return { success: false, message: data.message };
@@ -76,6 +95,12 @@ export const useDepartmentStore = create((set) => ({
       },
       body: JSON.stringify(deletedDepartment),
     });
+
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem("accessToken");
+      window.location.href = `/login?message=Session expired, please log in again`;
+      return;
+    }
 
     const data = await res.json();
     if (!data.success) return { success: false, message: data.message };
