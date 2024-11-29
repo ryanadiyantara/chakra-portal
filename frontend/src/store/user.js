@@ -129,13 +129,50 @@ export const useUserStore = create((set) => ({
         "Content-Type": "application/json",
       },
       body: JSON.stringify(newUser),
-      credentials: "include",
     });
 
     const data = await res.json();
-    if (!data.success) return { success: false, message: data.message };
+
+    if (!data.success) return { success: false, message: data.accessToken };
+
+    if (data.accessToken) {
+      localStorage.setItem("accessToken", data.accessToken);
+    }
 
     set((state) => ({ users: [...state.users, data.data] }));
     return { success: true, message: "Login successfully" };
   },
+
+  // refreshToken: async () => {
+  //   const cookies = document.cookie.split(";").reduce((acc, cookie) => {
+  //     const [key, value] = cookie.split("=");
+  //     acc[key.trim()] = value;
+  //     return acc;
+  //   }, {});
+
+  //   const refreshToken = cookies?.jwt;
+
+  //   if (!refreshToken) {
+  //     return { success: false, message: "No refresh token found" };
+  //   }
+
+  //   const res = await fetch("/api/auth/refresh", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ refreshToken }),
+  //   });
+
+  //   const data = await res.json();
+
+  //   if (!data.success) {
+  //     return { success: false, message: "Failed to refresh token" };
+  //   }
+
+  //   if (data.accessToken) {
+  //     localStorage.setItem("accessToken", data.accessToken);
+  //     return { success: true, message: "Token refreshed successfully" };
+  //   }
+  // },
 }));
