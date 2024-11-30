@@ -35,9 +35,7 @@ const Login = () => {
     if (!newUser.user_password) currentErrors.user_password = "Password is required";
 
     setErrors(currentErrors);
-    if (Object.keys(currentErrors).length > 0) {
-      return;
-    }
+    if (Object.keys(currentErrors).length > 0);
 
     const { success, message } = await loginUser(newUser);
 
@@ -82,6 +80,7 @@ const Login = () => {
   const textColor = useColorModeValue("gray.700", "white");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const bgForm = useColorModeValue("white", "navy.800");
+
   return (
     <>
       <Box
