@@ -38,10 +38,9 @@ const MasterDepartment = () => {
   const [editingDepartmentId, setEditingDepartmentId] = useState(null);
 
   const handleSubmit = async () => {
-    const currentErrors = {};
-
-    if (!newDepartment.department_name)
-      currentErrors.department_name = "Department name is required";
+    const currentErrors = {
+      department_name: !newDepartment.department_name,
+    };
 
     setErrors(currentErrors);
     if (Object.keys(currentErrors).length > 0);

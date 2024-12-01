@@ -29,13 +29,12 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    const currentErrors = {};
-
-    if (!newUser.email) currentErrors.email = "Email is required";
-    if (!newUser.user_password) currentErrors.user_password = "Password is required";
+    const currentErrors = {
+      email: !newUser.email,
+      user_password: !newUser.user_password,
+    };
 
     setErrors(currentErrors);
-    if (Object.keys(currentErrors).length > 0);
 
     const { success, message } = await loginUser(newUser);
 

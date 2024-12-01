@@ -63,15 +63,15 @@ const ManageEmployee = () => {
   };
 
   const handleSubmit = async () => {
-    const currentErrors = {};
-
-    if (!newUser.user_name) currentErrors.user_name = "User name is required";
-    if (!newUser.email) currentErrors.email = "Email is required";
-    if (!newUser.dateBirth) currentErrors.dateBirth = "Date birth is required";
-    if (!newUser.department_id) currentErrors.department_id = "Department is required";
-    if (!newUser.position_id) currentErrors.position_id = "Position is required";
-    if (!newUser.profilePicture) currentErrors.profilePicture = "Profile picture is required";
-    if (!newUser.startDate) currentErrors.startDate = "Start date is required";
+    const currentErrors = {
+      user_name: !newUser.position_name,
+      email: !newUser.email,
+      dateBirth: !newUser.dateBirth,
+      department_id: !newUser.department_id,
+      position_id: !newUser.position_id,
+      profilePicture: !newUser.profilePicture,
+      startDate: !newUser.startDate,
+    };
 
     setErrors(currentErrors);
     if (Object.keys(currentErrors).length > 0);

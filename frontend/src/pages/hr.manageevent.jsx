@@ -50,13 +50,13 @@ const ManageEvent = () => {
   };
 
   const handleSubmit = async () => {
-    const currentErrors = {};
-
-    if (!newEvent.event_name) currentErrors.event_name = "Event name is required";
-    if (!newEvent.poster) currentErrors.poster = "Poster is required";
-    if (!newEvent.event_startDate) currentErrors.event_startDate = "Start date is required";
-    if (!newEvent.event_endDate) currentErrors.event_endDate = "End date is required";
-    if (!newEvent.description) currentErrors.description = "Description is required";
+    const currentErrors = {
+      event_name: !newEvent.event_name,
+      poster: !newEvent.poster,
+      event_startDate: !newEvent.event_startDate,
+      event_endDate: !newEvent.event_endDate,
+      description: !newEvent.description,
+    };
 
     setErrors(currentErrors);
     if (Object.keys(currentErrors).length > 0);

@@ -47,10 +47,10 @@ const MasterPosition = () => {
   const [editingPositionId, setEditingPositionId] = useState(null);
 
   const handleSubmit = async () => {
-    const currentErrors = {};
-
-    if (!newPosition.position_name) currentErrors.position_name = "Position name is required";
-    if (!newPosition.department_id) currentErrors.department_id = "Department name is required";
+    const currentErrors = {
+      position_name: !newPosition.position_name,
+      department_id: !newPosition.department_id,
+    };
 
     setErrors(currentErrors);
     if (Object.keys(currentErrors).length > 0);
