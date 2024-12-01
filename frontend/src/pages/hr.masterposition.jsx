@@ -145,6 +145,7 @@ const MasterPosition = () => {
   // FE
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
+  const iconColor = useColorModeValue("black", "white");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const bgForm = useColorModeValue("white", "navy.800");
 
@@ -267,7 +268,7 @@ const MasterPosition = () => {
                                   as="button"
                                   onClick={() => handleEditClick(position)}
                                 >
-                                  <FaPen size="14" color={textColor} />
+                                  <FaPen size="14" color={iconColor} />
                                   <Text fontSize="14px" color={textColor} fontWeight="bold">
                                     EDIT
                                   </Text>
