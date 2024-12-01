@@ -1,9 +1,17 @@
 import { Button, Text, VStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
+import Background from "../components/Background";
+import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+
 const AttendanceSummary = () => {
   return (
     <>
+      <Background />
+      <Sidebar />
+
       <VStack spacing={2} alignItems={"center"}>
         <Text
           fontSize={{ base: "22", sm: "28" }}

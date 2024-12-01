@@ -14,6 +14,8 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import Background from "../components/Background";
+import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -80,6 +82,9 @@ const ChangePassword = () => {
 
   return (
     <>
+      <Background />
+      <Sidebar />
+
       <Box
         w={{
           base: "100%",

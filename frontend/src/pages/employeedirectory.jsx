@@ -13,6 +13,8 @@ import {
   Td,
   Image,
 } from "@chakra-ui/react";
+import Background from "../components/Background";
+import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -37,6 +39,9 @@ const EmployeeDirectory = () => {
 
   return (
     <>
+      <Background />
+      <Sidebar />
+
       <Box
         w={{
           base: "100%",

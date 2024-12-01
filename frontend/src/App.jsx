@@ -15,15 +15,10 @@ import EmployeeTerminated from "./pages/hr.employeeterminated";
 import AttendanceSummary from "./pages/hr.attendancesummary";
 import LeaveApproval from "./pages/hr.leaveapproval";
 
-import Sidebar from "./components/Sidebar";
-import Background from "./components/Background";
-
 function App() {
   return (
     <>
       <Box minH={"100vh"} bg={useColorModeValue("gray.100", "gray.900")}>
-        <Background />
-        <Sidebar />
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
 
