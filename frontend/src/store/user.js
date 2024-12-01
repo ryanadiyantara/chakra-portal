@@ -39,7 +39,6 @@ export const useUserStore = create((set) => ({
     });
 
     if (res.status === 401 || res.status === 403) {
-      localStorage.removeItem("accessToken");
       window.location.href = `/login?message=Session expired, please log in again`;
       return;
     }
@@ -60,7 +59,6 @@ export const useUserStore = create((set) => ({
     });
 
     if (res.status === 401 || res.status === 403) {
-      localStorage.removeItem("accessToken");
       window.location.href = `/login?message=Session expired, please log in again`;
       return;
     }
@@ -100,7 +98,6 @@ export const useUserStore = create((set) => ({
     });
 
     if (res.status === 401 || res.status === 403) {
-      localStorage.removeItem("accessToken");
       window.location.href = `/login?message=Session expired, please log in again`;
       return;
     }
@@ -132,7 +129,6 @@ export const useUserStore = create((set) => ({
     });
 
     if (res.status === 401 || res.status === 403) {
-      localStorage.removeItem("accessToken");
       window.location.href = `/login?message=Session expired, please log in again`;
       return;
     }
@@ -156,7 +152,6 @@ export const useUserStore = create((set) => ({
     });
 
     if (res.status === 401 || res.status === 403) {
-      localStorage.removeItem("accessToken");
       window.location.href = `/login?message=Session expired, please log in again`;
       return;
     }
@@ -174,7 +169,6 @@ export const useUserStore = create((set) => ({
     });
 
     if (res.status === 401 || res.status === 403) {
-      localStorage.removeItem("accessToken");
       window.location.href = `/login?message=Session expired, please log in again`;
       return;
     }
