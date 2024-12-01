@@ -28,6 +28,7 @@ export const login = asyncHandler(async (req, res) => {
     {
       UserInfo: {
         email: foundUser.email,
+        pid: foundUser._id,
       },
     },
     process.env.ACCESS_TOKEN_SECRET,

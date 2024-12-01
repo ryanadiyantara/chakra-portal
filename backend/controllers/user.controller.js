@@ -81,14 +81,36 @@ export const updateUsers = async (req, res) => {
     const { id } = req.params;
     const user = req.body;
 
+    // Check ID
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(404).json({ success: false, message: "Invalid User Id" });
     }
 
+    // Check New File
     if (req.file) {
       const filePath = path.relative("frontend/public", req.file.path);
-
       user.profilePicture = filePath;
+    }
+
+    // Check New Password
+    if (user.old_password && user.new_password) {
+      const foundUser = await User.findOne({ email: user.currentEmail }).exec();
+
+      if (!foundUser) {
+        return res.status(404).json({ success: false, message: "User tidak ditemukan" });
+      }
+
+      const match = await bcrypt.compare(user.old_password, foundUser.user_password);
+
+      if (!match) {
+        return res.status(404).json({ success: false, message: "Wrong Old Password" });
+      } else {
+        delete user.old_password;
+        delete user.currentEmail;
+        const hashedPwd = await bcrypt.hash(user.new_password, 10); // salt rounds
+        user.user_password = hashedPwd;
+        delete user.new_password;
+      }
     }
 
     try {
