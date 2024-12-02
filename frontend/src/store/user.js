@@ -246,7 +246,8 @@ export const useUserStore = create((set) => ({
 
     const data = await res.json();
 
-    if (!data.success) return { success: false, message: data.accessToken };
+    if (!data.success)
+      return { success: false, message: "Incorrect email or password. Please try again." };
 
     if (data.accessToken) {
       localStorage.setItem("accessToken", data.accessToken);

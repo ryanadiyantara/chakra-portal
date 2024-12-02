@@ -13,14 +13,15 @@ import {
   InputRightElement,
   IconButton,
 } from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
+
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 import { useUserStore } from "../store/user";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 const ChangePassword = () => {
   // BE
