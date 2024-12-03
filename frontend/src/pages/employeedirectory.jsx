@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   Box,
   Flex,
@@ -13,29 +14,29 @@ import {
   Td,
   Image,
 } from "@chakra-ui/react";
+
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 import { useUserStore } from "../store/user";
-import { useEffect } from "react";
 
 const EmployeeDirectory = () => {
-  // BE
+  // Utils
   const { users, departments, positions, fetchUser, getDepartmentData, getPositionData } =
     useUserStore();
 
+  const textColor = useColorModeValue("gray.700", "white");
+  const borderColor = useColorModeValue("gray.200", "gray.600");
+  const bgForm = useColorModeValue("white", "navy.800");
+
+  // Services
   useEffect(() => {
     fetchUser();
     getDepartmentData();
     getPositionData();
   }, [fetchUser, getDepartmentData, getPositionData]);
-
-  // FE
-  const textColor = useColorModeValue("gray.700", "white");
-  const borderColor = useColorModeValue("gray.200", "gray.600");
-  const bgForm = useColorModeValue("white", "navy.800");
 
   return (
     <>
@@ -110,7 +111,6 @@ const EmployeeDirectory = () => {
                       </Th>
                     </Tr>
                   </Thead>
-
                   <Tbody>
                     {users
                       .filter((user) => !user.na)

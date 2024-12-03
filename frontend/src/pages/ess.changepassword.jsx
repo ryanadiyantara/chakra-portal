@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -14,7 +15,6 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import React, { useState } from "react";
 
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
@@ -24,13 +24,18 @@ import Footer from "../components/Footer";
 import { useUserStore } from "../store/user";
 
 const ChangePassword = () => {
-  // BE
+  // Utils
   const { currentUser, changePassword } = useUserStore();
+
+  const toast = useToast();
+  const bgForm = useColorModeValue("white", "navy.800");
 
   const [newUser, setNewUser] = useState({
     old_password: "",
     new_password: "",
   });
+
+  const [errors, setErrors] = useState({});
 
   const [showPassword, setShowPassword] = useState({
     oldPassword: false,
@@ -41,21 +46,17 @@ const ChangePassword = () => {
     setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
-  const [errors, setErrors] = useState({});
-
+  // Services
   const handleSubmit = async () => {
     const currentErrors = {
       old_password: !newUser.old_password,
       new_password: !newUser.new_password,
     };
-
     setErrors(currentErrors);
 
     const currentUserId = currentUser.pid;
     const currentEmail = currentUser.email;
-
     const { success, message } = await changePassword(currentUserId, currentEmail, newUser);
-
     if (success) {
       toast({
         title: "Success",
@@ -76,10 +77,6 @@ const ChangePassword = () => {
       });
     }
   };
-
-  // FE
-  const toast = useToast();
-  const bgForm = useColorModeValue("white", "navy.800");
 
   return (
     <>
@@ -156,7 +153,6 @@ const ChangePassword = () => {
                       />
                     </InputRightElement>
                   </InputGroup>
-
                   <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                     New Password
                   </FormLabel>
@@ -184,7 +180,6 @@ const ChangePassword = () => {
                       />
                     </InputRightElement>
                   </InputGroup>
-
                   <Button
                     fontSize="14px"
                     variant="dark"

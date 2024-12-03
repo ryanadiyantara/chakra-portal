@@ -4,9 +4,7 @@ import {
   VStack,
   Button,
   Flex,
-  Link,
   Text,
-  Icon,
   useColorModeValue,
   Stack,
   useColorMode,
@@ -28,6 +26,7 @@ import Logo2 from "../assets/img/logo2.png";
 import { HSeparator } from "./Separator";
 
 function Sidebar() {
+  // Utils
   const routes = [
     {
       name: "",
@@ -61,16 +60,13 @@ function Sidebar() {
   ];
 
   const { colorMode } = useColorMode();
-
+  const location = useLocation();
   const activeBg = useColorModeValue("white", "navy.700");
   const inactiveBg = useColorModeValue("white", "navy.800");
   const activeColor = useColorModeValue("gray.700", "white");
   const inactiveColor = useColorModeValue("gray.400", "white");
   const hoverBg = useColorModeValue("gray.200", "navy.700");
-
   const sidebarBg = useColorModeValue("white", "navy.800");
-
-  const location = useLocation();
 
   return (
     <Box display={{ sm: "none", xl: "block" }} position="fixed">
@@ -109,7 +105,6 @@ function Sidebar() {
           </Stack>
           <HSeparator my="26px" />
         </Box>
-
         <VStack align="start" spacing={4} w="100%">
           {routes.map((route, index) => (
             <Box key={index} w="full">
@@ -119,7 +114,6 @@ function Sidebar() {
               <VStack align="start" spacing={2} w="100%">
                 {route.views.map((view, viewIndex) => {
                   const isActive = location.pathname === view.path;
-
                   return (
                     <NavLink to={view.path} key={viewIndex} style={{ width: "100%" }}>
                       <Button

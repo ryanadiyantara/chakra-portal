@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -19,7 +20,6 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { FaPen, FaTrash } from "react-icons/fa";
-import React, { useState, useEffect } from "react";
 
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
@@ -29,7 +29,7 @@ import Footer from "../components/Footer";
 import { usePositionStore } from "../store/position";
 
 const MasterPosition = () => {
-  // BE
+  // Utils
   const {
     positions,
     departments,
@@ -40,6 +40,12 @@ const MasterPosition = () => {
     getDepartmentData,
   } = usePositionStore();
 
+  const toast = useToast();
+  const textColor = useColorModeValue("gray.700", "white");
+  const iconColor = useColorModeValue("black", "white");
+  const borderColor = useColorModeValue("gray.200", "gray.600");
+  const bgForm = useColorModeValue("white", "navy.800");
+
   const [newPosition, setNewPosition] = useState({
     position_name: "",
     department_id: "",
@@ -48,6 +54,29 @@ const MasterPosition = () => {
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingPositionId, setEditingPositionId] = useState(null);
+
+  const handleEditClick = (position) => {
+    setNewPosition({
+      position_name: position.position_name,
+      department_id: position.department_id,
+    });
+    setErrors({});
+    setIsEditing(true);
+    setEditingPositionId(position._id);
+  };
+
+  const handleCancelEdit = () => {
+    setNewPosition({ position_name: "", department_id: "" });
+    setErrors({});
+    setIsEditing(false);
+    setEditingPositionId(null);
+  };
+
+  // Services
+  useEffect(() => {
+    fetchPosition();
+    getDepartmentData();
+  }, [fetchPosition, getDepartmentData]);
 
   const handleSubmit = async () => {
     const currentErrors = {
@@ -102,23 +131,6 @@ const MasterPosition = () => {
     }
   };
 
-  const handleEditClick = (position) => {
-    setNewPosition({
-      position_name: position.position_name,
-      department_id: position.department_id,
-    });
-    setErrors({});
-    setIsEditing(true);
-    setEditingPositionId(position._id);
-  };
-
-  const handleCancelEdit = () => {
-    setNewPosition({ position_name: "", department_id: "" });
-    setErrors({});
-    setIsEditing(false);
-    setEditingPositionId(null);
-  };
-
   const handleDeletePosition = async (pid) => {
     const { success, message } = await deletePosition(pid);
     if (success) {
@@ -139,18 +151,6 @@ const MasterPosition = () => {
       });
     }
   };
-
-  useEffect(() => {
-    fetchPosition();
-    getDepartmentData();
-  }, [fetchPosition, getDepartmentData]);
-
-  // FE
-  const toast = useToast();
-  const textColor = useColorModeValue("gray.700", "white");
-  const iconColor = useColorModeValue("black", "white");
-  const borderColor = useColorModeValue("gray.200", "gray.600");
-  const bgForm = useColorModeValue("white", "navy.800");
 
   return (
     <>
@@ -222,7 +222,6 @@ const MasterPosition = () => {
                       </Th>
                     </Tr>
                   </Thead>
-
                   <Tbody>
                     {positions
                       .filter((position) => !position.na)
@@ -263,11 +262,8 @@ const MasterPosition = () => {
                                 {department ? department.department_name : "Department not found"}
                               </Text>
                             </Td>
-
-                            {/* Action */}
                             <Td borderColor={borderColor}>
                               <Flex direction="row" p="0px" alignItems="center" gap="4">
-                                {/* Button for Edit */}
                                 <Flex
                                   alignItems="center"
                                   gap="1"
@@ -279,8 +275,6 @@ const MasterPosition = () => {
                                     EDIT
                                   </Text>
                                 </Flex>
-
-                                {/* Button for Delete */}
                                 <Flex
                                   alignItems="center"
                                   gap="1"
@@ -360,7 +354,6 @@ const MasterPosition = () => {
                         </option>
                       ))}
                   </Select>
-
                   <Button
                     fontSize="14px"
                     variant="dark"

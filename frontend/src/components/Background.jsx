@@ -1,8 +1,11 @@
 import { Box, useColorMode } from "@chakra-ui/react";
+
 import Backgrounds from "../assets/img/background.png";
 
 const Background = () => {
+  // Utils
   const { colorMode } = useColorMode();
+
   return (
     <>
       <Box

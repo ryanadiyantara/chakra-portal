@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -19,7 +20,6 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { FaPen, FaTrash } from "react-icons/fa";
-import React, { useState, useEffect } from "react";
 
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
@@ -29,8 +29,14 @@ import Footer from "../components/Footer";
 import { useEventStore } from "../store/event";
 
 const ManageEvent = () => {
-  // BE
+  // Utils
   const { events, createEvent, fetchEvent, updateEvent, deleteEvent } = useEventStore();
+
+  const toast = useToast();
+  const textColor = useColorModeValue("gray.700", "white");
+  const iconColor = useColorModeValue("black", "white");
+  const borderColor = useColorModeValue("gray.200", "gray.600");
+  const bgForm = useColorModeValue("white", "navy.800");
 
   const [newEvent, setNewEvent] = useState({
     event_name: "",
@@ -51,6 +57,48 @@ const ManageEvent = () => {
   const formatDate = (date) => {
     return new Date(date).toISOString().split("T")[0];
   };
+
+  // Fix soon
+  const handleDateChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "event_endDate" && new Date(value) < new Date(newEvent.event_startDate)) {
+      alert("End Date cannot be before Start Date");
+      return;
+    }
+    setNewEvent({ ...newEvent, [name]: value });
+  };
+
+  const handleEditClick = (event) => {
+    setNewEvent({
+      event_name: event.event_name,
+      poster: event.poster_path,
+      event_startDate: formatDate(event.event_startDate),
+      event_endDate: formatDate(event.event_endDate),
+      description: event.description,
+    });
+    setErrors({});
+    setIsEditing(true);
+    setEditingEventId(event._id);
+  };
+
+  const handleCancelEdit = () => {
+    setNewEvent({
+      event_name: "",
+      poster: "",
+      event_startDate: "",
+      event_endDate: "",
+      description: "",
+    });
+    document.querySelector('input[type="file"]').value = "";
+    setErrors({});
+    setIsEditing(false);
+    setEditingEventId(null);
+  };
+
+  // Services
+  useEffect(() => {
+    fetchEvent();
+  }, [fetchEvent]);
 
   const handleSubmit = async () => {
     const currentErrors = {
@@ -121,33 +169,6 @@ const ManageEvent = () => {
     }
   };
 
-  const handleEditClick = (event) => {
-    setNewEvent({
-      event_name: event.event_name,
-      poster: event.poster_path,
-      event_startDate: formatDate(event.event_startDate),
-      event_endDate: formatDate(event.event_endDate),
-      description: event.description,
-    });
-    setErrors({});
-    setIsEditing(true);
-    setEditingEventId(event._id);
-  };
-
-  const handleCancelEdit = () => {
-    setNewEvent({
-      event_name: "",
-      poster: "",
-      event_startDate: "",
-      event_endDate: "",
-      description: "",
-    });
-    document.querySelector('input[type="file"]').value = "";
-    setErrors({});
-    setIsEditing(false);
-    setEditingEventId(null);
-  };
-
   const handleDeleteEvent = async (pid) => {
     const { success, message } = await deleteEvent(pid);
     if (success) {
@@ -168,27 +189,6 @@ const ManageEvent = () => {
       });
     }
   };
-
-  useEffect(() => {
-    fetchEvent();
-  }, [fetchEvent]);
-
-  // Fix soon
-  const handleDateChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "event_endDate" && new Date(value) < new Date(newEvent.event_startDate)) {
-      alert("End Date cannot be before Start Date");
-      return;
-    }
-    setNewEvent({ ...newEvent, [name]: value });
-  };
-
-  // FE
-  const toast = useToast();
-  const textColor = useColorModeValue("gray.700", "white");
-  const iconColor = useColorModeValue("black", "white");
-  const borderColor = useColorModeValue("gray.200", "gray.600");
-  const bgForm = useColorModeValue("white", "navy.800");
 
   return (
     <>
@@ -263,7 +263,6 @@ const ManageEvent = () => {
                       </Th>
                     </Tr>
                   </Thead>
-
                   <Tbody>
                     {events
                       .filter((event) => !event.na)
@@ -312,11 +311,8 @@ const ManageEvent = () => {
                               {event.description}
                             </Text>
                           </Td>
-
-                          {/* Action */}
                           <Td borderColor={borderColor}>
                             <Flex direction="row" p="0px" alignItems="center" gap="4">
-                              {/* Button for Edit */}
                               <Flex
                                 alignItems="center"
                                 gap="1"
@@ -328,8 +324,6 @@ const ManageEvent = () => {
                                   EDIT
                                 </Text>
                               </Flex>
-
-                              {/* Button for Delete */}
                               <Flex
                                 alignItems="center"
                                 gap="1"
@@ -445,7 +439,6 @@ const ManageEvent = () => {
                     onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
                     borderColor={errors.description ? "red.500" : "gray.200"}
                   />
-
                   <Button
                     fontSize="14px"
                     variant="dark"

@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -18,7 +19,6 @@ import {
   Td,
 } from "@chakra-ui/react";
 import { FaPen, FaTrash } from "react-icons/fa";
-import React, { useState, useEffect } from "react";
 
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
@@ -28,9 +28,15 @@ import Footer from "../components/Footer";
 import { useDepartmentStore } from "../store/department";
 
 const MasterDepartment = () => {
-  // BE
+  // Utils
   const { departments, createDepartment, fetchDepartment, updateDepartment, deleteDepartment } =
     useDepartmentStore();
+
+  const toast = useToast();
+  const textColor = useColorModeValue("gray.700", "white");
+  const iconColor = useColorModeValue("black", "white");
+  const borderColor = useColorModeValue("gray.200", "gray.600");
+  const bgForm = useColorModeValue("white", "navy.800");
 
   const [newDepartment, setNewDepartment] = useState({
     department_name: "",
@@ -39,6 +45,25 @@ const MasterDepartment = () => {
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingDepartmentId, setEditingDepartmentId] = useState(null);
+
+  const handleEditClick = (department) => {
+    setNewDepartment({ department_name: department.department_name });
+    setErrors({});
+    setIsEditing(true);
+    setEditingDepartmentId(department._id);
+  };
+
+  const handleCancelEdit = () => {
+    setNewDepartment({ department_name: "" });
+    setErrors({});
+    setIsEditing(false);
+    setEditingDepartmentId(null);
+  };
+
+  // Services
+  useEffect(() => {
+    fetchDepartment();
+  }, [fetchDepartment]);
 
   const handleSubmit = async () => {
     const currentErrors = {
@@ -92,20 +117,6 @@ const MasterDepartment = () => {
     }
   };
 
-  const handleEditClick = (department) => {
-    setNewDepartment({ department_name: department.department_name });
-    setErrors({});
-    setIsEditing(true);
-    setEditingDepartmentId(department._id);
-  };
-
-  const handleCancelEdit = () => {
-    setNewDepartment({ department_name: "" });
-    setErrors({});
-    setIsEditing(false);
-    setEditingDepartmentId(null);
-  };
-
   const handleDeleteDepartment = async (pid) => {
     const { success, message } = await deleteDepartment(pid);
     if (success) {
@@ -126,17 +137,6 @@ const MasterDepartment = () => {
       });
     }
   };
-
-  useEffect(() => {
-    fetchDepartment();
-  }, [fetchDepartment]);
-
-  // FE
-  const toast = useToast();
-  const textColor = useColorModeValue("gray.700", "white");
-  const iconColor = useColorModeValue("black", "white");
-  const borderColor = useColorModeValue("gray.200", "gray.600");
-  const bgForm = useColorModeValue("white", "navy.800");
 
   return (
     <>
@@ -205,7 +205,6 @@ const MasterDepartment = () => {
                       </Th>
                     </Tr>
                   </Thead>
-
                   <Tbody>
                     {departments
                       .filter((department) => !department.na)
@@ -222,11 +221,8 @@ const MasterDepartment = () => {
                               {department.department_name}
                             </Text>
                           </Td>
-
-                          {/* Action */}
                           <Td borderColor={borderColor}>
                             <Flex direction="row" p="0px" alignItems="center" gap="4">
-                              {/* Button for Edit */}
                               <Flex
                                 alignItems="center"
                                 gap="1"
@@ -238,8 +234,6 @@ const MasterDepartment = () => {
                                   EDIT
                                 </Text>
                               </Flex>
-
-                              {/* Button for Delete */}
                               <Flex
                                 alignItems="center"
                                 gap="1"
@@ -293,7 +287,6 @@ const MasterDepartment = () => {
                     }
                     borderColor={errors.department_name ? "red.500" : "gray.200"}
                   />
-
                   <Button
                     fontSize="14px"
                     variant="dark"

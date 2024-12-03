@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -20,7 +21,6 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { FaPen, FaTrash } from "react-icons/fa";
-import React, { useState, useEffect } from "react";
 
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
@@ -30,7 +30,7 @@ import Footer from "../components/Footer";
 import { useUserStore } from "../store/user";
 
 const ManageEmployee = () => {
-  // BE
+  // Utils
   const {
     users,
     departments,
@@ -42,6 +42,12 @@ const ManageEmployee = () => {
     getDepartmentData,
     getPositionData,
   } = useUserStore();
+
+  const toast = useToast();
+  const textColor = useColorModeValue("gray.700", "white");
+  const iconColor = useColorModeValue("black", "white");
+  const borderColor = useColorModeValue("gray.200", "gray.600");
+  const bgForm = useColorModeValue("white", "navy.800");
 
   const [newUser, setNewUser] = useState({
     user_name: "",
@@ -64,6 +70,48 @@ const ManageEmployee = () => {
   const formatDate = (date) => {
     return new Date(date).toISOString().split("T")[0];
   };
+
+  const handleEditClick = (user) => {
+    setNewUser({
+      user_name: user.user_name,
+      email: user.email,
+      dateBirth: formatDate(user.dateBirth),
+      department_id: user.department_id,
+      position_id: user.position_id,
+      profilePicture: user.profilePicture,
+      startDate: formatDate(user.startDate),
+    });
+    setErrors({});
+    setIsEditing(true);
+    setEditingUserId(user._id);
+  };
+
+  const handleCancelEdit = () => {
+    setNewUser({
+      user_name: "",
+      email: "",
+      dateBirth: "",
+      department_id: "",
+      position_id: "",
+      profilePicture: "",
+      startDate: "",
+    });
+    document.querySelector('input[type="file"]').value = "";
+    setErrors({});
+    setIsEditing(false);
+    setEditingUserId(null);
+  };
+
+  // Services
+  useEffect(() => {
+    fetchUser();
+    getDepartmentData();
+    getPositionData();
+  }, [fetchUser, getDepartmentData, getPositionData]);
+
+  const filteredPositions = positions.filter(
+    (position) => position.department_id === newUser.department_id
+  );
 
   const handleSubmit = async () => {
     const currentErrors = {
@@ -141,37 +189,6 @@ const ManageEmployee = () => {
     }
   };
 
-  const handleEditClick = (user) => {
-    setNewUser({
-      user_name: user.user_name,
-      email: user.email,
-      dateBirth: formatDate(user.dateBirth),
-      department_id: user.department_id,
-      position_id: user.position_id,
-      profilePicture: user.profilePicture,
-      startDate: formatDate(user.startDate),
-    });
-    setErrors({});
-    setIsEditing(true);
-    setEditingUserId(user._id);
-  };
-
-  const handleCancelEdit = () => {
-    setNewUser({
-      user_name: "",
-      email: "",
-      dateBirth: "",
-      department_id: "",
-      position_id: "",
-      profilePicture: "",
-      startDate: "",
-    });
-    document.querySelector('input[type="file"]').value = "";
-    setErrors({});
-    setIsEditing(false);
-    setEditingUserId(null);
-  };
-
   const handleTerminatedUser = async (pid) => {
     const { success, message } = await terminatedUser(pid);
     if (success) {
@@ -192,23 +209,6 @@ const ManageEmployee = () => {
       });
     }
   };
-
-  useEffect(() => {
-    fetchUser();
-    getDepartmentData();
-    getPositionData();
-  }, [fetchUser, getDepartmentData, getPositionData]);
-
-  const filteredPositions = positions.filter(
-    (position) => position.department_id === newUser.department_id
-  );
-
-  // FE
-  const toast = useToast();
-  const textColor = useColorModeValue("gray.700", "white");
-  const iconColor = useColorModeValue("black", "white");
-  const borderColor = useColorModeValue("gray.200", "gray.600");
-  const bgForm = useColorModeValue("white", "navy.800");
 
   return (
     <>

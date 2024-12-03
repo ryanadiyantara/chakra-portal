@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -16,7 +17,6 @@ import {
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useState, useEffect } from "react";
 
 import Footer from "../components/Footer";
 import Logo1 from "../assets/img/logo1.png";
@@ -26,18 +26,37 @@ import logInImage from "../assets/img/logInImage.png";
 import { useUserStore } from "../store/user";
 
 const Login = () => {
-  // BE
+  // Utils
   const { loginUser } = useUserStore();
+
+  const toast = useToast();
+  const textColor = useColorModeValue("gray.700", "white");
+  const bgForm = useColorModeValue("white", "navy.800");
+  const colorMode = useColorMode();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [newUser, setNewUser] = useState({
     email: "",
     user_password: "",
   });
 
+  const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
-  const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
+
+  // Services
+  useEffect(() => {
+    const loginMessage = searchParams.get("message");
+    if (loginMessage) {
+      toast({
+        title: "Error",
+        description: loginMessage,
+        status: "error",
+        isClosable: true,
+      });
+    }
+  }, [searchParams]);
 
   const handleSubmit = async () => {
     const currentErrors = {
@@ -73,27 +92,6 @@ const Login = () => {
       });
     }
   };
-
-  const [searchParams] = useSearchParams();
-
-  useEffect(() => {
-    const loginMessage = searchParams.get("message");
-    if (loginMessage) {
-      toast({
-        title: "Error",
-        description: loginMessage,
-        status: "error",
-        isClosable: true,
-      });
-    }
-  }, [searchParams]);
-
-  const { colorMode } = useColorMode();
-
-  // FE
-  const toast = useToast();
-  const textColor = useColorModeValue("gray.700", "white");
-  const bgForm = useColorModeValue("white", "navy.800");
 
   return (
     <>
@@ -155,7 +153,6 @@ const Login = () => {
                 <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                   Password
                 </FormLabel>
-
                 <InputGroup size="lg" mb="24px">
                   <Input
                     fontSize="sm"
@@ -178,7 +175,6 @@ const Login = () => {
                     />
                   </InputRightElement>
                 </InputGroup>
-
                 <Button
                   fontSize="14px"
                   variant="dark"
@@ -191,7 +187,6 @@ const Login = () => {
                   Log In
                 </Button>
               </FormControl>
-
               <Text fontSize="sm" color={textColor} fontWeight="bold" mt="22px">
                 Forgot password?
               </Text>

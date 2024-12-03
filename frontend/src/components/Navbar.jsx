@@ -24,11 +24,10 @@ import { HSeparator } from "./Separator";
 import { useUserStore } from "../store/user";
 
 function Navbar() {
-  // BE
+  // Utils
   const { logoutUser } = useUserStore();
-
-  // FE
   const [isOpen, setIsOpen] = useState(false);
+
   const routes = [
     { path: "/dashboard", name: "Dashboard", category: "" },
     { path: "/employeedirectory", name: "Employee Directory", category: "" },
@@ -47,12 +46,11 @@ function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const activeRoute = routes.find((route) => route.path === location.pathname);
-
+  const { colorMode, toggleColorMode } = useColorMode();
   const handleOpenDrawer = () => setIsOpen(true);
   const handleCloseDrawer = () => setIsOpen(false);
 
-  const { colorMode, toggleColorMode } = useColorMode();
-
+  // Services
   const handleLogout = async () => {
     const { success, message } = await logoutUser();
 
@@ -151,7 +149,6 @@ function Navbar() {
             {activeRoute ? activeRoute.name : "Page Not Found"}
           </Link>
         </Box>
-
         <Flex
           pe={{ sm: "0px", md: "16px" }}
           w={{ sm: "100%", md: "auto" }}
@@ -167,7 +164,6 @@ function Navbar() {
             h="18px"
           />
         </Flex>
-
         <Drawer isOpen={isOpen} onClose={handleCloseDrawer}>
           <DrawerContent>
             <DrawerHeader>
