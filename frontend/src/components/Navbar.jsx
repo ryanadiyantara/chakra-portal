@@ -15,12 +15,19 @@ import {
   DrawerBody,
   Button,
   useColorMode,
+  useToast,
 } from "@chakra-ui/react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { SettingsIcon } from "./Icons/Icons";
 import { HSeparator } from "./Separator";
 
+import { useUserStore } from "../store/user";
+
 function Navbar() {
+  // BE
+  const { logoutUser } = useUserStore();
+
+  // FE
   const [isOpen, setIsOpen] = useState(false);
   const routes = [
     { path: "/dashboard", name: "Dashboard", category: "" },
@@ -35,13 +42,37 @@ function Navbar() {
     { path: "/hr/attendancesummary", name: "Attendance Summary", category: "Human Resource" },
     { path: "/hr/leaveapproval", name: "Leave Approval", category: "Human Resource" },
   ];
+
+  const toast = useToast();
   const location = useLocation();
+  const navigate = useNavigate();
   const activeRoute = routes.find((route) => route.path === location.pathname);
 
   const handleOpenDrawer = () => setIsOpen(true);
   const handleCloseDrawer = () => setIsOpen(false);
 
   const { colorMode, toggleColorMode } = useColorMode();
+
+  const handleLogout = async () => {
+    const { success, message } = await logoutUser();
+
+    if (success) {
+      toast({
+        title: "Success",
+        description: message,
+        status: "success",
+        isClosable: true,
+      });
+      navigate("/login");
+    } else {
+      toast({
+        title: "Error",
+        description: message,
+        status: "error",
+        isClosable: true,
+      });
+    }
+  };
 
   return (
     <Flex
@@ -161,21 +192,20 @@ function Navbar() {
                 </Flex>
                 <HSeparator />
                 <Box mt="24px">
-                  <Link href="#" w="100%">
-                    <Button
-                      w="100%"
-                      bg={useColorModeValue("white", "transparent")}
-                      border="1px solid"
-                      borderColor={useColorModeValue("gray.700", "white")}
-                      color={useColorModeValue("gray.700", "white")}
-                      fontSize="xs"
-                      variant="no-effects"
-                      px="20px"
-                      mb="16px"
-                    >
-                      <Text textDecoration="none">Log Out</Text>
-                    </Button>
-                  </Link>
+                  <Button
+                    w="100%"
+                    bg={useColorModeValue("white", "transparent")}
+                    border="1px solid"
+                    borderColor={useColorModeValue("gray.700", "white")}
+                    color={useColorModeValue("gray.700", "white")}
+                    fontSize="xs"
+                    variant="no-effects"
+                    px="20px"
+                    mb="16px"
+                    onClick={handleLogout}
+                  >
+                    <Text textDecoration="none">Log Out</Text>
+                  </Button>
                 </Box>
               </Flex>
             </DrawerBody>

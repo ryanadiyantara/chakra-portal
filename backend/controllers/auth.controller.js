@@ -11,7 +11,6 @@ export const login = asyncHandler(async (req, res) => {
   }
 
   const { email, user_password } = auth;
-
   const foundUser = await User.findOne({ email }).exec();
 
   if (!foundUser) {
@@ -90,9 +89,12 @@ export const refresh = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  const cookies = req.cookies;
+  // const cookies = req.cookies;
   console.log(req.cookies);
-  if (!cookies?.jwt) return res.sendStatus(204); //No content
-  res.clearCookie("jwt", { httpOnly: true, sameSite: "None", secure: true });
-  res.json({ message: "Cookie cleared" });
+  // if (!cookies?.jwt) return res.sendStatus(204); //No content
+  res.clearCookie("jwt", { httpOnly: true, sameSite: "None", secure: false });
+  res.json({
+    success: true,
+    message: "Cookie cleared",
+  });
 };

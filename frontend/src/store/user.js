@@ -256,4 +256,22 @@ export const useUserStore = create((set) => ({
     set((state) => ({ users: [...state.users, data.data] }));
     return { success: true, message: "Login successfully" };
   },
+
+  logoutUser: async () => {
+    const res = await fetch("/api/auth/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      localStorage.removeItem("accessToken");
+      set({ users: [] });
+      return { success: true, message: "Logout successfully" };
+    }
+
+    return { success: false, message: "Failed to logout. Please try again." };
+  },
 }));

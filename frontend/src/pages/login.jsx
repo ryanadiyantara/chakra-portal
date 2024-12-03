@@ -60,7 +60,10 @@ const Login = () => {
         email: "",
         user_password: "",
       });
-      navigate("/dashboard");
+      setTimeout(() => {
+        navigate("/dashboard");
+        window.location.reload();
+      }, 1500);
     } else {
       toast({
         title: "Error",
