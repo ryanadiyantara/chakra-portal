@@ -51,7 +51,7 @@ const Login = () => {
     if (loginMessage) {
       toast({
         title: "Error",
-        description: loginMessage,
+        description: "Session expired, please log in again",
         status: "error",
         isClosable: true,
       });
