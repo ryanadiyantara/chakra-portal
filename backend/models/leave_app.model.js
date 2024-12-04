@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const leaveApplicationsSchema = new mongoose.Schema(
+const leaveAppsSchema = new mongoose.Schema(
   {
     user_id: {
       type: mongoose.Schema.Types.ObjectId,
@@ -44,9 +44,6 @@ const leaveApplicationsSchema = new mongoose.Schema(
   }
 );
 
-const LeaveApplication = mongoose.model(
-  "LeaveApplication",
-  leaveApplicationsSchema
-);
+const LeaveApp = mongoose.model("LeaveApp", leaveAppsSchema);
 
-export default LeaveApplication;
+export default LeaveApp;

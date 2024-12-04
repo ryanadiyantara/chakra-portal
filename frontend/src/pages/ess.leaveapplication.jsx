@@ -1,5 +1,24 @@
-import { Button, Text, VStack } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  HStack,
+  Input,
+  Table,
+  Tbody,
+  Text,
+  Th,
+  Thead,
+  Tr,
+  useToast,
+  useColorModeValue,
+  VStack,
+  Td,
+} from "@chakra-ui/react";
+import { FaPen, FaTrash } from "react-icons/fa";
 
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
@@ -7,6 +26,116 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 const LeaveApplication = () => {
+  // Utils
+  const { departments, createDepartment, fetchDepartment, updateDepartment, deleteDepartment } =
+    useDepartmentStore();
+
+  const toast = useToast();
+  const textColor = useColorModeValue("gray.700", "white");
+  const iconColor = useColorModeValue("black", "white");
+  const borderColor = useColorModeValue("gray.200", "gray.600");
+  const bgForm = useColorModeValue("white", "navy.800");
+
+  const [newDepartment, setNewDepartment] = useState({
+    department_name: "",
+  });
+
+  const [errors, setErrors] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingDepartmentId, setEditingDepartmentId] = useState(null);
+
+  const handleEditClick = (department) => {
+    setNewDepartment({ department_name: department.department_name });
+    setErrors({});
+    setIsEditing(true);
+    setEditingDepartmentId(department._id);
+  };
+
+  const handleCancelEdit = () => {
+    setNewDepartment({ department_name: "" });
+    setErrors({});
+    setIsEditing(false);
+    setEditingDepartmentId(null);
+  };
+
+  // Services
+  useEffect(() => {
+    fetchDepartment();
+  }, [fetchDepartment]);
+
+  const handleSubmit = async () => {
+    const currentErrors = {
+      department_name: !newDepartment.department_name,
+    };
+
+    setErrors(currentErrors);
+    if (Object.keys(currentErrors).length > 0);
+
+    if (isEditing && editingDepartmentId) {
+      // Update department
+      const { success, message } = await updateDepartment(editingDepartmentId, newDepartment);
+      if (success) {
+        toast({
+          title: "Success",
+          description: "Department updated successfully",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        setIsEditing(false);
+        setEditingDepartmentId(null);
+        setNewDepartment({ department_name: "" });
+      } else {
+        toast({
+          title: "Error",
+          description: message,
+          status: "error",
+          isClosable: true,
+        });
+      }
+    } else {
+      // Create new department
+      const { success, message } = await createDepartment(newDepartment);
+      if (success) {
+        toast({
+          title: "Success",
+          description: message,
+          status: "success",
+          isClosable: true,
+        });
+        setNewDepartment({ department_name: "" });
+      } else {
+        toast({
+          title: "Error",
+          description: message,
+          status: "error",
+          isClosable: true,
+        });
+      }
+    }
+  };
+
+  const handleDeleteDepartment = async (pid) => {
+    const { success, message } = await deleteDepartment(pid);
+    if (success) {
+      toast({
+        title: "Success",
+        description: "Department deleted successfully",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Error",
+        description: message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
   return (
     <>
       <Background />

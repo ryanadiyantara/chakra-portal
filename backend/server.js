@@ -7,7 +7,7 @@ import { connectDB } from "./config/db.js";
 
 import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
-import leaveApplicationRoutes from "./routes/leave_application.route.js";
+import leaveAppRoutes from "./routes/leave_app.route.js";
 import attendanceRecordRoutes from "./routes/attendance_record.route.js";
 import eventRoutes from "./routes/event.route.js";
 import departmentRoutes from "./routes/department.route.js";
@@ -26,7 +26,7 @@ app.use(express.json()); //allows us to accept JSON data in the req.body
 app.use("/api/auth", authRoutes);
 
 app.use("/api/users", userRoutes);
-app.use("/api/leaveapplications", leaveApplicationRoutes);
+app.use("/api/leaveapps", leaveAppRoutes);
 app.use("/api/attendancerecords", attendanceRecordRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/departments", departmentRoutes);
