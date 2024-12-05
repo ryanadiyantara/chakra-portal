@@ -30,7 +30,7 @@ import { useLeaveAppStore } from "../store/leaveapp";
 
 const LeaveApp = () => {
   // Utils
-  const { leaveapps, createLeaveApp, fetchLeaveApp, updateLeaveApp, deleteLeaveApp } =
+  const { leaveapps, currentUser, createLeaveApp, fetchLeaveApp, updateLeaveApp, deleteLeaveApp } =
     useLeaveAppStore();
 
   const toast = useToast();
@@ -43,7 +43,7 @@ const LeaveApp = () => {
     leave_startDate: "",
     leave_endDate: "",
     type: "",
-    leave_status: "",
+    attachment: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -51,7 +51,7 @@ const LeaveApp = () => {
   const [editingLeaveAppId, setEditingLeaveAppId] = useState(null);
 
   const handleFileChange = (e) => {
-    setNewLeaveApp({ ...newLeaveApp, file: e.target.files[0] });
+    setNewLeaveApp({ ...newLeaveApp, attachment: e.target.files[0] });
   };
 
   const formatDate = (date) => {
@@ -73,7 +73,7 @@ const LeaveApp = () => {
       leave_startDate: formatDate(leaveapp.leave_startDate),
       leave_endDate: formatDate(leaveapp.leave_endDate),
       type: leaveapp.type,
-      leave_status: leaveapp.leave_status,
+      attachment: leaveapp.attachment,
     });
     setErrors({});
     setIsEditing(true);
@@ -85,8 +85,9 @@ const LeaveApp = () => {
       leave_startDate: "",
       leave_endDate: "",
       type: "",
-      leave_status: "",
+      attachment: "",
     });
+    document.querySelector('input[type="file"]').value = "";
     setErrors({});
     setIsEditing(false);
     setEditingLeaveAppId(null);
@@ -102,11 +103,10 @@ const LeaveApp = () => {
       leave_startDate: !newLeaveApp.leave_startDate,
       leave_endDate: !newLeaveApp.leave_endDate,
       type: !newLeaveApp.type,
-      leave_status: !newLeaveApp.leave_status,
     };
 
     setErrors(currentErrors);
-    if (Object.keys(currentErrors).length > 0);
+    const currentId = currentUser.user_id;
 
     if (isEditing && editingLeaveAppId) {
       // Update leave app
@@ -125,7 +125,7 @@ const LeaveApp = () => {
           leave_startDate: "",
           leave_endDate: "",
           type: "",
-          leave_status: "",
+          attachment: "",
         });
       } else {
         toast({
@@ -137,7 +137,7 @@ const LeaveApp = () => {
       }
     } else {
       // Create new leave app
-      const { success, message } = await createLeaveApp(newLeaveApp);
+      const { success, message } = await createLeaveApp(newLeaveApp, currentId);
       if (success) {
         toast({
           title: "Success",
@@ -149,8 +149,9 @@ const LeaveApp = () => {
           leave_startDate: "",
           leave_endDate: "",
           type: "",
-          leave_status: "",
+          attachment: "",
         });
+        document.querySelector('input[type="file"]').value = "";
       } else {
         toast({
           title: "Error",
@@ -159,27 +160,6 @@ const LeaveApp = () => {
           isClosable: true,
         });
       }
-    }
-  };
-
-  const handleDeleteLeaveApp = async (pid) => {
-    const { success, message } = await deleteLeaveApp(pid);
-    if (success) {
-      toast({
-        title: "Success",
-        description: "Leave Application deleted successfully",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-    } else {
-      toast({
-        title: "Error",
-        description: message,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
     }
   };
 
@@ -267,7 +247,7 @@ const LeaveApp = () => {
                         <Tr key={leaveapp._id}>
                           <Td width={{ sm: "50px" }} pl="0px" borderColor={borderColor} py={5}>
                             <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {index + 1}
+                              {leaveapp.leaveAppId}
                             </Text>
                           </Td>
                           <Td borderColor={borderColor}>

@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const leaveAppsSchema = new mongoose.Schema(
   {
-    user_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+    leaveAppId: {
+      type: String,
+      unique: true,
       required: true,
     },
     leave_startDate: {

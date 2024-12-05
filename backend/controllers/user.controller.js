@@ -52,7 +52,6 @@ export const createUsers = async (req, res) => {
     }
 
     const filePath = path.relative("frontend/public", req.file.path);
-
     user.profilePicture = filePath;
 
     try {
