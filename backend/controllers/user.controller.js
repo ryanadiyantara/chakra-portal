@@ -19,9 +19,9 @@ const upload = multer({ storage }).single("file");
 
 const getNextUserId = async () => {
   const counter = await Counter.findOneAndUpdate(
-    { name: "user_id" }, // Filter
-    { $inc: { seq: 1 } }, // Increment
-    { new: true, upsert: true } // Return updated doc, create if not exist
+    { name: "user_id" },
+    { $inc: { seq: 1 } },
+    { new: true, upsert: true }
   );
   return counter.seq;
 };

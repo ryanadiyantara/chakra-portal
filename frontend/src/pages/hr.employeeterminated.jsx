@@ -98,10 +98,10 @@ const EmployeeTerminated = () => {
                         Name & Email
                       </Th>
                       <Th borderColor={borderColor} color="gray.400">
-                        Department & Position
+                        Employee ID
                       </Th>
                       <Th borderColor={borderColor} color="gray.400">
-                        Employee ID
+                        Department & Position
                       </Th>
                       <Th borderColor={borderColor} color="gray.400">
                         Birth Date
@@ -151,16 +151,6 @@ const EmployeeTerminated = () => {
                               </Flex>
                             </Td>
                             <Td borderColor={borderColor}>
-                              <Flex direction="column">
-                                <Text fontSize="md" color={textColor} fontWeight="bold">
-                                  {department ? department.department_name : "Department not found"}
-                                </Text>
-                                <Text fontSize="sm" color="gray.400" fontWeight="normal">
-                                  {position ? position.position_name : "Position not found"}
-                                </Text>
-                              </Flex>
-                            </Td>
-                            <Td borderColor={borderColor}>
                               <Text
                                 fontSize="md"
                                 color={textColor}
@@ -169,6 +159,16 @@ const EmployeeTerminated = () => {
                               >
                                 {user.user_id}
                               </Text>
+                            </Td>
+                            <Td borderColor={borderColor}>
+                              <Flex direction="column">
+                                <Text fontSize="md" color={textColor} fontWeight="bold">
+                                  {department ? department.department_name : "Department not found"}
+                                </Text>
+                                <Text fontSize="sm" color="gray.400" fontWeight="normal">
+                                  {position ? position.position_name : "Position not found"}
+                                </Text>
+                              </Flex>
                             </Td>
                             <Td borderColor={borderColor}>
                               <Text
