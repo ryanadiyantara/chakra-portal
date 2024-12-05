@@ -53,7 +53,12 @@ export const useLeaveAppStore = create((set) => ({
   },
 
   updateLeaveApp: async (pid, updatedLeaveApp) => {
-    if (!updatedLeaveApp.department_name) {
+    if (
+      !updatedLeaveApp.leave_startDate ||
+      !updatedLeaveApp.leave_endDate ||
+      !updatedLeaveApp.type ||
+      !updatedLeaveApp.leave_status
+    ) {
       return { success: false, message: "Please fill in all fields." };
     }
 
@@ -76,9 +81,7 @@ export const useLeaveAppStore = create((set) => ({
 
     // update the ui immediately, without needing a refresh
     set((state) => ({
-      leaveapps: state.leaveapps.map((leaveapp) =>
-        department._id === pid ? data.data : department
-      ),
+      leaveapps: state.leaveapps.map((leaveapp) => (leaveapp._id === pid ? data.data : leaveapp)),
     }));
     return { success: true, message: data.message };
   },
@@ -108,7 +111,7 @@ export const useLeaveAppStore = create((set) => ({
 
     // update the ui immediately, without needing a refresh
     set((state) => ({
-      leaveapps: state.leaveapps.filter((department) => department._id !== pid),
+      leaveapps: state.leaveapps.filter((leaveapp) => leaveapp._id !== pid),
     }));
     return { success: true, message: data.message };
   },

@@ -6,7 +6,7 @@ import ForgotPassword from "./pages/forgotpassword";
 import Dashboard from "./pages/dashboard";
 import EmployeeDirectory from "./pages/employeedirectory";
 import ChangePassword from "./pages/ess.changepassword";
-import LeaveApplication from "./pages/ess.leaveapplication";
+import LeaveApp from "./pages/ess.leaveapp";
 import MasterDepartment from "./pages/hr.masterdepartment";
 import MasterPosition from "./pages/hr.masterposition";
 import ManageEvent from "./pages/hr.manageevent";
@@ -27,7 +27,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/employeedirectory" element={<EmployeeDirectory />} />
           <Route path="/ess/changepassword" element={<ChangePassword />} />
-          <Route path="/ess/leaveapplication" element={<LeaveApplication />} />
+          <Route path="/ess/leaveapp" element={<LeaveApp />} />
           <Route path="/hr/masterdepartment" element={<MasterDepartment />} />
           <Route path="/hr/masterposition" element={<MasterPosition />} />
           <Route path="/hr/manageevent" element={<ManageEvent />} />

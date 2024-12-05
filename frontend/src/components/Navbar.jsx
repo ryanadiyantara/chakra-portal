@@ -32,7 +32,7 @@ function Navbar() {
     { path: "/dashboard", name: "Dashboard", category: "" },
     { path: "/employeedirectory", name: "Employee Directory", category: "" },
     { path: "/ess/changepassword", name: "Change Password", category: "Employee Self Service" },
-    { path: "/ess/leaveapplication", name: "Leave Application", category: "Employee Self Service" },
+    { path: "/ess/leaveapp", name: "Leave Application", category: "Employee Self Service" },
     { path: "/hr/masterdepartment", name: "Master Department", category: "Human Resource" },
     { path: "/hr/masterposition", name: "Master Position", category: "Human Resource" },
     { path: "/hr/manageevent", name: "Manage Event", category: "Human Resource" },

@@ -41,7 +41,7 @@ function Sidebar() {
       category: "ess",
       views: [
         { path: "/ess/changepassword", name: "Change Password", icon: <SupportIcon /> },
-        { path: "/ess/leaveapplication", name: "Leave Application", icon: <DocumentIcon /> },
+        { path: "/ess/leaveapp", name: "Leave Application", icon: <DocumentIcon /> },
       ],
     },
     {

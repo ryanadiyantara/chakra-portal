@@ -57,7 +57,7 @@ const Dashboard = () => {
           <Link to={"/ess/changepassword"}>
             <Button>Change Password</Button>
           </Link>
-          <Link to={"/ess/leaveapplication"}>
+          <Link to={"/ess/leaveapp"}>
             <Button>Leave Application</Button>
           </Link>
           <Link to={"/hr/masterdepartment"}>
