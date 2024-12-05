@@ -72,7 +72,6 @@ export const createUsers = async (req, res) => {
 
 export const getUsers = async (req, res) => {
   try {
-    await Counter.create({ name: "user_id", seq: 100003 });
     const users = await User.find({});
     res.status(200).json({ success: true, data: users });
   } catch (error) {
