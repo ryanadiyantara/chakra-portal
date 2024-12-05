@@ -340,7 +340,7 @@ const ManageEmployee = () => {
                                 fontWeight="bold"
                                 minWidth="100%"
                               >
-                                Nanti Employee ID
+                                {user.user_id}
                               </Text>
                             </Td>
                             <Td borderColor={borderColor}>

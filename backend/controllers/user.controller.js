@@ -3,6 +3,7 @@ import multer from "multer";
 import path from "path";
 import bcrypt from "bcrypt";
 import User from "../models/user.model.js";
+import Counter from "../models/counter_user.js";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -15,6 +16,15 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage }).single("file");
+
+const getNextUserId = async () => {
+  const counter = await Counter.findOneAndUpdate(
+    { name: "user_id" }, // Filter
+    { $inc: { seq: 1 } }, // Increment
+    { new: true, upsert: true } // Return updated doc, create if not exist
+  );
+  return counter.seq;
+};
 
 export const createUsers = async (req, res) => {
   upload(req, res, async (err) => {
@@ -45,12 +55,12 @@ export const createUsers = async (req, res) => {
 
     user.profilePicture = filePath;
 
-    const hashedPwd = await bcrypt.hash("chakra1234", 10); // salt rounds
-    user.user_password = hashedPwd;
-
-    const newUser = new User(user);
-
     try {
+      user.user_id = await getNextUserId();
+      const hashedPwd = await bcrypt.hash("chakra1234", 10); // salt rounds
+      user.user_password = hashedPwd;
+
+      const newUser = new User(user);
       await newUser.save();
       res.status(201).json({ success: true, data: newUser });
     } catch (error) {
@@ -62,6 +72,7 @@ export const createUsers = async (req, res) => {
 
 export const getUsers = async (req, res) => {
   try {
+    await Counter.create({ name: "user_id", seq: 100002 });
     const users = await User.find({});
     res.status(200).json({ success: true, data: users });
   } catch (error) {
