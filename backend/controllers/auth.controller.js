@@ -26,8 +26,9 @@ export const login = asyncHandler(async (req, res) => {
   const accessToken = jwt.sign(
     {
       UserInfo: {
-        email: foundUser.email,
         pid: foundUser._id,
+        user_id: foundUser.user_id,
+        email: foundUser.email,
       },
     },
     process.env.ACCESS_TOKEN_SECRET,
