@@ -5,6 +5,6 @@ const counterSchema = new mongoose.Schema({
   seq: { type: Number, required: true },
 });
 
-const Counter = mongoose.model("Counteruser", counterSchema);
+const counter = mongoose.model("Counter", counterSchema);
 
-export default Counter;
+export default counter;

@@ -3,7 +3,7 @@ import multer from "multer";
 import path from "path";
 import bcrypt from "bcrypt";
 import User from "../models/user.model.js";
-import Counter from "../models/counter_user.js";
+import Counter from "../models/counter.js";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -72,7 +72,7 @@ export const createUsers = async (req, res) => {
 
 export const getUsers = async (req, res) => {
   try {
-    await Counter.create({ name: "user_id", seq: 100002 });
+    await Counter.create({ name: "user_id", seq: 100003 });
     const users = await User.find({});
     res.status(200).json({ success: true, data: users });
   } catch (error) {
