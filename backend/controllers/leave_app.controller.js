@@ -17,21 +17,23 @@ const storage = multer.diskStorage({
 const upload = multer({ storage }).single("file");
 
 const getNextLeaveAppId = async (userId) => {
+  const prefix = "LEAVE";
+  const year = new Date().getFullYear();
+  const counterName = `${prefix}/${userId}/${year}`;
+
   try {
-    const prefix = "LEAVE";
-    const year = new Date().getFullYear();
-    const counterName = `${prefix}/${userId}/${year}`;
     let counter = await Counter.findOne({ name: counterName });
 
     if (!counter) {
-      counter = new Counter({ name: counterName, seq: 1 });
-      await counter.save();
+      return { id: `${prefix}/${userId}/${year}/1`, seq: 1, name: counterName, isNew: true };
     } else {
-      counter.seq += 1;
-      await counter.save();
+      return {
+        id: `${prefix}/${userId}/${year}/${counter.seq + 1}`,
+        seq: counter.seq + 1,
+        name: counterName,
+        isNew: false,
+      };
     }
-
-    return `${prefix}/${userId}/${year}/${counter.seq}`;
   } catch (error) {
     console.error("Error in getNextLeaveAppId:", error.message);
     throw new Error("Failed to generate LeaveApp ID");
@@ -57,12 +59,21 @@ export const createLeaveApps = async (req, res) => {
     }
 
     try {
-      leaveApp.leaveAppId = await getNextLeaveAppId(leaveApp.currentId);
+      const { id, seq, name, isNew } = await getNextLeaveAppId(leaveApp.currentId);
+      leaveApp.leaveAppId = id;
       leaveApp.leave_status = "Pending";
       delete leaveApp.currentId;
 
       const newLeaveApp = new LeaveApp(leaveApp);
       await newLeaveApp.save();
+
+      if (isNew) {
+        const newCounter = new Counter({ name, seq });
+        await newCounter.save();
+      } else {
+        await Counter.updateOne({ name }, { $inc: { seq: 1 } });
+      }
+
       res.status(201).json({ success: true, data: newLeaveApp });
     } catch (error) {
       res.status(500).json({ success: false, message: "Server Error" });

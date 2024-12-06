@@ -4,7 +4,6 @@ const leaveAppsSchema = new mongoose.Schema(
   {
     leaveAppId: {
       type: String,
-      unique: true,
       required: true,
     },
     leave_startDate: {
