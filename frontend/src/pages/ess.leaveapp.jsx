@@ -51,7 +51,37 @@ const LeaveApp = () => {
   const [editingLeaveAppId, setEditingLeaveAppId] = useState(null);
 
   const handleFileChange = (e) => {
-    setNewLeaveApp({ ...newLeaveApp, attachment: e.target.files[0] });
+    const file = e.target.files[0];
+    const allowedType = "application/pdf";
+    const maxSize = 5 * 1024 * 1024;
+
+    if (file) {
+      if (file.type !== allowedType) {
+        toast({
+          title: "Error",
+          description: "The file must be in PDF format.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        e.target.value = "";
+        return;
+      }
+
+      if (file.size > maxSize) {
+        toast({
+          title: "Error",
+          description: "The file size must not exceed 5 MB.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        e.target.value = "";
+        return;
+      }
+
+      setNewLeaveApp({ ...newLeaveApp, attachment: file });
+    }
   };
 
   const formatDate = (date) => {
@@ -67,6 +97,7 @@ const LeaveApp = () => {
     }
     setNewLeaveApp({ ...newLeaveApp, [name]: value });
   };
+  //
 
   const handleEditClick = (leaveapp) => {
     setNewLeaveApp({
@@ -104,8 +135,8 @@ const LeaveApp = () => {
       leave_endDate: !newLeaveApp.leave_endDate,
       type: !newLeaveApp.type,
     };
-
     setErrors(currentErrors);
+
     const currentId = currentUser.user_id;
 
     if (isEditing && editingLeaveAppId) {

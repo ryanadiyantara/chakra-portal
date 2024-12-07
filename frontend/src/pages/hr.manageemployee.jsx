@@ -64,7 +64,38 @@ const ManageEmployee = () => {
   const [editingUserId, setEditingUserId] = useState(null);
 
   const handleFileChange = (e) => {
-    setNewUser({ ...newUser, profilePicture: e.target.files[0] });
+    const file = e.target.files[0];
+    const allowedType = ["image/jpeg", "image/jpg", "image/png"];
+    const maxSize = 5 * 1024 * 1024;
+
+    if (file) {
+      const fileTypeValid = allowedType.some((type) => file.type === type);
+      if (!fileTypeValid) {
+        toast({
+          title: "Error",
+          description: "The file must be in JPG, JPEG, or PNG format.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        e.target.value = "";
+        return;
+      }
+
+      if (file.size > maxSize) {
+        toast({
+          title: "Error",
+          description: "The file size must not exceed 5 MB.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        e.target.value = "";
+        return;
+      }
+
+      setNewUser({ ...newUser, profilePicture: file });
+    }
   };
 
   const formatDate = (date) => {
