@@ -368,7 +368,7 @@ const LeaveApp = () => {
                     type="file"
                     mb="24px"
                     size="lg"
-                    name="file"
+                    name="attachment"
                     sx={{
                       display: "flex",
                       alignItems: "center",
@@ -376,7 +376,7 @@ const LeaveApp = () => {
                       padding: "8px 12px",
                     }}
                     onChange={handleFileChange}
-                    borderColor={errors.file ? "red.500" : "gray.200"}
+                    borderColor={errors.attachment ? "red.500" : "gray.200"}
                   />
 
                   <Button
