@@ -76,6 +76,14 @@ export const createLeaveApps = async (req, res) => {
 
       res.status(201).json({ success: true, data: newLeaveApp });
     } catch (error) {
+      console.error("Error in Create leave application:", error, message);
+      if (req.file) {
+        fs.unlink(req.file.path, (unlinkErr) => {
+          if (unlinkErr) {
+            console.error("Failed to delete file during error handling:", unlinkErr);
+          }
+        });
+      }
       res.status(500).json({ success: false, message: "Server Error" });
     }
   });

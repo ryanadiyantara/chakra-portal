@@ -146,7 +146,7 @@ const ManageEmployee = () => {
 
   const handleSubmit = async () => {
     const currentErrors = {
-      user_name: !newUser.position_name,
+      user_name: !newUser.user_name,
       email: !newUser.email,
       dateBirth: !newUser.dateBirth,
       department_id: !newUser.department_id,

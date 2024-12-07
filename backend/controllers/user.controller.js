@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import multer from "multer";
 import path from "path";
 import bcrypt from "bcrypt";
+import fs from "fs";
 import User from "../models/user.model.js";
 import Counter from "../models/counter.js";
 
@@ -47,6 +48,18 @@ export const createUsers = async (req, res) => {
       return res.status(400).json({ success: false, message: "Please provide all fields" });
     }
 
+    const existingEmail = await User.findOne({ email: user.email });
+    if (existingEmail) {
+      if (req.file) {
+        fs.unlink(req.file.path, (unlinkErr) => {
+          if (unlinkErr) {
+            console.error("Failed to delete file:", unlinkErr);
+          }
+        });
+      }
+      return res.status(400).json({ success: false, message: "Email is already taken" });
+    }
+
     if (!req.file) {
       return res.status(400).json({ success: false, message: "No file uploaded" });
     }
@@ -64,6 +77,13 @@ export const createUsers = async (req, res) => {
       res.status(201).json({ success: true, data: newUser });
     } catch (error) {
       console.error("Error in Create user:", error, message);
+      if (req.file) {
+        fs.unlink(req.file.path, (unlinkErr) => {
+          if (unlinkErr) {
+            console.error("Failed to delete file during error handling:", unlinkErr);
+          }
+        });
+      }
       res.status(500).json({ success: false, message: "Server Error" });
     }
   });
