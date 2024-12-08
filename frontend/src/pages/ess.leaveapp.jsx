@@ -18,6 +18,7 @@ import {
   VStack,
   Td,
   Select,
+  Badge,
 } from "@chakra-ui/react";
 import { FaPen, FaTrash } from "react-icons/fa";
 
@@ -38,6 +39,12 @@ const LeaveApp = () => {
   const iconColor = useColorModeValue("black", "white");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const bgForm = useColorModeValue("white", "navy.800");
+
+  const statusColors = {
+    Approved: "green.400",
+    Pending: "#ED8936",
+    Rejected: "#E53E3E",
+  };
 
   const [newLeaveApp, setNewLeaveApp] = useState({
     leave_startDate: "",
@@ -268,12 +275,16 @@ const LeaveApp = () => {
                       <Th borderColor={borderColor} color="gray.400">
                         Status
                       </Th>
+                      <Th borderColor={borderColor} color="gray.400">
+                        Action
+                      </Th>
                     </Tr>
                   </Thead>
                   <Tbody>
                     {leaveapps
                       .filter((leaveapp) => !leaveapp.na)
                       .filter((leaveapp) => !leaveapp.del)
+                      .filter((leaveapp) => leaveapp.leaveAppId.includes(currentUser.user_id))
                       .map((leaveapp, index) => (
                         <Tr key={leaveapp._id}>
                           <Td width={{ sm: "50px" }} pl="0px" borderColor={borderColor} py={5}>
@@ -312,13 +323,42 @@ const LeaveApp = () => {
                           </Td>
                           <Td borderColor={borderColor}>
                             <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {leaveapp.type}
+                              {leaveapp.attachment}
                             </Text>
                           </Td>
                           <Td borderColor={borderColor}>
-                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {leaveapp.type}
-                            </Text>
+                            <Badge
+                              bg={statusColors[leaveapp.leave_status] || "gray.400"}
+                              color={"white"}
+                              fontSize="16px"
+                              p="3px 10px"
+                              borderRadius="8px"
+                            >
+                              {leaveapp.leave_status}
+                            </Badge>
+                          </Td>
+                          <Td borderColor={borderColor}>
+                            <Flex direction="row" p="0px" alignItems="center" gap="4">
+                              <Flex
+                                alignItems="center"
+                                gap="1"
+                                as="button"
+                                onClick={() => {
+                                  if (leaveapp.leave_status == "Pending") {
+                                    handleEditClick(leaveapp);
+                                  }
+                                }}
+                                cursor={
+                                  leaveapp.leave_status !== "Pending" ? "not-allowed" : "pointer"
+                                }
+                                opacity={leaveapp.leave_status !== "Pending" ? 0.4 : 1}
+                              >
+                                <FaPen size="14" color={iconColor} />
+                                <Text fontSize="14px" color={textColor} fontWeight="bold">
+                                  EDIT
+                                </Text>
+                              </Flex>
+                            </Flex>
                           </Td>
                         </Tr>
                       ))}

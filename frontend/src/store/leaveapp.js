@@ -77,21 +77,25 @@ export const useLeaveAppStore = create((set) => ({
 
   updateLeaveApp: async (pid, updatedLeaveApp) => {
     if (
-      !updatedLeaveApp.leave_startDate ||
-      !updatedLeaveApp.leave_endDate ||
       !updatedLeaveApp.type ||
-      !updatedLeaveApp.leave_status
+      !updatedLeaveApp.leave_startDate ||
+      !updatedLeaveApp.leave_endDate
     ) {
       return { success: false, message: "Please fill in all fields." };
     }
 
+    const formData = new FormData();
+    formData.append("file", updatedLeaveApp.attachment);
+    formData.append("type", updatedLeaveApp.type);
+    formData.append("leave_startDate", updatedLeaveApp.leave_startDate);
+    formData.append("leave_endDate", updatedLeaveApp.leave_endDate);
+
     const res = await fetch(`/api/leaveapps/${pid}`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(updatedLeaveApp),
+      body: formData,
     });
 
     if (res.status === 401 || res.status === 403) {

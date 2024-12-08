@@ -100,23 +100,35 @@ export const getLeaveApps = async (req, res) => {
 };
 
 export const updateLeaveApps = async (req, res) => {
-  const { id } = req.params;
+  upload(req, res, async (err) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ success: false, message: "File upload failed", error: err.message });
+    }
+    const { id } = req.params;
+    const leaveApp = req.body;
 
-  const leaveApps = req.body;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ success: false, message: "Invalid Leave Application Id" });
+    }
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ success: false, message: "Invalid Leave Application Id" });
-  }
+    if (req.file) {
+      const filePath = path.relative("frontend/public", req.file.path);
 
-  try {
-    const updatedLeaveApp = await LeaveApp.findByIdAndUpdate(id, leaveApps, {
-      new: true,
-    });
-    res.status(200).json({ success: true, data: updatedLeaveApp });
-  } catch (error) {
-    console.log("Error in Updating leave applications:", error.message);
-    res.status(500).json({ success: false, message: "Server Error" });
-  }
+      leaveApp.attachment = filePath;
+    }
+
+    try {
+      const updatedLeaveApp = await LeaveApp.findByIdAndUpdate(id, leaveApp, {
+        new: true,
+      });
+      res.status(200).json({ success: true, data: updatedLeaveApp });
+    } catch (error) {
+      console.log("Error in Updating leave applications:", error.message);
+      res.status(500).json({ success: false, message: "Server Error" });
+    }
+  });
 };
 
 export const deleteLeaveApps = async (req, res) => {
