@@ -27,6 +27,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 import { useEventStore } from "../store/event";
+import { Link } from "react-router-dom";
 
 const ManageEvent = () => {
   // Utils
@@ -269,9 +270,20 @@ const ManageEvent = () => {
           >
             <Box overflowX={{ sm: "scroll", xl: "hidden" }} pb="0px">
               <Box p="6px 0px 22px 0px">
-                <Text fontSize="xl" color={textColor} fontWeight="bold">
-                  Event List
-                </Text>
+                <Flex align="center" justify="space-between" p="0px">
+                  <Text fontSize="xl" color={textColor} fontWeight="bold">
+                    Event List
+                  </Text>
+                  <Button
+                    fontSize="xs"
+                    as={Link}
+                    to="/hr/eventhistory"
+                    variant="primary"
+                    maxH="30px"
+                  >
+                    Event History
+                  </Button>
+                </Flex>
               </Box>
               <Box>
                 <Table variant="simple" color={textColor}>
@@ -284,7 +296,10 @@ const ManageEvent = () => {
                         Event Name
                       </Th>
                       <Th borderColor={borderColor} color="gray.400">
-                        Event Date
+                        Start Date
+                      </Th>
+                      <Th borderColor={borderColor} color="gray.400">
+                        End Date
                       </Th>
                       <Th borderColor={borderColor} color="gray.400">
                         Description
@@ -298,6 +313,8 @@ const ManageEvent = () => {
                     {events
                       .filter((event) => !event.na)
                       .filter((event) => !event.del)
+                      .filter((event) => new Date(event.event_startDate) > new Date())
+                      .sort((a, b) => new Date(a.event_startDate) - new Date(b.event_startDate))
                       .map((event) => (
                         <Tr key={event._id}>
                           <Td pl="0px" borderColor={borderColor} py={5}>
@@ -325,8 +342,11 @@ const ManageEvent = () => {
                                   month: "long",
                                   year: "numeric",
                                 })
-                                .replace(" ", ", ")}{" "}
-                              {" - "}
+                                .replace(" ", ", ")}
+                            </Text>
+                          </Td>
+                          <Td borderColor={borderColor}>
+                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
                               {new Date(event.event_endDate)
                                 .toLocaleDateString("en-GB", {
                                   weekday: "long",

@@ -10,6 +10,7 @@ import LeaveApp from "./pages/ess.leaveapp";
 import MasterDepartment from "./pages/hr.masterdepartment";
 import MasterPosition from "./pages/hr.masterposition";
 import ManageEvent from "./pages/hr.manageevent";
+import EventHistory from "./pages/hr.eventhistory";
 import ManageEmployee from "./pages/hr.manageemployee";
 import EmployeeTerminated from "./pages/hr.employeeterminated";
 import AttendanceSummary from "./pages/hr.attendancesummary";
@@ -31,6 +32,7 @@ function App() {
           <Route path="/hr/masterdepartment" element={<MasterDepartment />} />
           <Route path="/hr/masterposition" element={<MasterPosition />} />
           <Route path="/hr/manageevent" element={<ManageEvent />} />
+          <Route path="/hr/eventhistory" element={<EventHistory />} />
           <Route path="/hr/manageemployee" element={<ManageEmployee />} />
           <Route path="/hr/employeeterminated" element={<EmployeeTerminated />} />
           <Route path="/hr/attendancesummary" element={<AttendanceSummary />} />
