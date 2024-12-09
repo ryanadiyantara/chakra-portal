@@ -53,7 +53,6 @@ function Sidebar() {
         { path: "/hr/manageemployee", name: "Manage Employee", icon: <PersonIcon /> },
         { path: "/hr/manageevent", name: "Manage Event", icon: <HomeIcon /> },
         { path: "/hr/employeeterminated", name: "Employee Terminated", icon: <PersonIcon /> },
-        { path: "/hr/attendancesummary", name: "Attendance Summary", icon: <ClockIcon /> },
         { path: "/hr/leaveapproval", name: "Leave Approval", icon: <RocketIcon /> },
       ],
     },

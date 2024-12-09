@@ -13,7 +13,6 @@ import ManageEvent from "./pages/hr.manageevent";
 import EventHistory from "./pages/hr.eventhistory";
 import ManageEmployee from "./pages/hr.manageemployee";
 import EmployeeTerminated from "./pages/hr.employeeterminated";
-import AttendanceSummary from "./pages/hr.attendancesummary";
 import LeaveApproval from "./pages/hr.leaveapproval";
 
 function App() {
@@ -35,7 +34,6 @@ function App() {
           <Route path="/hr/eventhistory" element={<EventHistory />} />
           <Route path="/hr/manageemployee" element={<ManageEmployee />} />
           <Route path="/hr/employeeterminated" element={<EmployeeTerminated />} />
-          <Route path="/hr/attendancesummary" element={<AttendanceSummary />} />
           <Route path="/hr/leaveapproval" element={<LeaveApproval />} />
         </Routes>
       </Box>

@@ -39,7 +39,6 @@ function Navbar() {
     { path: "/hr/eventhistory", name: "Event History", category: "Human Resource" },
     { path: "/hr/manageemployee", name: "Manage Employee", category: "Human Resource" },
     { path: "/hr/employeeterminated", name: "Employee Terminated", category: "Human Resource" },
-    { path: "/hr/attendancesummary", name: "Attendance Summary", category: "Human Resource" },
     { path: "/hr/leaveapproval", name: "Leave Approval", category: "Human Resource" },
   ];
 
