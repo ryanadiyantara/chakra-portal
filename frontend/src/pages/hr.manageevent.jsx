@@ -433,7 +433,6 @@ const ManageEvent = () => {
                     fontSize="sm"
                     ms="4px"
                     type="file"
-                    mb="24px"
                     size="lg"
                     name="poster"
                     sx={{
@@ -445,6 +444,12 @@ const ManageEvent = () => {
                     onChange={handleFileChange}
                     borderColor={errors.poster ? "red.500" : "gray.200"}
                   />
+                  <Text fontSize="xs" color="red.500" ms="4px" fontStyle="italic">
+                    * Accepted file types: JPG, JPEG, PNG.
+                  </Text>
+                  <Text fontSize="xs" color="red.500" ms="4px" mb="24px" fontStyle="italic">
+                    * Recommended aspect ratio: 1:2.
+                  </Text>
                   <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                     Start Date
                   </FormLabel>

@@ -437,7 +437,6 @@ const LeaveApp = () => {
                     fontSize="sm"
                     ms="4px"
                     type="file"
-                    mb="24px"
                     size="lg"
                     name="attachment"
                     sx={{
@@ -449,7 +448,9 @@ const LeaveApp = () => {
                     onChange={handleFileChange}
                     borderColor={errors.attachment ? "red.500" : "gray.200"}
                   />
-
+                  <Text fontSize="xs" color="red.500" ms="4px" mb="24px" fontStyle="italic">
+                    * File must be in PDF format.
+                  </Text>
                   <Button
                     fontSize="14px"
                     variant="dark"
