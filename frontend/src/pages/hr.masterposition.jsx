@@ -46,6 +46,7 @@ const MasterPosition = () => {
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const bgForm = useColorModeValue("white", "navy.800");
 
+  const [searchQuery, setSearchQuery] = useState("");
   const [newPosition, setNewPosition] = useState({
     position_name: "",
     department_id: "",
@@ -54,6 +55,10 @@ const MasterPosition = () => {
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingPositionId, setEditingPositionId] = useState(null);
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value.toLowerCase());
+  };
 
   const handleEditClick = (position) => {
     setNewPosition({
@@ -199,11 +204,24 @@ const MasterPosition = () => {
             bg={bgForm}
           >
             <Box overflowX={{ sm: "scroll", xl: "hidden" }} pb="0px">
-              <Box p="6px 0px 22px 0px">
-                <Text fontSize="xl" color={textColor} fontWeight="bold">
-                  Position List
-                </Text>
-              </Box>
+              <Flex align="center" justify="space-between" p="0px">
+                <Box p="6px 0px 22px 0px">
+                  <Text fontSize="xl" color={textColor} fontWeight="bold">
+                    Position List
+                  </Text>
+                </Box>
+                {/* Search Input */}
+                <Box>
+                  <Input
+                    placeholder="Search on list..."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    size="sm"
+                    borderRadius="5px"
+                    w="100%"
+                  />
+                </Box>
+              </Flex>
               <Box>
                 <Table variant="simple" color={textColor}>
                   <Thead>
@@ -226,6 +244,17 @@ const MasterPosition = () => {
                     {positions
                       .filter((position) => !position.na)
                       .filter((position) => !position.del)
+                      .filter(
+                        (position) =>
+                          position.position_name.toLowerCase().includes(searchQuery) ||
+                          departments.some(
+                            (department) =>
+                              department._id === position.department_id &&
+                              department.department_name
+                                .toLowerCase()
+                                .includes(searchQuery.toLowerCase())
+                          )
+                      )
                       .map((position, index) => {
                         const department = departments.find(
                           (dept) => dept._id === position.department_id

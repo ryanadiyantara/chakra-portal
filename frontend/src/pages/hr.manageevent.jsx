@@ -39,6 +39,7 @@ const ManageEvent = () => {
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const bgForm = useColorModeValue("white", "navy.800");
 
+  const [searchQuery, setSearchQuery] = useState("");
   const [newEvent, setNewEvent] = useState({
     event_name: "",
     poster: "",
@@ -50,6 +51,10 @@ const ManageEvent = () => {
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingEventId, setEditingEventId] = useState(null);
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value.toLowerCase());
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -274,15 +279,29 @@ const ManageEvent = () => {
                   <Text fontSize="xl" color={textColor} fontWeight="bold">
                     Event List
                   </Text>
-                  <Button
-                    fontSize="xs"
-                    as={Link}
-                    to="/hr/eventhistory"
-                    variant="primary"
-                    maxH="30px"
-                  >
-                    Event History
-                  </Button>
+                  <Flex align="center" justify="space-between" p="0px" gap="20px">
+                    <Button
+                      fontSize="xs"
+                      as={Link}
+                      to="/hr/eventhistory"
+                      variant="primary"
+                      maxH="30px"
+                      borderRadius="5px"
+                    >
+                      Event History
+                    </Button>
+                    {/* Search Input */}
+                    <Box>
+                      <Input
+                        placeholder="Search on list..."
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        size="sm"
+                        borderRadius="5px"
+                        w="100%"
+                      />
+                    </Box>
+                  </Flex>
                 </Flex>
               </Box>
               <Box>
@@ -313,6 +332,35 @@ const ManageEvent = () => {
                     {events
                       .filter((event) => !event.na)
                       .filter((event) => !event.del)
+                      .filter((event) => {
+                        const startDate = new Date(event.event_startDate);
+                        const endDate = new Date(event.event_endDate);
+
+                        const formattedStartDate = startDate
+                          .toLocaleDateString("en-GB", {
+                            weekday: "long",
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric",
+                          })
+                          .toLowerCase();
+
+                        const formattedEndDate = endDate
+                          .toLocaleDateString("en-GB", {
+                            weekday: "long",
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric",
+                          })
+                          .toLowerCase();
+
+                        return (
+                          event.event_name.toLowerCase().includes(searchQuery) ||
+                          formattedStartDate.includes(searchQuery.toLowerCase()) ||
+                          formattedEndDate.includes(searchQuery.toLowerCase()) ||
+                          event.description.toLowerCase().includes(searchQuery)
+                        );
+                      })
                       .filter((event) => new Date(event.event_startDate) > new Date())
                       .sort((a, b) => new Date(a.event_startDate) - new Date(b.event_startDate))
                       .map((event) => (

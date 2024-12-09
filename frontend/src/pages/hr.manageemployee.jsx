@@ -49,6 +49,7 @@ const ManageEmployee = () => {
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const bgForm = useColorModeValue("white", "navy.800");
 
+  const [searchQuery, setSearchQuery] = useState("");
   const [newUser, setNewUser] = useState({
     user_name: "",
     email: "",
@@ -62,6 +63,10 @@ const ManageEmployee = () => {
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingUserId, setEditingUserId] = useState(null);
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value.toLowerCase());
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -288,11 +293,24 @@ const ManageEmployee = () => {
             bg={bgForm}
           >
             <Box overflowX={{ sm: "scroll", xl: "hidden" }} pb="0px">
-              <Box p="6px 0px 22px 0px">
-                <Text fontSize="xl" color={textColor} fontWeight="bold">
-                  Employee List
-                </Text>
-              </Box>
+              <Flex align="center" justify="space-between" p="0px">
+                <Box p="6px 0px 22px 0px">
+                  <Text fontSize="xl" color={textColor} fontWeight="bold">
+                    Employee List
+                  </Text>
+                </Box>
+                {/* Search Input */}
+                <Box>
+                  <Input
+                    placeholder="Search on list..."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    size="sm"
+                    borderRadius="5px"
+                    w="100%"
+                  />
+                </Box>
+              </Flex>
               <Box>
                 <Table variant="simple" color={textColor}>
                   <Thead>
@@ -321,6 +339,48 @@ const ManageEmployee = () => {
                   <Tbody>
                     {users
                       .filter((user) => !user.na)
+                      .filter((user) => {
+                        const startDate = new Date(user.startDate);
+                        const birthDate = new Date(user.dateBirth);
+
+                        const formattedBirthDate = birthDate
+                          .toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric",
+                          })
+                          .toLowerCase();
+
+                        const formattedStartDate = startDate
+                          .toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric",
+                          })
+                          .toLowerCase();
+
+                        return (
+                          user.user_name.toLowerCase().includes(searchQuery) ||
+                          user.email.toLowerCase().includes(searchQuery) ||
+                          user.user_id.toLowerCase().includes(searchQuery) ||
+                          departments.some(
+                            (department) =>
+                              department._id === user.department_id &&
+                              department.department_name
+                                .toLowerCase()
+                                .includes(searchQuery.toLowerCase())
+                          ) ||
+                          positions.some(
+                            (position) =>
+                              position._id === user.position_id &&
+                              position.position_name
+                                .toLowerCase()
+                                .includes(searchQuery.toLowerCase())
+                          ) ||
+                          formattedBirthDate.includes(searchQuery.toLowerCase()) ||
+                          formattedStartDate.includes(searchQuery.toLowerCase())
+                        );
+                      })
                       .map((user) => {
                         const department = departments.find(
                           (dept) => dept._id === user.department_id

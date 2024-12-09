@@ -46,6 +46,8 @@ const LeaveApp = () => {
     Rejected: "#E53E3E",
   };
 
+  const [searchQuery, setSearchQuery] = useState("");
+
   const [newLeaveApp, setNewLeaveApp] = useState({
     leave_startDate: "",
     leave_endDate: "",
@@ -56,6 +58,10 @@ const LeaveApp = () => {
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingLeaveAppId, setEditingLeaveAppId] = useState(null);
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value.toLowerCase());
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -249,9 +255,22 @@ const LeaveApp = () => {
           >
             <Box overflowX={{ sm: "scroll", xl: "hidden" }} pb="0px">
               <Box p="6px 0px 22px 0px">
-                <Text fontSize="xl" color={textColor} fontWeight="bold">
-                  Leave Application History
-                </Text>
+                <Flex align="center" justify="space-between" p="0px">
+                  <Text fontSize="xl" color={textColor} fontWeight="bold">
+                    Leave Application History
+                  </Text>
+                  {/* Search Input */}
+                  <Box>
+                    <Input
+                      placeholder="Search on list..."
+                      value={searchQuery}
+                      onChange={handleSearchChange}
+                      size="sm"
+                      borderRadius="5px"
+                      w="100%"
+                    />
+                  </Box>
+                </Flex>
               </Box>
               <Box>
                 <Table variant="simple" color={textColor}>
@@ -285,6 +304,36 @@ const LeaveApp = () => {
                       .filter((leaveapp) => !leaveapp.na)
                       .filter((leaveapp) => !leaveapp.del)
                       .filter((leaveapp) => leaveapp.leaveAppId.includes(currentUser.user_id))
+                      .filter((leaveapp) => {
+                        const startDate = new Date(leaveapp.leave_startDate);
+                        const endDate = new Date(leaveapp.leave_endDate);
+
+                        const formattedStartDate = startDate
+                          .toLocaleDateString("en-GB", {
+                            weekday: "long",
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric",
+                          })
+                          .toLowerCase();
+
+                        const formattedEndDate = endDate
+                          .toLocaleDateString("en-GB", {
+                            weekday: "long",
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric",
+                          })
+                          .toLowerCase();
+
+                        return (
+                          leaveapp.leaveAppId.toLowerCase().includes(searchQuery) ||
+                          leaveapp.type.toLowerCase().includes(searchQuery) ||
+                          formattedStartDate.includes(searchQuery.toLowerCase()) ||
+                          formattedEndDate.includes(searchQuery.toLowerCase()) ||
+                          leaveapp.leave_status.toLowerCase().includes(searchQuery)
+                        );
+                      })
                       .map((leaveapp, index) => (
                         <Tr key={leaveapp._id}>
                           <Td width={{ sm: "50px" }} pl="0px" borderColor={borderColor} py={5}>

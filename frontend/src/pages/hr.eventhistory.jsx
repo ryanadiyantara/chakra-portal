@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -14,6 +14,7 @@ import {
   VStack,
   Td,
   Image,
+  Input,
 } from "@chakra-ui/react";
 
 import Background from "../components/Background";
@@ -31,6 +32,12 @@ const EventHistory = () => {
   const textColor = useColorModeValue("gray.700", "white");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const bgForm = useColorModeValue("white", "navy.800");
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value.toLowerCase());
+  };
 
   // Services
   useEffect(() => {
@@ -89,15 +96,29 @@ const EventHistory = () => {
                   <Text fontSize="xl" color={textColor} fontWeight="bold">
                     Event History
                   </Text>
-                  <Button
-                    fontSize="xs"
-                    as={Link}
-                    to="/hr/manageevent"
-                    variant="primary"
-                    maxH="30px"
-                  >
-                    Manage Event
-                  </Button>
+                  <Flex align="center" justify="space-between" p="0px" gap="20px">
+                    <Button
+                      fontSize="xs"
+                      as={Link}
+                      to="/hr/manageevent"
+                      variant="primary"
+                      maxH="30px"
+                      borderRadius="5px"
+                    >
+                      Manage Event
+                    </Button>
+                    {/* Search Input */}
+                    <Box>
+                      <Input
+                        placeholder="Search on list..."
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        size="sm"
+                        borderRadius="5px"
+                        w="100%"
+                      />
+                    </Box>
+                  </Flex>
                 </Flex>
               </Box>
               <Box>
@@ -125,6 +146,35 @@ const EventHistory = () => {
                     {events
                       .filter((event) => !event.na)
                       .filter((event) => !event.del)
+                      .filter((event) => {
+                        const startDate = new Date(event.event_startDate);
+                        const endDate = new Date(event.event_endDate);
+
+                        const formattedStartDate = startDate
+                          .toLocaleDateString("en-GB", {
+                            weekday: "long",
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric",
+                          })
+                          .toLowerCase();
+
+                        const formattedEndDate = endDate
+                          .toLocaleDateString("en-GB", {
+                            weekday: "long",
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric",
+                          })
+                          .toLowerCase();
+
+                        return (
+                          event.event_name.toLowerCase().includes(searchQuery) ||
+                          formattedStartDate.includes(searchQuery.toLowerCase()) ||
+                          formattedEndDate.includes(searchQuery.toLowerCase()) ||
+                          event.description.toLowerCase().includes(searchQuery)
+                        );
+                      })
                       .sort((a, b) => new Date(a.event_startDate) - new Date(b.event_startDate))
                       .map((event) => (
                         <Tr key={event._id}>

@@ -38,6 +38,7 @@ const MasterDepartment = () => {
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const bgForm = useColorModeValue("white", "navy.800");
 
+  const [searchQuery, setSearchQuery] = useState("");
   const [newDepartment, setNewDepartment] = useState({
     department_name: "",
   });
@@ -45,6 +46,10 @@ const MasterDepartment = () => {
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingDepartmentId, setEditingDepartmentId] = useState(null);
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value.toLowerCase());
+  };
 
   const handleEditClick = (department) => {
     setNewDepartment({ department_name: department.department_name });
@@ -185,11 +190,24 @@ const MasterDepartment = () => {
             bg={bgForm}
           >
             <Box overflowX={{ sm: "scroll", xl: "hidden" }} pb="0px">
-              <Box p="6px 0px 22px 0px">
-                <Text fontSize="xl" color={textColor} fontWeight="bold">
-                  Department List
-                </Text>
-              </Box>
+              <Flex align="center" justify="space-between" p="0px">
+                <Box p="6px 0px 22px 0px">
+                  <Text fontSize="xl" color={textColor} fontWeight="bold">
+                    Department List
+                  </Text>
+                </Box>
+                {/* Search Input */}
+                <Box>
+                  <Input
+                    placeholder="Search on list..."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    size="sm"
+                    borderRadius="5px"
+                    w="100%"
+                  />
+                </Box>
+              </Flex>
               <Box>
                 <Table variant="simple" color={textColor}>
                   <Thead>
@@ -209,6 +227,9 @@ const MasterDepartment = () => {
                     {departments
                       .filter((department) => !department.na)
                       .filter((department) => !department.del)
+                      .filter((department) =>
+                        department.department_name.toLowerCase().includes(searchQuery)
+                      )
                       .map((department, index) => (
                         <Tr key={department._id}>
                           <Td width={{ sm: "50px" }} pl="0px" borderColor={borderColor} py={5}>
