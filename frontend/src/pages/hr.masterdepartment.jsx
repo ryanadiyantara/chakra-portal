@@ -23,6 +23,7 @@ import { FaPen, FaTrash } from "react-icons/fa";
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+import CustomModal from "../components/Modal";
 import Footer from "../components/Footer";
 
 import { useDepartmentStore } from "../store/department";
@@ -46,6 +47,9 @@ const MasterDepartment = () => {
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingDepartmentId, setEditingDepartmentId] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [selectedDepartmentName, setSelectedDepartmentName] = useState(null);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
@@ -65,6 +69,17 @@ const MasterDepartment = () => {
     setEditingDepartmentId(null);
   };
 
+  const openDeleteModal = (name) => {
+    setSelectedDepartmentName(name);
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+    setInputValue("");
+    setSelectedDepartmentName(null);
+  };
+
   // Services
   useEffect(() => {
     fetchDepartment();
@@ -76,7 +91,6 @@ const MasterDepartment = () => {
     };
 
     setErrors(currentErrors);
-    if (Object.keys(currentErrors).length > 0);
 
     if (isEditing && editingDepartmentId) {
       // Update department
@@ -123,6 +137,19 @@ const MasterDepartment = () => {
   };
 
   const handleDeleteDepartment = async (pid) => {
+    if (!selectedDepartmentName) return;
+
+    if (inputValue !== selectedDepartmentName) {
+      toast({
+        title: "Error",
+        description: "Input does not match the department name.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
     const { success, message } = await deleteDepartment(pid);
     if (success) {
       toast({
@@ -132,6 +159,9 @@ const MasterDepartment = () => {
         duration: 3000,
         isClosable: true,
       });
+      setIsOpen(false);
+      setInputValue("");
+      setSelectedDepartmentName(null);
     } else {
       toast({
         title: "Error",
@@ -259,13 +289,33 @@ const MasterDepartment = () => {
                                 alignItems="center"
                                 gap="1"
                                 as="button"
-                                onClick={() => handleDeleteDepartment(department._id)}
+                                onClick={() => openDeleteModal(department.department_name)}
                               >
                                 <FaTrash size="14" color="#E53E3E" />
                                 <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
                                   DELETE
                                 </Text>
                               </Flex>
+                              {/* Modal Delete */}
+                              <CustomModal
+                                isOpen={isOpen}
+                                onClose={handleClose}
+                                title="Delete Department"
+                                bodyContent={
+                                  <p>
+                                    To delete a department named{" "}
+                                    <span style={{ fontWeight: "bold" }}>
+                                      {selectedDepartmentName}
+                                    </span>
+                                    , type the name to confirm.
+                                  </p>
+                                }
+                                modalBgColor="blackAlpha.400"
+                                modalBackdropFilter="blur(1px)"
+                                inputValue={inputValue}
+                                onInputChange={(e) => setInputValue(e.target.value)}
+                                onConfirm={() => handleDeleteDepartment(department._id)}
+                              />
                             </Flex>
                           </Td>
                         </Tr>

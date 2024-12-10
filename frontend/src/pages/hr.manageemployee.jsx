@@ -25,6 +25,7 @@ import { FaPen, FaTrash } from "react-icons/fa";
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+import CustomModal from "../components/Modal";
 import Footer from "../components/Footer";
 
 import { useUserStore } from "../store/user";
@@ -63,6 +64,9 @@ const ManageEmployee = () => {
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingUserId, setEditingUserId] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [selectedUserName, setSelectedUserName] = useState(null);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
@@ -138,6 +142,17 @@ const ManageEmployee = () => {
     setEditingUserId(null);
   };
 
+  const openDeleteModal = (name) => {
+    setSelectedUserName(name);
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+    setInputValue("");
+    setSelectedUserName(null);
+  };
+
   // Services
   useEffect(() => {
     fetchUser();
@@ -161,7 +176,6 @@ const ManageEmployee = () => {
     };
 
     setErrors(currentErrors);
-    if (Object.keys(currentErrors).length > 0);
 
     if (isEditing && editingUserId) {
       // Update user
@@ -226,6 +240,19 @@ const ManageEmployee = () => {
   };
 
   const handleTerminatedUser = async (pid) => {
+    if (!selectedUserName) return;
+
+    if (inputValue !== selectedUserName) {
+      toast({
+        title: "Error",
+        description: "Input does not match the user name.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
     const { success, message } = await terminatedUser(pid);
     if (success) {
       toast({
@@ -235,6 +262,9 @@ const ManageEmployee = () => {
         duration: 3000,
         isClosable: true,
       });
+      setIsOpen(false);
+      setInputValue("");
+      setSelectedUserName(null);
     } else {
       toast({
         title: "Error",
@@ -484,13 +514,31 @@ const ManageEmployee = () => {
                                   alignItems="center"
                                   gap="1"
                                   as="button"
-                                  onClick={() => handleTerminatedUser(user._id)}
+                                  onClick={() => openDeleteModal(user.user_name)}
                                 >
                                   <FaTrash size="14" color="#E53E3E" />
                                   <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
                                     TERMINATED
                                   </Text>
                                 </Flex>
+                                {/* Modal Delete */}
+                                <CustomModal
+                                  isOpen={isOpen}
+                                  onClose={handleClose}
+                                  title="Delete User"
+                                  bodyContent={
+                                    <p>
+                                      To delete a user named{" "}
+                                      <span style={{ fontWeight: "bold" }}>{selectedUserName}</span>
+                                      , type the name to confirm.
+                                    </p>
+                                  }
+                                  modalBgColor="blackAlpha.400"
+                                  modalBackdropFilter="blur(1px)"
+                                  inputValue={inputValue}
+                                  onInputChange={(e) => setInputValue(e.target.value)}
+                                  onConfirm={() => handleTerminatedUser(user._id)}
+                                />
                               </Flex>
                             </Td>
                           </Tr>

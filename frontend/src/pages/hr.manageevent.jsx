@@ -24,6 +24,7 @@ import { FaPen, FaTrash } from "react-icons/fa";
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+import CustomModal from "../components/Modal";
 import Footer from "../components/Footer";
 
 import { useEventStore } from "../store/event";
@@ -51,6 +52,9 @@ const ManageEvent = () => {
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingEventId, setEditingEventId] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [selectedEventName, setSelectedEventName] = useState(null);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
@@ -138,6 +142,17 @@ const ManageEvent = () => {
     setEditingEventId(null);
   };
 
+  const openDeleteModal = (name) => {
+    setSelectedEventName(name);
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+    setInputValue("");
+    setSelectedEventName(null);
+  };
+
   // Services
   useEffect(() => {
     fetchEvent();
@@ -153,7 +168,6 @@ const ManageEvent = () => {
     };
 
     setErrors(currentErrors);
-    if (Object.keys(currentErrors).length > 0);
 
     if (isEditing && editingEventId) {
       // Update event
@@ -213,6 +227,19 @@ const ManageEvent = () => {
   };
 
   const handleDeleteEvent = async (pid) => {
+    if (!selectedEventName) return;
+
+    if (inputValue !== selectedEventName) {
+      toast({
+        title: "Error",
+        description: "Input does not match the event name.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
     const { success, message } = await deleteEvent(pid);
     if (success) {
       toast({
@@ -222,6 +249,9 @@ const ManageEvent = () => {
         duration: 3000,
         isClosable: true,
       });
+      setIsOpen(false);
+      setInputValue("");
+      setSelectedEventName(null);
     } else {
       toast({
         title: "Error",
@@ -433,13 +463,31 @@ const ManageEvent = () => {
                                 alignItems="center"
                                 gap="1"
                                 as="button"
-                                onClick={() => handleDeleteEvent(event._id)}
+                                onClick={() => openDeleteModal(event.event_name)}
                               >
                                 <FaTrash size="14" color="#E53E3E" />
                                 <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
                                   DELETE
                                 </Text>
                               </Flex>
+                              {/* Modal Delete */}
+                              <CustomModal
+                                isOpen={isOpen}
+                                onClose={handleClose}
+                                title="Delete Event"
+                                bodyContent={
+                                  <p>
+                                    To delete a event named{" "}
+                                    <span style={{ fontWeight: "bold" }}>{selectedEventName}</span>,
+                                    type the name to confirm.
+                                  </p>
+                                }
+                                modalBgColor="blackAlpha.800"
+                                modalBackdropFilter="blur(2px)"
+                                inputValue={inputValue}
+                                onInputChange={(e) => setInputValue(e.target.value)}
+                                onConfirm={() => handleDeleteEvent(event._id)}
+                              />
                             </Flex>
                           </Td>
                         </Tr>

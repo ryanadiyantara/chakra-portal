@@ -24,6 +24,7 @@ import { FaPen, FaTrash } from "react-icons/fa";
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+import CustomModal from "../components/Modal";
 import Footer from "../components/Footer";
 
 import { usePositionStore } from "../store/position";
@@ -55,6 +56,9 @@ const MasterPosition = () => {
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingPositionId, setEditingPositionId] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [selectedPositionName, setSelectedPositionName] = useState(null);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
@@ -77,6 +81,17 @@ const MasterPosition = () => {
     setEditingPositionId(null);
   };
 
+  const openDeleteModal = (names) => {
+    setSelectedPositionName(names);
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+    setInputValue("");
+    setSelectedPositionName(null);
+  };
+
   // Services
   useEffect(() => {
     fetchPosition();
@@ -90,7 +105,6 @@ const MasterPosition = () => {
     };
 
     setErrors(currentErrors);
-    if (Object.keys(currentErrors).length > 0);
 
     if (isEditing && editingPositionId) {
       // Update position
@@ -137,6 +151,19 @@ const MasterPosition = () => {
   };
 
   const handleDeletePosition = async (pid) => {
+    if (!selectedPositionName) return;
+
+    if (inputValue !== selectedPositionName) {
+      toast({
+        title: "Error",
+        description: "Input does not match the position name.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
     const { success, message } = await deletePosition(pid);
     if (success) {
       toast({
@@ -146,6 +173,9 @@ const MasterPosition = () => {
         duration: 3000,
         isClosable: true,
       });
+      setIsOpen(false);
+      setInputValue("");
+      setSelectedPositionName(null);
     } else {
       toast({
         title: "Error",
@@ -308,13 +338,33 @@ const MasterPosition = () => {
                                   alignItems="center"
                                   gap="1"
                                   as="button"
-                                  onClick={() => handleDeletePosition(position._id)}
+                                  onClick={() => openDeleteModal(position.position_name)}
                                 >
                                   <FaTrash size="14" color="#E53E3E" />
                                   <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
                                     DELETE
                                   </Text>
                                 </Flex>
+                                {/* Modal Delete */}
+                                <CustomModal
+                                  isOpen={isOpen}
+                                  onClose={handleClose}
+                                  title="Delete Position"
+                                  bodyContent={
+                                    <p>
+                                      To delete a position named{" "}
+                                      <span style={{ fontWeight: "bold" }}>
+                                        {selectedPositionName}
+                                      </span>
+                                      , type the name to confirm.
+                                    </p>
+                                  }
+                                  modalBgColor="blackAlpha.200"
+                                  modalBackdropFilter="blur(0.6px)"
+                                  inputValue={inputValue}
+                                  onInputChange={(e) => setInputValue(e.target.value)}
+                                  onConfirm={() => handleDeletePosition(position._id)}
+                                />
                               </Flex>
                             </Td>
                           </Tr>
