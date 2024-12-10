@@ -105,7 +105,14 @@ const LeaveApp = () => {
   const handleDateChange = (e) => {
     const { name, value } = e.target;
     if (name === "leave_endDate" && new Date(value) < new Date(newLeaveApp.leave_startDate)) {
-      alert("End Date cannot be before Start Date");
+      toast({
+        title: "Error",
+        description: "End Date cannot be before Start Date.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      e.target.value = "";
       return;
     }
     setNewLeaveApp({ ...newLeaveApp, [name]: value });

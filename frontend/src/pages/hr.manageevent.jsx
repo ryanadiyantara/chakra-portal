@@ -95,11 +95,17 @@ const ManageEvent = () => {
     return new Date(date).toISOString().split("T")[0];
   };
 
-  // Fix soon
   const handleDateChange = (e) => {
     const { name, value } = e.target;
     if (name === "event_endDate" && new Date(value) < new Date(newEvent.event_startDate)) {
-      alert("End Date cannot be before Start Date");
+      toast({
+        title: "Error",
+        description: "End Date cannot be before Start Date.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      e.target.value = "";
       return;
     }
     setNewEvent({ ...newEvent, [name]: value });
