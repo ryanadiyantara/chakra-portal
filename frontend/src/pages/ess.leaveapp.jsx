@@ -20,7 +20,7 @@ import {
   Select,
   Badge,
 } from "@chakra-ui/react";
-import { FaPen, FaTrash } from "react-icons/fa";
+import { FaAddressBook, FaDochub, FaFile, FaPen, FaTrash } from "react-icons/fa";
 
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
@@ -101,7 +101,6 @@ const LeaveApp = () => {
     return new Date(date).toISOString().split("T")[0];
   };
 
-  // Fix soon
   const handleDateChange = (e) => {
     const { name, value } = e.target;
     if (name === "leave_endDate" && new Date(value) < new Date(newLeaveApp.leave_startDate)) {
@@ -117,7 +116,6 @@ const LeaveApp = () => {
     }
     setNewLeaveApp({ ...newLeaveApp, [name]: value });
   };
-  //
 
   const handleEditClick = (leaveapp) => {
     setNewLeaveApp({
@@ -378,9 +376,29 @@ const LeaveApp = () => {
                             </Text>
                           </Td>
                           <Td borderColor={borderColor}>
-                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {leaveapp.attachment}
-                            </Text>
+                            <Flex
+                              alignItems="center"
+                              gap="1"
+                              as="button"
+                              onClick={() => {
+                                if (leaveapp.attachment) {
+                                  const filePath = leaveapp.attachment.replace("/ess", "");
+                                  const fullPath = `http://localhost:5000/${filePath}`;
+
+                                  window.open(fullPath, "_blank");
+                                } else {
+                                  alert("Attachment not available.");
+                                }
+                              }}
+                            >
+                              <FaFile size="14" color={iconColor} />
+                              <Text fontSize="14px" color={textColor} fontWeight="bold">
+                                EDIT
+                              </Text>
+                              <Text fontSize="14px" color={textColor} fontWeight="bold">
+                                {leaveapp.attachment}
+                              </Text>
+                            </Flex>
                           </Td>
                           <Td borderColor={borderColor}>
                             <Badge
