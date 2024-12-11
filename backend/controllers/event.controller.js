@@ -5,7 +5,7 @@ import Event from "../models/event.model.js";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "frontend/public/uploads/event");
+    cb(null, "public/uploads/event");
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -33,7 +33,7 @@ export const createEvents = async (req, res) => {
       return res.status(400).json({ success: false, message: "No file uploaded" });
     }
 
-    const filePath = path.relative("frontend/public", req.file.path);
+    const filePath = path.relative("public/uploads", req.file.path);
     event.poster_path = filePath;
 
     const newEvent = new Event(event);
@@ -81,7 +81,7 @@ export const updateEvents = async (req, res) => {
     }
 
     if (req.file) {
-      const filePath = path.relative("frontend/public", req.file.path);
+      const filePath = path.relative("public/uploads", req.file.path);
 
       event.poster_path = filePath;
     }

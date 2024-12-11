@@ -6,7 +6,7 @@ import Counter from "../models/counter.js";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "frontend/public/uploads/leaveAppFile");
+    cb(null, "public/uploads/leaveAppFile");
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -54,7 +54,7 @@ export const createLeaveApps = async (req, res) => {
     }
 
     if (req.file) {
-      const filePath = path.relative("frontend/public", req.file.path);
+      const filePath = path.relative("public/uploads", req.file.path);
       leaveApp.attachment = filePath;
     }
 
@@ -114,7 +114,7 @@ export const updateLeaveApps = async (req, res) => {
     }
 
     if (req.file) {
-      const filePath = path.relative("frontend/public", req.file.path);
+      const filePath = path.relative("public/uploads", req.file.path);
 
       leaveApp.attachment = filePath;
     }

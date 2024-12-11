@@ -190,7 +190,7 @@ const EmployeeDirectory = () => {
                             >
                               <Flex direction="row">
                                 <Image
-                                  src={"/" + user.profilePicture}
+                                  src={"/public/uploads/" + user.profilePicture}
                                   alt={user.profilePicture}
                                   boxSize="50px"
                                   objectFit="cover"

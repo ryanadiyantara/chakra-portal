@@ -22,6 +22,8 @@ const __dirname = path.resolve();
 app.use(cookieParser());
 app.use(express.json()); //allows us to accept JSON data in the req.body
 
+app.use("/public", express.static(path.join(__dirname, "public")));
+
 app.use("/api/auth", authRoutes);
 
 app.use("/api/users", userRoutes);

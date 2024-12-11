@@ -383,7 +383,7 @@ const LeaveApp = () => {
                               onClick={() => {
                                 if (leaveapp.attachment) {
                                   const filePath = leaveapp.attachment.replace("/ess", "");
-                                  const fullPath = `http://localhost:5000/${filePath}`;
+                                  const fullPath = `http://localhost:5000/public/uploads/${filePath}`;
 
                                   window.open(fullPath, "_blank");
                                 } else {
