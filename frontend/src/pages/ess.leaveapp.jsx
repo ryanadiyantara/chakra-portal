@@ -393,10 +393,7 @@ const LeaveApp = () => {
                             >
                               <FaFile size="14" color={iconColor} />
                               <Text fontSize="14px" color={textColor} fontWeight="bold">
-                                EDIT
-                              </Text>
-                              <Text fontSize="14px" color={textColor} fontWeight="bold">
-                                {leaveapp.attachment}
+                                VIEW
                               </Text>
                             </Flex>
                           </Td>
