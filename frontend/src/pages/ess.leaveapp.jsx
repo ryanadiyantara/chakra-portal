@@ -381,20 +381,27 @@ const LeaveApp = () => {
                               gap="1"
                               as="button"
                               onClick={() => {
-                                if (leaveapp.attachment) {
+                                if (leaveapp.attachment && leaveapp.attachment !== "-") {
                                   const filePath = leaveapp.attachment.replace("/ess", "");
                                   const fullPath = `http://localhost:5000/public/uploads/${filePath}`;
 
                                   window.open(fullPath, "_blank");
-                                } else {
-                                  alert("Attachment not available.");
                                 }
                               }}
+                              disabled={!leaveapp.attachment || leaveapp.attachment === "-"}
+                              cursor={
+                                !leaveapp.attachment || leaveapp.attachment === "-"
+                                  ? "not-allowed"
+                                  : "pointer"
+                              }
+                              opacity={
+                                !leaveapp.attachment || leaveapp.attachment === "-" ? 0.6 : 1
+                              }
                             >
-                              <FaFile size="14" color={iconColor} />
                               <Text fontSize="14px" color={textColor} fontWeight="bold">
-                                VIEW
+                                SEE
                               </Text>
+                              <FaFile size="14" color={iconColor} />
                             </Flex>
                           </Td>
                           <Td borderColor={borderColor}>
