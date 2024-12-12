@@ -23,6 +23,7 @@ const userInfo = token ? parseJwt(token)?.UserInfo : null;
 
 export const useLeaveAppStore = create((set) => ({
   leaveapps: [],
+  users: [],
   currentUser: userInfo,
   setLeaveApp: (leaveapps) => set({ leaveapps }),
 
@@ -141,5 +142,22 @@ export const useLeaveAppStore = create((set) => ({
       leaveapps: state.leaveapps.filter((leaveapp) => leaveapp._id !== pid),
     }));
     return { success: true, message: data.message };
+  },
+
+  getUserData: async () => {
+    const res = await fetch("/api/users", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res.status === 401 || res.status === 403) {
+      window.location.href = `/login?message=Session Expired`;
+      return;
+    }
+
+    const data = await res.json();
+    set({ users: data.data });
   },
 }));

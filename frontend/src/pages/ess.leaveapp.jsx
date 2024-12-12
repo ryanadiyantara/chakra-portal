@@ -20,7 +20,7 @@ import {
   Select,
   Badge,
 } from "@chakra-ui/react";
-import { FaAddressBook, FaDochub, FaFile, FaPen, FaTrash } from "react-icons/fa";
+import { FaFile, FaPen } from "react-icons/fa";
 
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
@@ -31,7 +31,7 @@ import { useLeaveAppStore } from "../store/leaveapp";
 
 const LeaveApp = () => {
   // Utils
-  const { leaveapps, currentUser, createLeaveApp, fetchLeaveApp, updateLeaveApp, deleteLeaveApp } =
+  const { leaveapps, currentUser, createLeaveApp, fetchLeaveApp, updateLeaveApp } =
     useLeaveAppStore();
 
   const toast = useToast();
@@ -388,14 +388,13 @@ const LeaveApp = () => {
                                   window.open(fullPath, "_blank");
                                 }
                               }}
-                              disabled={!leaveapp.attachment || leaveapp.attachment === "-"}
                               cursor={
                                 !leaveapp.attachment || leaveapp.attachment === "-"
                                   ? "not-allowed"
                                   : "pointer"
                               }
                               opacity={
-                                !leaveapp.attachment || leaveapp.attachment === "-" ? 0.6 : 1
+                                !leaveapp.attachment || leaveapp.attachment === "-" ? 0.4 : 1
                               }
                             >
                               <Text fontSize="14px" color={textColor} fontWeight="bold">
