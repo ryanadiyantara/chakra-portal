@@ -114,19 +114,16 @@ export const useLeaveAppStore = create((set) => ({
     return { success: true, message: data.message };
   },
 
-  deleteLeaveApp: async (pid) => {
-    const deletedLeaveApp = {
-      na: true,
-      del: true,
-    };
+  approvalLeaveApp: async (pid, approval) => {
+    const formData = new FormData();
+    formData.append("leave_status", approval);
 
     const res = await fetch(`/api/leaveapps/${pid}`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(deletedLeaveApp),
+      body: formData,
     });
 
     if (res.status === 401 || res.status === 403) {
@@ -139,9 +136,9 @@ export const useLeaveAppStore = create((set) => ({
 
     // update the ui immediately, without needing a refresh
     set((state) => ({
-      leaveapps: state.leaveapps.filter((leaveapp) => leaveapp._id !== pid),
+      leaveapps: state.leaveapps.map((leaveapp) => (leaveapp._id === pid ? data.data : leaveapp)),
     }));
-    return { success: true, message: data.message };
+    return { success: true, message: data.message, message2: "Berhasil coyy" };
   },
 
   getUserData: async () => {

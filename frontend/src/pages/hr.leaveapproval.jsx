@@ -19,6 +19,13 @@ import {
   Td,
   Select,
   Badge,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
 } from "@chakra-ui/react";
 import { FaCheckCircle, FaFile, FaPen, FaTrash } from "react-icons/fa";
 
@@ -31,7 +38,7 @@ import { useLeaveAppStore } from "../store/leaveapp";
 
 const LeaveApproval = () => {
   // Utils
-  const { leaveapps, users, currentUser, fetchLeaveApp, updateLeaveApp, getUserData } =
+  const { leaveapps, users, currentUser, fetchLeaveApp, approvalLeaveApp, getUserData } =
     useLeaveAppStore();
 
   const toast = useToast();
@@ -47,9 +54,24 @@ const LeaveApproval = () => {
   };
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedApproval, setSelectedApproval] = useState(null);
+  const [leaveAppId, setLeaveAppId] = useState(null);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
+  };
+
+  const openApprovalModal = (leaveapp, approval) => {
+    setSelectedApproval(approval);
+    setLeaveAppId(leaveapp._id);
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+    setLeaveAppId(null);
+    setSelectedApproval(null);
   };
 
   // Services
@@ -57,6 +79,30 @@ const LeaveApproval = () => {
     fetchLeaveApp();
     getUserData();
   }, [fetchLeaveApp, getUserData]);
+
+  const handleApproval = async () => {
+    const { success, message } = await approvalLeaveApp(leaveAppId, selectedApproval);
+    if (success) {
+      toast({
+        title: "Success",
+        description: `Leave application ${selectedApproval} successfully`,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      setIsOpen(false);
+      setLeaveAppId(null);
+      setSelectedApproval(null);
+    } else {
+      toast({
+        title: "Error",
+        description: message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
 
   return (
     <>
@@ -304,11 +350,12 @@ const LeaveApproval = () => {
                                   alignItems="center"
                                   gap="1"
                                   as="button"
-                                  // onClick={() => handleEditClick(department)}
+                                  onClick={() => openApprovalModal(leaveapp, "Approved")}
                                   cursor={
                                     leaveapp.leave_status !== "Pending" ? "not-allowed" : "pointer"
                                   }
                                   opacity={leaveapp.leave_status !== "Pending" ? 0.4 : 1}
+                                  disabled={leaveapp.leave_status !== "Pending"}
                                 >
                                   <FaCheckCircle size="14" color="#48BB78" />
                                   <Text fontSize="14px" color="#48BB78" fontWeight="bold">
@@ -319,17 +366,58 @@ const LeaveApproval = () => {
                                   alignItems="center"
                                   gap="1"
                                   as="button"
-                                  // onClick={() => openDeleteModal(department.department_name)}
+                                  onClick={() => openApprovalModal(leaveapp, "Rejected")}
                                   cursor={
                                     leaveapp.leave_status !== "Pending" ? "not-allowed" : "pointer"
                                   }
                                   opacity={leaveapp.leave_status !== "Pending" ? 0.4 : 1}
+                                  disabled={leaveapp.leave_status !== "Pending"}
                                 >
                                   <FaTrash size="14" color="#E53E3E" />
                                   <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
                                     REJECT
                                   </Text>
                                 </Flex>
+                                {/* Modal Delete */}
+                                <Modal
+                                  isOpen={isOpen}
+                                  onClose={handleClose}
+                                  motionPreset="slideInBottom"
+                                >
+                                  <ModalOverlay bg="blackAlpha.400" backdropFilter="blur(1px)" />
+                                  <ModalContent
+                                    borderRadius="15px"
+                                    boxShadow="none"
+                                    p={4}
+                                    maxW="400px"
+                                    w="90%"
+                                  >
+                                    <ModalHeader>{selectedApproval} Leave Application</ModalHeader>
+                                    <ModalCloseButton />
+                                    <ModalBody>
+                                      <p>
+                                        Are you sure you want to{" "}
+                                        <span style={{ fontWeight: "bold" }}>
+                                          {selectedApproval}?
+                                        </span>
+                                        <br /> This action cannot be undone.
+                                      </p>
+                                    </ModalBody>
+                                    <ModalFooter>
+                                      <Button colorScheme="blue" mr={3} onClick={handleClose}>
+                                        Cancel
+                                      </Button>
+                                      <Button
+                                        colorScheme={
+                                          selectedApproval == "Approved" ? "green" : "red"
+                                        }
+                                        onClick={handleApproval}
+                                      >
+                                        {selectedApproval == "Approved" ? "Approved" : "Rejected"}
+                                      </Button>
+                                    </ModalFooter>
+                                  </ModalContent>
+                                </Modal>
                               </Flex>
                             </Td>
                           </Tr>
