@@ -11,14 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { NavLink, useLocation } from "react-router-dom";
 
-import {
-  HomeIcon,
-  PersonIcon,
-  DocumentIcon,
-  RocketIcon,
-  SupportIcon,
-  ClockIcon,
-} from "./Icons/Icons";
+import { HomeIcon, PersonIcon, DocumentIcon, RocketIcon, SupportIcon } from "./Icons/Icons";
 import IconBox from "./Icons/IconBox";
 
 import Logo1 from "../assets/img/logo1.png";

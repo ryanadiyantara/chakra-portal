@@ -240,7 +240,10 @@ const LeaveApproval = () => {
                         const userFind = users.find((user) => user.user_id === extractedId);
 
                         return (
-                          <Tr key={leaveapp._id}>
+                          <Tr
+                            key={leaveapp._id}
+                            _hover={{ backgroundColor: "gray.100", cursor: "pointer" }}
+                          >
                             <Td width={{ sm: "50px" }} pl="0px" borderColor={borderColor} py={5}>
                               <Text
                                 fontSize="md"

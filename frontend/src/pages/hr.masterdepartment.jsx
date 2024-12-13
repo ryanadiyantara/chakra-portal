@@ -261,7 +261,10 @@ const MasterDepartment = () => {
                         department.department_name.toLowerCase().includes(searchQuery)
                       )
                       .map((department, index) => (
-                        <Tr key={department._id}>
+                        <Tr
+                          key={department._id}
+                          _hover={{ backgroundColor: "gray.100", cursor: "pointer" }}
+                        >
                           <Td width={{ sm: "50px" }} pl="0px" borderColor={borderColor} py={5}>
                             <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
                               {index + 1}

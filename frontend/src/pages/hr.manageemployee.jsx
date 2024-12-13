@@ -417,7 +417,10 @@ const ManageEmployee = () => {
                         );
                         const position = positions.find((post) => post._id === user.position_id);
                         return (
-                          <Tr key={user._id}>
+                          <Tr
+                            key={user._id}
+                            _hover={{ backgroundColor: "gray.100", cursor: "pointer" }}
+                          >
                             <Td
                               borderColor={borderColor}
                               width={{ base: "100px", xl: "200px" }}

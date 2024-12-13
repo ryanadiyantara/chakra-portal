@@ -290,7 +290,10 @@ const MasterPosition = () => {
                           (dept) => dept._id === position.department_id
                         );
                         return (
-                          <Tr key={position._id}>
+                          <Tr
+                            key={position._id}
+                            _hover={{ backgroundColor: "gray.100", cursor: "pointer" }}
+                          >
                             <Td width={{ sm: "50px" }} pl="0px" borderColor={borderColor} py={5}>
                               <Text
                                 fontSize="md"

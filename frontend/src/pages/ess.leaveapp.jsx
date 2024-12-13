@@ -340,7 +340,10 @@ const LeaveApp = () => {
                         );
                       })
                       .map((leaveapp, index) => (
-                        <Tr key={leaveapp._id}>
+                        <Tr
+                          key={leaveapp._id}
+                          _hover={{ backgroundColor: "gray.100", cursor: "pointer" }}
+                        >
                           <Td width={{ sm: "50px" }} pl="0px" borderColor={borderColor} py={5}>
                             <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
                               {leaveapp.leaveAppId}

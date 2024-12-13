@@ -177,7 +177,10 @@ const EventHistory = () => {
                       })
                       .sort((a, b) => new Date(a.event_startDate) - new Date(b.event_startDate))
                       .map((event) => (
-                        <Tr key={event._id}>
+                        <Tr
+                          key={event._id}
+                          _hover={{ backgroundColor: "gray.100", cursor: "pointer" }}
+                        >
                           <Td pl="0px" borderColor={borderColor} py={5}>
                             <Image
                               src={"/public/uploads/" + event.poster_path}
