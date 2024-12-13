@@ -429,6 +429,7 @@ const LeaveApp = () => {
                                   leaveapp.leave_status !== "Pending" ? "not-allowed" : "pointer"
                                 }
                                 opacity={leaveapp.leave_status !== "Pending" ? 0.4 : 1}
+                                disabled={leaveapp.leave_status !== "Pending"}
                               >
                                 <FaPen size="14" color={iconColor} />
                                 <Text fontSize="14px" color={textColor} fontWeight="bold">
