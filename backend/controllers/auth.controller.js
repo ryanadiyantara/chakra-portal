@@ -28,7 +28,10 @@ export const login = asyncHandler(async (req, res) => {
       UserInfo: {
         pid: foundUser._id,
         user_id: foundUser.user_id,
+        user_name: foundUser.user_name,
         email: foundUser.email,
+        department_id: foundUser.department_id,
+        position_id: foundUser.position_id,
       },
     },
     process.env.ACCESS_TOKEN_SECRET,
