@@ -3,8 +3,8 @@ import { create } from "zustand";
 const token = localStorage.getItem("accessToken");
 
 export const usePositionStore = create((set) => ({
-  positions: [],
   departments: [],
+  positions: [],
   setPosition: (positions) => set({ positions }),
 
   createPosition: async (newPosition) => {

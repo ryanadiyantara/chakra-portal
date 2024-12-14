@@ -23,8 +23,8 @@ const userInfo = token ? parseJwt(token)?.UserInfo : null;
 
 export const useUserStore = create((set) => ({
   users: [],
-  positions: [],
   departments: [],
+  positions: [],
   currentUser: userInfo,
   setUser: (users) => set({ users }),
 
