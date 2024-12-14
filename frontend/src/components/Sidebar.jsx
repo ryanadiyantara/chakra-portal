@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   VStack,
@@ -18,8 +18,13 @@ import Logo1 from "../assets/img/logo1.png";
 import Logo2 from "../assets/img/logo2.png";
 import { HSeparator } from "./Separator";
 
+import { useUserStore } from "../store/user";
+
 function Sidebar() {
   // Utils
+  const { departments, positions, currentUser, getDepartmentData, getPositionData } =
+    useUserStore();
+
   const routes = [
     {
       name: "",
@@ -38,7 +43,7 @@ function Sidebar() {
       ],
     },
     {
-      name: "HUMAN RESOURCE",
+      name: "Human Resources",
       category: "hr",
       views: [
         { path: "/hr/masterdepartment", name: "Master Department", icon: <SupportIcon /> },
@@ -60,6 +65,20 @@ function Sidebar() {
   const hoverBg = useColorModeValue("gray.200", "navy.700");
   const sidebarBg = useColorModeValue("white", "navy.800");
 
+  // Services
+  useEffect(() => {
+    getDepartmentData();
+    getPositionData();
+  }, [getDepartmentData, getDepartmentData]);
+
+  const filteredRoutes = routes.filter((route) => {
+    if (route.name === "ESS" || route.name === "") return true;
+
+    return departments.some(
+      (department) =>
+        department._id === currentUser.department_id && department.department_name === route.name
+    );
+  });
   return (
     <Box display={{ sm: "none", xl: "block" }} position="fixed">
       <Box
@@ -98,7 +117,7 @@ function Sidebar() {
           <HSeparator my="26px" />
         </Box>
         <VStack align="start" spacing={4} w="100%">
-          {routes.map((route, index) => (
+          {filteredRoutes.map((route, index) => (
             <Box key={index} w="full">
               <Text fontWeight="bold" mb={2} pl={3}>
                 {route.name}
