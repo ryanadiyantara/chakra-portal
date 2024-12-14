@@ -28,7 +28,6 @@ function Sidebar() {
   const routes = [
     {
       name: "",
-      category: "dashboard",
       views: [
         { path: "/dashboard", name: "Dashboard", icon: <HomeIcon /> },
         { path: "/employeedirectory", name: "Employee Directory", icon: <PersonIcon /> },
@@ -36,15 +35,17 @@ function Sidebar() {
     },
     {
       name: "ESS",
-      category: "ess",
       views: [
         { path: "/ess/changepassword", name: "Change Password", icon: <SupportIcon /> },
         { path: "/ess/leaveapp", name: "Leave Application", icon: <DocumentIcon /> },
       ],
     },
     {
+      name: "Executive Management",
+      views: [],
+    },
+    {
       name: "Human Resources",
-      category: "hr",
       views: [
         { path: "/hr/masterdepartment", name: "Master Department", icon: <SupportIcon /> },
         { path: "/hr/masterposition", name: "Master Position", icon: <SupportIcon /> },
@@ -53,6 +54,22 @@ function Sidebar() {
         { path: "/hr/employeeterminated", name: "Employee Terminated", icon: <PersonIcon /> },
         { path: "/hr/leaveapproval", name: "Leave Approval", icon: <RocketIcon /> },
       ],
+    },
+    {
+      name: "Information Technology",
+      views: [],
+    },
+    {
+      name: "Production",
+      views: [],
+    },
+    {
+      name: "Operations and Logistics",
+      views: [],
+    },
+    {
+      name: "Marketing",
+      views: [],
     },
   ];
 
