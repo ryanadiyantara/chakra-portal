@@ -1,6 +1,5 @@
 import {
   Avatar,
-  AvatarGroup,
   Box,
   Button,
   Card,
@@ -8,21 +7,14 @@ import {
   CardHeader,
   Flex,
   Grid,
-  HStack,
   Icon,
   Image,
   Text,
-  useColorMode,
   useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa";
-import { IoDocumentsSharp } from "react-icons/io5";
-import avatar2 from "../assets/img/avatars/avatar2.png";
-import avatar3 from "../assets/img/avatars/avatar3.png";
-import avatar4 from "../assets/img/avatars/avatar4.png";
 import avatar5 from "../assets/img/avatars/avatar5.png";
-import avatar6 from "../assets/img/avatars/avatar6.png";
 import ImageArchitect1 from "../assets/img/ImageArchitect1.png";
 
 import Background from "../components/Background";
@@ -32,9 +24,7 @@ import Footer from "../components/Footer";
 
 const Dashboard = () => {
   // Utils
-  const { colorMode, toggleColorMode } = useColorMode();
   const textColor = useColorModeValue("gray.700", "white");
-  const iconColor = useColorModeValue("blue.500", "white");
   const bgProfile = useColorModeValue("hsla(0,0%,100%,.8)", "navy.800");
   const borderProfileColor = useColorModeValue("white", "transparent");
   const emailColor = useColorModeValue("gray.400", "gray.300");
