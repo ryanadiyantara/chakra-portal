@@ -3,8 +3,6 @@ import {
   Box,
   Button,
   Flex,
-  FormControl,
-  FormLabel,
   HStack,
   Input,
   Table,
@@ -17,7 +15,6 @@ import {
   useColorModeValue,
   VStack,
   Td,
-  Select,
   Badge,
   Modal,
   ModalOverlay,
@@ -27,7 +24,7 @@ import {
   ModalBody,
   ModalFooter,
 } from "@chakra-ui/react";
-import { FaCheckCircle, FaFile, FaPen, FaTrash } from "react-icons/fa";
+import { FaCheckCircle, FaFile, FaTrash } from "react-icons/fa";
 
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
@@ -38,8 +35,7 @@ import { useLeaveAppStore } from "../store/leaveapp";
 
 const LeaveApproval = () => {
   // Utils
-  const { leaveapps, users, currentUser, fetchLeaveApp, approvalLeaveApp, getUserData } =
-    useLeaveAppStore();
+  const { leaveapps, users, fetchLeaveApp, approvalLeaveApp, getUserData } = useLeaveAppStore();
 
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
