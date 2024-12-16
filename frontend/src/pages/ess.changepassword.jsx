@@ -25,7 +25,7 @@ import { useUserStore } from "../store/user";
 
 const ChangePassword = () => {
   // Utils
-  const { currentUser, changePassword } = useUserStore();
+  const { currentUsers, fetchCurrentUser, changePassword } = useUserStore();
 
   const toast = useToast();
   const bgForm = useColorModeValue("white", "navy.800");
@@ -47,6 +47,10 @@ const ChangePassword = () => {
   };
 
   // Services
+  useEffect(() => {
+    fetchCurrentUser();
+  }, [fetchCurrentUser]);
+
   const handleSubmit = async () => {
     const currentErrors = {
       old_password: !newUser.old_password,
@@ -54,8 +58,8 @@ const ChangePassword = () => {
     };
     setErrors(currentErrors);
 
-    const currentUserId = currentUser.pid;
-    const currentEmail = currentUser.email;
+    const currentUserId = currentUsers._id;
+    const currentEmail = currentUsers.email;
     const { success, message } = await changePassword(currentUserId, currentEmail, newUser);
     if (success) {
       toast({
