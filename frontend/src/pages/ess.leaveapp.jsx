@@ -33,7 +33,7 @@ import { useUserStore } from "../store/user";
 const LeaveApp = () => {
   // Utils
   const { leaveapps, createLeaveApp, fetchLeaveApp, updateLeaveApp } = useLeaveAppStore();
-  const { currentUser } = useUserStore();
+  const { currentUsers, fetchCurrentUser } = useUserStore();
 
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
@@ -146,7 +146,8 @@ const LeaveApp = () => {
   // Services
   useEffect(() => {
     fetchLeaveApp();
-  }, [fetchLeaveApp]);
+    fetchCurrentUser();
+  }, [fetchLeaveApp, fetchCurrentUser]);
 
   const handleSubmit = async () => {
     const currentErrors = {
@@ -155,8 +156,6 @@ const LeaveApp = () => {
       type: !newLeaveApp.type,
     };
     setErrors(currentErrors);
-
-    const currentId = currentUser.user_id;
 
     if (isEditing && editingLeaveAppId) {
       // Update leave app
@@ -187,7 +186,7 @@ const LeaveApp = () => {
       }
     } else {
       // Create new leave app
-      const { success, message } = await createLeaveApp(newLeaveApp, currentId);
+      const { success, message } = await createLeaveApp(newLeaveApp, currentUsers.user_id);
       if (success) {
         toast({
           title: "Success",
@@ -309,7 +308,7 @@ const LeaveApp = () => {
                     {leaveapps
                       .filter((leaveapp) => !leaveapp.na)
                       .filter((leaveapp) => !leaveapp.del)
-                      .filter((leaveapp) => leaveapp.leaveAppId.includes(currentUser.user_id))
+                      .filter((leaveapp) => leaveapp.leaveAppId.includes(currentUsers.user_id))
                       .filter((leaveapp) => {
                         const startDate = new Date(leaveapp.leave_startDate);
                         const endDate = new Date(leaveapp.leave_endDate);
