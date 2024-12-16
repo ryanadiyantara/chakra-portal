@@ -21,7 +21,7 @@ export const createPositions = async (req, res) => {
 
 export const getPositions = async (req, res) => {
   try {
-    const positions = await Position.find({});
+    const positions = await Position.find({}).populate("department_id", "department_name");
     res.status(200).json({ success: true, data: positions });
   } catch (error) {
     console.log("Error in Fetching positions:", error.message);

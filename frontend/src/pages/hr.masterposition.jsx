@@ -317,7 +317,7 @@ const MasterPosition = () => {
                                 fontWeight="bold"
                                 minWidth="100%"
                               >
-                                {department ? department.department_name : "Department not found"}
+                                {position.department_id.department_name}
                               </Text>
                             </Td>
                             <Td borderColor={borderColor}>
