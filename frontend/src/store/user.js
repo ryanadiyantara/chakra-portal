@@ -24,6 +24,7 @@ const userInfo = token ? parseJwt(token)?.UserInfo : null;
 export const useUserStore = create((set) => ({
   users: [],
   currentUser: userInfo,
+  currentUsers: [],
   setUser: (users) => set({ users }),
 
   createUser: async (newUser) => {
@@ -83,6 +84,23 @@ export const useUserStore = create((set) => ({
 
     const data = await res.json();
     set({ users: data.data });
+  },
+
+  fetchCurrentUser: async () => {
+    const res = await fetch(`/api/users/${userInfo.pid}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res.status === 401 || res.status === 403) {
+      window.location.href = `/login?message=Session Expired`;
+      return;
+    }
+
+    const data = await res.json();
+    set({ currentUsers: data.data });
   },
 
   updateUser: async (pid, updatedUser) => {

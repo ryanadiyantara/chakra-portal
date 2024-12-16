@@ -22,12 +22,25 @@ import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
+import { useUserStore } from "../store/user";
+import { useEventStore } from "../store/event";
+import { useEffect } from "react";
+
 const Dashboard = () => {
   // Utils
+  const { currentUsers, fetchCurrentUser } = useUserStore();
+  const { events, fetchEvent } = useEventStore();
+
   const textColor = useColorModeValue("gray.700", "white");
   const bgProfile = useColorModeValue("hsla(0,0%,100%,.8)", "navy.800");
   const borderProfileColor = useColorModeValue("white", "transparent");
   const emailColor = useColorModeValue("gray.400", "gray.300");
+
+  // Services
+  useEffect(() => {
+    fetchCurrentUser();
+    fetchEvent();
+  }, [fetchCurrentUser, fetchEvent]);
 
   return (
     <>
@@ -83,7 +96,13 @@ const Dashboard = () => {
               w={{ sm: "100%" }}
               textAlign={{ sm: "center", md: "start" }}
             >
-              <Avatar me={{ md: "22px" }} src={avatar5} w="80px" h="80px" borderRadius="15px" />
+              <Avatar
+                me={{ md: "22px" }}
+                src={"/public/uploads/" + currentUsers.profilePicture}
+                w="80px"
+                h="80px"
+                borderRadius="15px"
+              />
               <Flex direction="column" maxWidth="100%" my={{ sm: "14px" }}>
                 <Text
                   fontSize={{ sm: "lg", lg: "xl" }}
@@ -91,10 +110,11 @@ const Dashboard = () => {
                   fontWeight="bold"
                   ms={{ sm: "8px", md: "0px" }}
                 >
-                  Hello, Alec Thompson !
+                  Hello, {currentUsers?.user_name || "..."}
                 </Text>
                 <Text fontSize={{ sm: "sm", md: "md" }} color={emailColor} fontWeight="semibold">
-                  Human Resources | HR Manager
+                  {currentUsers?.department_id?.department_name || "..."} |{" "}
+                  {currentUsers?.position_id?.position_name || "..."}
                 </Text>
               </Flex>
             </Flex>
