@@ -25,6 +25,7 @@ import Footer from "../components/Footer";
 import { useUserStore } from "../store/user";
 import { useEventStore } from "../store/event";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   // Utils
@@ -110,7 +111,7 @@ const Dashboard = () => {
                   fontWeight="bold"
                   ms={{ sm: "8px", md: "0px" }}
                 >
-                  Hello, {currentUsers?.user_name || "..."}
+                  Hello, {currentUsers?.user_name || "..."} !
                 </Text>
                 <Text fontSize={{ sm: "sm", md: "md" }} color={emailColor} fontWeight="semibold">
                   {currentUsers?.department_id?.department_name || "..."} |{" "}
@@ -138,45 +139,92 @@ const Dashboard = () => {
                 templateRows={{ sm: "1fr 1fr 1fr auto", md: "1fr 1fr", xl: "1fr" }}
                 gap="24px"
               >
-                <Flex direction="column" border="1px solid lightgray" borderRadius="15px">
-                  <Box aspectRatio={2 / 1} mb="20px" position="relative" borderRadius="15px">
-                    <Image src={ImageArchitect1} borderRadius="15px" objectFit="cover" />
-                    <Box
-                      w="100%"
-                      h="100%"
-                      position="absolute"
-                      top="0"
+                {events
+                  .filter((event) => !event.na)
+                  .filter((event) => !event.del)
+                  .filter((event) => new Date(event.event_startDate) > new Date())
+                  .sort((a, b) => new Date(a.event_startDate) - new Date(b.event_startDate))
+                  .map((event) => (
+                    <Flex
+                      key={event._id}
+                      direction="column"
+                      border="1px solid lightgray"
                       borderRadius="15px"
-                      bg="linear-gradient(360deg, rgba(49, 56, 96, 0.16) 0%, rgba(21, 25, 40, 0.88) 100%)"
-                    ></Box>
-                  </Box>
-                  <Flex direction="column" px="10px">
-                    <Text fontSize="md" color="gray.400" fontWeight="600" mb="10px">
-                      Events | 31 December 2024
-                    </Text>
-                    <Text fontSize="xl" color={textColor} fontWeight="bold" mb="10px">
-                      Event Name
-                    </Text>
-                    <Text fontSize="md" color="gray.400" fontWeight="400" mb="20px">
-                      As Uber works through a huge amount of internal management turmoil.
-                    </Text>
-                  </Flex>
-                </Flex>
+                      maxHeight="400px"
+                    >
+                      <Box aspectRatio={2 / 1} mb="20px" position="relative" borderRadius="15px">
+                        <Image
+                          src={"/public/uploads/" + event.poster_path}
+                          alt={event.poster_path}
+                          borderRadius="15px"
+                          objectFit="cover"
+                        />
+                        <Box
+                          w="100%"
+                          h="100%"
+                          position="absolute"
+                          top="0"
+                          borderRadius="15px"
+                          bg="linear-gradient(360deg, rgba(49, 56, 96, 0.16) 0%, rgba(21, 25, 40, 0.88) 100%)"
+                        ></Box>
+                      </Box>
+                      <Flex direction="column" px="10px">
+                        <Text fontSize="xl" color={textColor} fontWeight="bold" mb="10px">
+                          Event | {event.event_name}
+                        </Text>
+                        <Text fontSize="md" color="gray.400" fontWeight="600" mb="10px">
+                          {(() => {
+                            const startDate = new Date(event.event_startDate);
+                            const endDate = new Date(event.event_endDate);
 
-                <Button
-                  p="0px"
-                  bg="transparent"
-                  border="1px solid lightgray"
-                  borderRadius="15px"
-                  minHeight={{ sm: "200px", md: "100%" }}
-                >
-                  <Flex direction="column" justifyContent="center" align="center">
-                    <Icon as={FaPlus} color={textColor} fontSize="lg" mb="12px" />
-                    <Text fontSize="lg" color={textColor} fontWeight="bold">
-                      Create a New Project
-                    </Text>
-                  </Flex>
-                </Button>
+                            const startDay = startDate
+                              .toLocaleDateString("en-GB", {
+                                weekday: "long",
+                                day: "2-digit",
+                              })
+                              .replace(" ", ", ");
+
+                            const startMonth = startDate.toLocaleDateString("en-GB", {
+                              month: "long",
+                            });
+
+                            const startYear = startDate.getFullYear();
+
+                            const endDay = endDate.toLocaleDateString("en-GB", {
+                              day: "2-digit",
+                            });
+
+                            const endMonth = endDate.toLocaleDateString("en-GB", {
+                              month: "long",
+                            });
+
+                            const endYear = endDate.getFullYear();
+
+                            if (
+                              startDate.getDate() === endDate.getDate() &&
+                              startDate.getMonth() === endDate.getMonth() &&
+                              startYear === endYear
+                            ) {
+                              return `${startDay} ${startMonth} ${startYear}`;
+                            }
+
+                            if (startYear === endYear) {
+                              if (startDate.getMonth() === endDate.getMonth()) {
+                                return `${startDay} - ${endDay} ${endMonth} ${endYear}`;
+                              } else {
+                                return `${startDay} ${startMonth} - ${endDay} ${endMonth} ${endYear}`;
+                              }
+                            } else {
+                              return `${startDay} ${startMonth} ${startYear} - ${endDay} ${endMonth} ${endYear}`;
+                            }
+                          })()}
+                        </Text>
+                        <Text fontSize="md" color="gray.400" fontWeight="400" mb="20px">
+                          {event.description}
+                        </Text>
+                      </Flex>
+                    </Flex>
+                  ))}
               </Grid>
             </CardBody>
           </Card>
