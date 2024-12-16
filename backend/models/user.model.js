@@ -20,12 +20,12 @@ const usersSchema = new mongoose.Schema(
     },
     department_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "department",
+      ref: "Department",
       required: true,
     },
     position_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "position",
+      ref: "Position",
       required: true,
     },
     profilePicture: {

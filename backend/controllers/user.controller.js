@@ -91,7 +91,9 @@ export const createUsers = async (req, res) => {
 
 export const getUsers = async (req, res) => {
   try {
-    const users = await User.find({});
+    const users = await User.find({})
+      .populate("department_id", "department_name") // Ambil nama department
+      .populate("position_id", "position_name");
     res.status(200).json({ success: true, data: users });
   } catch (error) {
     console.log("Error in Fetching users:", error.message);

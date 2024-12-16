@@ -29,20 +29,14 @@ import CustomModal from "../components/Modal";
 import Footer from "../components/Footer";
 
 import { useUserStore } from "../store/user";
+import { useDepartmentStore } from "../store/department";
+import { usePositionStore } from "../store/position";
 
 const ManageEmployee = () => {
   // Utils
-  const {
-    users,
-    departments,
-    positions,
-    createUser,
-    fetchUser,
-    updateUser,
-    terminatedUser,
-    getDepartmentData,
-    getPositionData,
-  } = useUserStore();
+  const { users, createUser, fetchUser, updateUser, terminatedUser } = useUserStore();
+  const { departments, fetchDepartment } = useDepartmentStore();
+  const { positions, fetchPosition } = usePositionStore();
 
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
@@ -156,9 +150,9 @@ const ManageEmployee = () => {
   // Services
   useEffect(() => {
     fetchUser();
-    getDepartmentData();
-    getPositionData();
-  }, [fetchUser, getDepartmentData, getPositionData]);
+    fetchDepartment();
+    fetchPosition();
+  }, [fetchUser, fetchDepartment, fetchPosition]);
 
   const filteredPositions = positions.filter(
     (position) => position.department_id === newUser.department_id
@@ -393,29 +387,13 @@ const ManageEmployee = () => {
                           user.user_name.toLowerCase().includes(searchQuery) ||
                           user.email.toLowerCase().includes(searchQuery) ||
                           user.user_id.toLowerCase().includes(searchQuery) ||
-                          departments.some(
-                            (department) =>
-                              department._id === user.department_id &&
-                              department.department_name
-                                .toLowerCase()
-                                .includes(searchQuery.toLowerCase())
-                          ) ||
-                          positions.some(
-                            (position) =>
-                              position._id === user.position_id &&
-                              position.position_name
-                                .toLowerCase()
-                                .includes(searchQuery.toLowerCase())
-                          ) ||
+                          user.department_id.department_name.toLowerCase().includes(searchQuery) ||
+                          user.position_id.position_name.toLowerCase().includes(searchQuery) ||
                           formattedBirthDate.includes(searchQuery.toLowerCase()) ||
                           formattedStartDate.includes(searchQuery.toLowerCase())
                         );
                       })
                       .map((user) => {
-                        const department = departments.find(
-                          (dept) => dept._id === user.department_id
-                        );
-                        const position = positions.find((post) => post._id === user.position_id);
                         return (
                           <Tr
                             key={user._id}
@@ -460,10 +438,10 @@ const ManageEmployee = () => {
                             <Td borderColor={borderColor}>
                               <Flex direction="column">
                                 <Text fontSize="md" color={textColor} fontWeight="bold">
-                                  {department ? department.department_name : "Department not found"}
+                                  {user.department_id.department_name}
                                 </Text>
                                 <Text fontSize="sm" color="gray.400" fontWeight="normal">
-                                  {position ? position.position_name : "Position not found"}
+                                  {user.position_id.position_name}
                                 </Text>
                               </Flex>
                             </Td>

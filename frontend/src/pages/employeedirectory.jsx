@@ -22,11 +22,14 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 import { useUserStore } from "../store/user";
+import { useDepartmentStore } from "../store/department";
+import { usePositionStore } from "../store/position";
 
 const EmployeeDirectory = () => {
   // Utils
-  const { users, departments, positions, fetchUser, getDepartmentData, getPositionData } =
-    useUserStore();
+  const { users, fetchUser } = useUserStore();
+  const { departments, fetchDepartment } = useDepartmentStore();
+  const { positions, fetchPosition } = usePositionStore();
 
   const textColor = useColorModeValue("gray.700", "white");
   const borderColor = useColorModeValue("gray.200", "gray.600");
@@ -41,9 +44,9 @@ const EmployeeDirectory = () => {
   // Services
   useEffect(() => {
     fetchUser();
-    getDepartmentData();
-    getPositionData();
-  }, [fetchUser, getDepartmentData, getPositionData]);
+    fetchDepartment();
+    fetchPosition();
+  }, [fetchUser, fetchDepartment, fetchPosition]);
 
   return (
     <>
@@ -157,23 +160,11 @@ const EmployeeDirectory = () => {
                         return (
                           user.user_name.toLowerCase().includes(searchQuery) ||
                           user.email.toLowerCase().includes(searchQuery) ||
-                          departments.some(
-                            (department) =>
-                              department._id === user.department_id &&
-                              department.department_name
-                                .toLowerCase()
-                                .includes(searchQuery.toLowerCase())
-                          ) ||
-                          positions.some(
-                            (position) =>
-                              position._id === user.position_id &&
-                              position.position_name
-                                .toLowerCase()
-                                .includes(searchQuery.toLowerCase())
-                          ) ||
+                          user.user_id.toLowerCase().includes(searchQuery) ||
+                          user.department_id.department_name.toLowerCase().includes(searchQuery) ||
+                          user.position_id.position_name.toLowerCase().includes(searchQuery) ||
                           formattedBirthDate.includes(searchQuery.toLowerCase()) ||
-                          formattedStartDate.includes(searchQuery.toLowerCase()) ||
-                          user.user_id.toLowerCase().includes(searchQuery)
+                          formattedStartDate.includes(searchQuery.toLowerCase())
                         );
                       })
                       .map((user) => {

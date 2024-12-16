@@ -22,11 +22,14 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 import { useUserStore } from "../store/user";
+import { useDepartmentStore } from "../store/department";
+import { usePositionStore } from "../store/position";
 
 const EmployeeTerminated = () => {
   // Utils
-  const { users, departments, positions, fetchUser, getDepartmentData, getPositionData } =
-    useUserStore();
+  const { users, fetchUser } = useUserStore();
+  const { departments, fetchDepartment } = useDepartmentStore();
+  const { positions, fetchPosition } = usePositionStore();
 
   const textColor = useColorModeValue("gray.700", "white");
   const borderColor = useColorModeValue("gray.200", "gray.600");
@@ -41,9 +44,9 @@ const EmployeeTerminated = () => {
   // Services
   useEffect(() => {
     fetchUser();
-    getDepartmentData();
-    getPositionData();
-  }, [fetchUser, getDepartmentData, getPositionData]);
+    fetchDepartment();
+    fetchPosition();
+  }, [fetchUser, fetchDepartment, fetchPosition]);
 
   return (
     <>
@@ -170,20 +173,8 @@ const EmployeeTerminated = () => {
                           user.user_name.toLowerCase().includes(searchQuery) ||
                           user.email.toLowerCase().includes(searchQuery) ||
                           user.user_id.toLowerCase().includes(searchQuery) ||
-                          departments.some(
-                            (department) =>
-                              department._id === user.department_id &&
-                              department.department_name
-                                .toLowerCase()
-                                .includes(searchQuery.toLowerCase())
-                          ) ||
-                          positions.some(
-                            (position) =>
-                              position._id === user.position_id &&
-                              position.position_name
-                                .toLowerCase()
-                                .includes(searchQuery.toLowerCase())
-                          ) ||
+                          user.department_id.department_name.toLowerCase().includes(searchQuery) ||
+                          user.position_id.position_name.toLowerCase().includes(searchQuery) ||
                           formattedBirthDate.includes(searchQuery.toLowerCase()) ||
                           formattedStartDate.includes(searchQuery.toLowerCase()) ||
                           formattedEndDate.includes(searchQuery.toLowerCase())
@@ -238,10 +229,10 @@ const EmployeeTerminated = () => {
                             <Td borderColor={borderColor}>
                               <Flex direction="column">
                                 <Text fontSize="md" color={textColor} fontWeight="bold">
-                                  {department ? department.department_name : "Department not found"}
+                                  {user.department_id.department_name}
                                 </Text>
                                 <Text fontSize="sm" color="gray.400" fontWeight="normal">
-                                  {position ? position.position_name : "Position not found"}
+                                  {user.position_id.position_name}
                                 </Text>
                               </Flex>
                             </Td>

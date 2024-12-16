@@ -23,8 +23,6 @@ const userInfo = token ? parseJwt(token)?.UserInfo : null;
 
 export const useUserStore = create((set) => ({
   users: [],
-  departments: [],
-  positions: [],
   currentUser: userInfo,
   setUser: (users) => set({ users }),
 
@@ -194,40 +192,6 @@ export const useUserStore = create((set) => ({
       users: state.users.filter((user) => user._id !== pid),
     }));
     return { success: true, message: data.message };
-  },
-
-  getDepartmentData: async () => {
-    const res = await fetch("/api/departments", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (res.status === 401 || res.status === 403) {
-      window.location.href = `/login?message=Session Expired`;
-      return;
-    }
-
-    const data = await res.json();
-    set({ departments: data.data });
-  },
-
-  getPositionData: async () => {
-    const res = await fetch("/api/positions", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (res.status === 401 || res.status === 403) {
-      window.location.href = `/login?message=Session Expired`;
-      return;
-    }
-
-    const data = await res.json();
-    set({ positions: data.data });
   },
 
   // Auth
