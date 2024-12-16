@@ -28,18 +28,14 @@ import CustomModal from "../components/Modal";
 import Footer from "../components/Footer";
 
 import { usePositionStore } from "../store/position";
+import { useDepartmentStore } from "../store/department";
 
 const MasterPosition = () => {
   // Utils
-  const {
-    positions,
-    departments,
-    createPosition,
-    fetchPosition,
-    updatePosition,
-    deletePosition,
-    getDepartmentData,
-  } = usePositionStore();
+  const { positions, createPosition, fetchPosition, updatePosition, deletePosition } =
+    usePositionStore();
+
+  const { departments, fetchDepartment } = useDepartmentStore();
 
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
@@ -95,8 +91,8 @@ const MasterPosition = () => {
   // Services
   useEffect(() => {
     fetchPosition();
-    getDepartmentData();
-  }, [fetchPosition, getDepartmentData]);
+    fetchDepartment();
+  }, [fetchPosition, fetchDepartment]);
 
   const handleSubmit = async () => {
     const currentErrors = {
