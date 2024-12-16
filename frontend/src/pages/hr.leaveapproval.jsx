@@ -32,10 +32,12 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 import { useLeaveAppStore } from "../store/leaveapp";
+import { useUserStore } from "../store/user";
 
 const LeaveApproval = () => {
   // Utils
-  const { leaveapps, users, fetchLeaveApp, approvalLeaveApp, getUserData } = useLeaveAppStore();
+  const { leaveapps, fetchLeaveApp, approvalLeaveApp } = useLeaveAppStore();
+  const { users, fetchUser } = useUserStore();
 
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
@@ -73,8 +75,8 @@ const LeaveApproval = () => {
   // Services
   useEffect(() => {
     fetchLeaveApp();
-    getUserData();
-  }, [fetchLeaveApp, getUserData]);
+    fetchUser();
+  }, [fetchLeaveApp, fetchUser]);
 
   const handleApproval = async () => {
     const { success, message } = await approvalLeaveApp(leaveAppId, selectedApproval);

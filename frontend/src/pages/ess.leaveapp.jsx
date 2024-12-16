@@ -28,11 +28,12 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 import { useLeaveAppStore } from "../store/leaveapp";
+import { useUserStore } from "../store/user";
 
 const LeaveApp = () => {
   // Utils
-  const { leaveapps, currentUser, createLeaveApp, fetchLeaveApp, updateLeaveApp } =
-    useLeaveAppStore();
+  const { leaveapps, createLeaveApp, fetchLeaveApp, updateLeaveApp } = useLeaveAppStore();
+  const { currentUser } = useUserStore();
 
   const toast = useToast();
   const textColor = useColorModeValue("gray.700", "white");
