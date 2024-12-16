@@ -19,11 +19,12 @@ import Logo2 from "../assets/img/logo2.png";
 import { HSeparator } from "./Separator";
 
 import { useUserStore } from "../store/user";
+import { useDepartmentStore } from "../store/department";
+import { usePositionStore } from "../store/position";
 
 function Sidebar() {
   // Utils
-  const { departments, positions, currentUser, getDepartmentData, getPositionData } =
-    useUserStore();
+  const { currentUsers, fetchCurrentUser } = useUserStore();
 
   const routes = [
     {
@@ -84,18 +85,17 @@ function Sidebar() {
 
   // Services
   useEffect(() => {
-    getDepartmentData();
-    getPositionData();
-  }, [getDepartmentData, getDepartmentData]);
+    fetchCurrentUser();
+  }, [fetchCurrentUser]);
 
   const filteredRoutes = routes.filter((route) => {
-    if (route.name === "ESS" || route.name === "") return true;
-
-    return departments.some(
-      (department) =>
-        department._id === currentUser.department_id && department.department_name === route.name
+    return (
+      route.name === "ESS" ||
+      route.name === "" ||
+      route.name === currentUsers?.department_id?.department_name
     );
   });
+
   return (
     <Box display={{ sm: "none", xl: "block" }} position="fixed">
       <Box
