@@ -22,14 +22,10 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 import { useUserStore } from "../store/user";
-import { useDepartmentStore } from "../store/department";
-import { usePositionStore } from "../store/position";
 
 const EmployeeTerminated = () => {
   // Utils
   const { users, fetchUser } = useUserStore();
-  const { departments, fetchDepartment } = useDepartmentStore();
-  const { positions, fetchPosition } = usePositionStore();
 
   const textColor = useColorModeValue("gray.700", "white");
   const borderColor = useColorModeValue("gray.200", "gray.600");
@@ -44,9 +40,7 @@ const EmployeeTerminated = () => {
   // Services
   useEffect(() => {
     fetchUser();
-    fetchDepartment();
-    fetchPosition();
-  }, [fetchUser, fetchDepartment, fetchPosition]);
+  }, [fetchUser]);
 
   return (
     <>
@@ -181,10 +175,6 @@ const EmployeeTerminated = () => {
                         );
                       })
                       .map((user) => {
-                        const department = departments.find(
-                          (dept) => dept._id === user.department_id
-                        );
-                        const position = positions.find((post) => post._id === user.position_id);
                         return (
                           <Tr
                             key={user._id}

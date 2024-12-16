@@ -22,14 +22,10 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 import { useUserStore } from "../store/user";
-import { useDepartmentStore } from "../store/department";
-import { usePositionStore } from "../store/position";
 
 const EmployeeDirectory = () => {
   // Utils
   const { users, fetchUser } = useUserStore();
-  const { departments, fetchDepartment } = useDepartmentStore();
-  const { positions, fetchPosition } = usePositionStore();
 
   const textColor = useColorModeValue("gray.700", "white");
   const borderColor = useColorModeValue("gray.200", "gray.600");
@@ -44,9 +40,7 @@ const EmployeeDirectory = () => {
   // Services
   useEffect(() => {
     fetchUser();
-    fetchDepartment();
-    fetchPosition();
-  }, [fetchUser, fetchDepartment, fetchPosition]);
+  }, [fetchUser]);
 
   return (
     <>
@@ -168,10 +162,6 @@ const EmployeeDirectory = () => {
                         );
                       })
                       .map((user) => {
-                        const department = departments.find(
-                          (dept) => dept._id === user.department_id
-                        );
-                        const position = positions.find((post) => post._id === user.position_id);
                         return (
                           <Tr
                             key={user._id}
@@ -206,10 +196,10 @@ const EmployeeDirectory = () => {
                             <Td borderColor={borderColor}>
                               <Flex direction="column">
                                 <Text fontSize="md" color={textColor} fontWeight="bold">
-                                  {department ? department.department_name : "Department not found"}
+                                  {user.department_id.department_name}
                                 </Text>
                                 <Text fontSize="sm" color="gray.400" fontWeight="normal">
-                                  {position ? position.position_name : "Position not found"}
+                                  {user.position_id.position_name}
                                 </Text>
                               </Flex>
                             </Td>
