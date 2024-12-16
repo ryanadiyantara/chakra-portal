@@ -58,9 +58,12 @@ const ChangePassword = () => {
     };
     setErrors(currentErrors);
 
-    const currentUserId = currentUsers._id;
-    const currentEmail = currentUsers.email;
-    const { success, message } = await changePassword(currentUserId, currentEmail, newUser);
+    const { success, message } = await changePassword(
+      currentUsers._id,
+      currentUsers.email,
+      newUser
+    );
+
     if (success) {
       toast({
         title: "Success",
