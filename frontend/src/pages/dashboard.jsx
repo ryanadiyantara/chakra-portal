@@ -7,15 +7,11 @@ import {
   CardHeader,
   Flex,
   Grid,
-  Icon,
   Image,
   Text,
   useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
-import { FaPlus } from "react-icons/fa";
-import avatar5 from "../assets/img/avatars/avatar5.png";
-import ImageArchitect1 from "../assets/img/ImageArchitect1.png";
 
 import Background from "../components/Background";
 import Sidebar from "../components/Sidebar";
@@ -24,13 +20,22 @@ import Footer from "../components/Footer";
 
 import { useUserStore } from "../store/user";
 import { useEventStore } from "../store/event";
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Dashboard = () => {
   // Utils
   const { currentUsers, fetchCurrentUser } = useUserStore();
   const { events, fetchEvent } = useEventStore();
+
+  const [showAll, setShowAll] = useState(false);
+  const [expandedStates, setExpandedStates] = useState({});
+
+  const toggleText = (id) => {
+    setExpandedStates((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }));
+  };
 
   const textColor = useColorModeValue("gray.700", "white");
   const bgProfile = useColorModeValue("hsla(0,0%,100%,.8)", "navy.800");
@@ -138,94 +143,137 @@ const Dashboard = () => {
                 templateColumns={{ sm: "1fr", md: "1fr 1fr", xl: "repeat(4, 1fr)" }}
                 templateRows={{ sm: "1fr 1fr 1fr auto", md: "1fr 1fr", xl: "1fr" }}
                 gap="24px"
+                alignItems="flex-start"
               >
                 {events
                   .filter((event) => !event.na)
                   .filter((event) => !event.del)
                   .filter((event) => new Date(event.event_startDate) > new Date())
                   .sort((a, b) => new Date(a.event_startDate) - new Date(b.event_startDate))
-                  .map((event) => (
-                    <Flex
-                      key={event._id}
-                      direction="column"
-                      border="1px solid lightgray"
-                      borderRadius="15px"
-                      maxHeight="400px"
-                    >
-                      <Box aspectRatio={2 / 1} mb="20px" position="relative" borderRadius="15px">
-                        <Image
-                          src={"/public/uploads/" + event.poster_path}
-                          alt={event.poster_path}
-                          borderRadius="15px"
-                          objectFit="cover"
-                        />
-                        <Box
-                          w="100%"
-                          h="100%"
-                          position="absolute"
-                          top="0"
-                          borderRadius="15px"
-                          bg="linear-gradient(360deg, rgba(49, 56, 96, 0.16) 0%, rgba(21, 25, 40, 0.88) 100%)"
-                        ></Box>
-                      </Box>
-                      <Flex direction="column" px="10px">
-                        <Text fontSize="xl" color={textColor} fontWeight="bold" mb="10px">
-                          Event | {event.event_name}
-                        </Text>
-                        <Text fontSize="md" color="gray.400" fontWeight="600" mb="10px">
-                          {(() => {
-                            const startDate = new Date(event.event_startDate);
-                            const endDate = new Date(event.event_endDate);
+                  .slice(0, showAll ? events.length : 4)
+                  .map((event) => {
+                    const isExpanded = expandedStates[event._id] || false;
+                    return (
+                      <Flex
+                        key={event._id}
+                        direction="column"
+                        border="1px solid lightgray"
+                        borderRadius="15px"
+                        minHeight="420px"
+                      >
+                        <Box aspectRatio={2 / 1} mb="20px" position="relative" borderRadius="15px">
+                          <Image
+                            src={"/public/uploads/" + event.poster_path}
+                            alt={event.poster_path}
+                            borderRadius="15px"
+                            objectFit="cover"
+                          />
+                          <Box
+                            w="100%"
+                            h="100%"
+                            position="absolute"
+                            top="0"
+                            borderRadius="15px"
+                            bg="linear-gradient(360deg, rgba(49, 56, 96, 0.16) 0%, rgba(21, 25, 40, 0.88) 100%)"
+                          ></Box>
+                        </Box>
+                        <Flex direction="column" px="10px">
+                          <Text fontSize="xl" color={textColor} fontWeight="bold" mb="10px">
+                            Event | {event.event_name}
+                          </Text>
+                          <Text fontSize="md" color="gray.400" fontWeight="600" mb="10px">
+                            {(() => {
+                              const startDate = new Date(event.event_startDate);
+                              const endDate = new Date(event.event_endDate);
 
-                            const startDay = startDate
-                              .toLocaleDateString("en-GB", {
-                                weekday: "long",
+                              const startDay = startDate
+                                .toLocaleDateString("en-GB", {
+                                  weekday: "long",
+                                  day: "2-digit",
+                                })
+                                .replace(" ", ", ");
+
+                              const startMonth = startDate.toLocaleDateString("en-GB", {
+                                month: "long",
+                              });
+
+                              const startYear = startDate.getFullYear();
+
+                              const endDay = endDate.toLocaleDateString("en-GB", {
                                 day: "2-digit",
-                              })
-                              .replace(" ", ", ");
+                              });
 
-                            const startMonth = startDate.toLocaleDateString("en-GB", {
-                              month: "long",
-                            });
+                              const endMonth = endDate.toLocaleDateString("en-GB", {
+                                month: "long",
+                              });
 
-                            const startYear = startDate.getFullYear();
+                              const endYear = endDate.getFullYear();
 
-                            const endDay = endDate.toLocaleDateString("en-GB", {
-                              day: "2-digit",
-                            });
-
-                            const endMonth = endDate.toLocaleDateString("en-GB", {
-                              month: "long",
-                            });
-
-                            const endYear = endDate.getFullYear();
-
-                            if (
-                              startDate.getDate() === endDate.getDate() &&
-                              startDate.getMonth() === endDate.getMonth() &&
-                              startYear === endYear
-                            ) {
-                              return `${startDay} ${startMonth} ${startYear}`;
-                            }
-
-                            if (startYear === endYear) {
-                              if (startDate.getMonth() === endDate.getMonth()) {
-                                return `${startDay} - ${endDay} ${endMonth} ${endYear}`;
-                              } else {
-                                return `${startDay} ${startMonth} - ${endDay} ${endMonth} ${endYear}`;
+                              if (
+                                startDate.getDate() === endDate.getDate() &&
+                                startDate.getMonth() === endDate.getMonth() &&
+                                startYear === endYear
+                              ) {
+                                return `${startDay} ${startMonth} ${startYear}`;
                               }
-                            } else {
-                              return `${startDay} ${startMonth} ${startYear} - ${endDay} ${endMonth} ${endYear}`;
-                            }
-                          })()}
-                        </Text>
-                        <Text fontSize="md" color="gray.400" fontWeight="400" mb="20px">
-                          {event.description}
-                        </Text>
+
+                              if (startYear === endYear) {
+                                if (startDate.getMonth() === endDate.getMonth()) {
+                                  return `${startDay} - ${endDay} ${endMonth} ${endYear}`;
+                                } else {
+                                  return `${startDay} ${startMonth} - ${endDay} ${endMonth} ${endYear}`;
+                                }
+                              } else {
+                                return `${startDay} ${startMonth} ${startYear} - ${endDay} ${endMonth} ${endYear}`;
+                              }
+                            })()}
+                          </Text>
+                          <Text fontSize="md" color="gray.400" fontWeight="400" mb="5px">
+                            {isExpanded
+                              ? event.description
+                              : `${event.description.substring(0, 50)}...`}
+                          </Text>
+                          {event.description.length > 50 && (
+                            <Text
+                              fontSize="md"
+                              fontWeight="400"
+                              color="blue.500"
+                              cursor="pointer"
+                              display="inline"
+                              mb="20px"
+                              onClick={() => toggleText(event._id)}
+                            >
+                              {isExpanded ? "Read less" : "Read more"}
+                            </Text>
+                          )}
+                        </Flex>
                       </Flex>
-                    </Flex>
-                  ))}
+                    );
+                  })}
               </Grid>
+              <Flex justify="center" mt="20px">
+                {!showAll && events.length > 4 && (
+                  <Button
+                    fontSize="xs"
+                    borderRadius="5px"
+                    variant="primary"
+                    onClick={() => setShowAll(true)}
+                  >
+                    Show More
+                  </Button>
+                )}
+                {showAll && (
+                  <Button
+                    fontSize="xs"
+                    borderRadius="5px"
+                    variant="primary"
+                    onClick={() => setShowAll(false)}
+                    ml="4"
+                  >
+                    Show Less
+                  </Button>
+                )}
+              </Flex>
             </CardBody>
           </Card>
         </VStack>
