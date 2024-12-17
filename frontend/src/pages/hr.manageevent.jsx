@@ -405,15 +405,20 @@ const ManageEvent = () => {
                           _hover={{ backgroundColor: "gray.100", cursor: "pointer" }}
                         >
                           <Td pl="0px" borderColor={borderColor} py={5}>
-                            <Image
-                              src={"/public/uploads/" + event.poster_path}
-                              alt={event.poster_path}
-                              boxSize="200px"
-                              objectFit="cover"
-                              borderRadius="lg"
+                            <Box
                               width="200px"
                               height="100px"
-                            />
+                              position="relative"
+                              borderRadius="lg"
+                              overflow="hidden"
+                            >
+                              <Image
+                                src={"/public/uploads/" + event.poster_path}
+                                alt={event.poster_path}
+                                layout="fill"
+                                objectFit="cover"
+                              />
+                            </Box>
                           </Td>
                           <Td borderColor={borderColor}>
                             <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
@@ -553,7 +558,7 @@ const ManageEvent = () => {
                     * Accepted file types: JPG, JPEG, PNG.
                   </Text>
                   <Text fontSize="xs" color="red.500" ms="4px" mb="24px" fontStyle="italic">
-                    * Recommended aspect ratio: 1:2.
+                    * Recommended aspect ratio: 2:1.
                   </Text>
                   <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                     Start Date
