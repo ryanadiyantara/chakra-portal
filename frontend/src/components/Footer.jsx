@@ -29,13 +29,8 @@ const Footer = () => {
         >
           &copy; {1900 + new Date().getYear()}, <Text as="span">Ryan Adiyantara</Text>
         </Text>
-        <List display="flex">
-          <ListItem
-            me={{
-              base: "20px",
-              md: "44px",
-            }}
-          >
+        <List display="flex" gap={{ base: "20px", md: "44px" }}>
+          <ListItem>
             <Link
               color="gray.400"
               href="https://www.linkedin.com/in/muchammad-ryan-adiyantara-817377225/"
@@ -43,12 +38,7 @@ const Footer = () => {
               LinkedIn
             </Link>
           </ListItem>
-          <ListItem
-            me={{
-              base: "20px",
-              md: "44px",
-            }}
-          >
+          <ListItem>
             <Link color="gray.400" href="https://www.instagram.com/ryandyntr/">
               Instagram
             </Link>
