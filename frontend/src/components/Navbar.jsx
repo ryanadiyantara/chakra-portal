@@ -164,7 +164,6 @@ function Navbar() {
           </Link>
         </Box>
         <Flex
-          pe={{ sm: "0px", md: "16px" }}
           w={{ sm: "100%", md: "auto" }}
           alignItems="center"
           flexDirection="row"
@@ -175,7 +174,6 @@ function Navbar() {
           <SettingsIcon
             cursor="pointer"
             color="white"
-            me="16px"
             onClick={handleOpenDrawer}
             w="18px"
             h="18px"
