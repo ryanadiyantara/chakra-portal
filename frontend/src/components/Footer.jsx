@@ -16,7 +16,7 @@ const Footer = () => {
         }}
         justifyContent="space-between"
         px="30px"
-        pb="20px"
+        py="20px"
         w="100%"
       >
         <Text
