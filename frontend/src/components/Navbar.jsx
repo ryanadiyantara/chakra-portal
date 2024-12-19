@@ -22,6 +22,7 @@ import { SettingsIcon } from "./Icons/Icons";
 import { HSeparator } from "./Separator";
 
 import { useUserStore } from "../store/user";
+import { SidebarResponsive } from "./Sidebar";
 
 function Navbar() {
   // Utils
@@ -92,23 +93,36 @@ function Navbar() {
       minH="75px"
       justifyContent={{ xl: "center" }}
       lineHeight="25.6px"
-      px="40px"
+      mx="auto"
       mt="22px"
       pb="8px"
+      px={{
+        sm: "15px",
+        md: "30px",
+      }}
+      ps={{
+        xl: "12px",
+      }}
+      pt="8px"
       top="18px"
       w={{ sm: "calc(100vw - 30px)", xl: "calc(100vw - 75px - 275px)" }}
     >
       <Flex
         w="100%"
         flexDirection={{
-          base: "column",
-          xl: "row",
+          sm: "column",
+          md: "row",
         }}
         alignItems={{ xl: "center" }}
-        justifyContent="space-between"
+        justifyContent={{ md: "space-between" }}
       >
         <Box mb={{ sm: "8px", md: "0px" }}>
-          <Breadcrumb>
+          <Breadcrumb
+            display={{
+              base: "none",
+              md: "block",
+            }}
+          >
             <BreadcrumbItem color={"white"}>
               <BreadcrumbLink href="/dashboard" color={"white"}>
                 Pages
@@ -154,10 +168,13 @@ function Navbar() {
           w={{ sm: "100%", md: "auto" }}
           alignItems="center"
           flexDirection="row"
+          justifyContent="flex-end"
         >
+          {/* Hamburger Icon */}
+          <SidebarResponsive />
           <SettingsIcon
             cursor="pointer"
-            ms={{ base: "16px", xl: "0px" }}
+            color="white"
             me="16px"
             onClick={handleOpenDrawer}
             w="18px"
