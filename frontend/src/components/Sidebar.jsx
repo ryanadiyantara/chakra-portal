@@ -303,18 +303,21 @@ export function SidebarResponsive({}) {
             my={{
               sm: "16px",
             }}
-            sx={{
-              "&::-webkit-scrollbar": {
-                display: "none",
-              },
-              scrollbarWidth: "none",
-            }}
             overflowY="auto"
             borderRadius="20px"
             bg={sidebarBg}
           >
             <DrawerCloseButton _focus={{ boxShadow: "none" }} _hover={{ boxShadow: "none" }} />
-            <DrawerBody maxW="250px" px="1rem">
+            <DrawerBody
+              maxW="250px"
+              px="1rem"
+              sx={{
+                "&::-webkit-scrollbar": {
+                  display: "none",
+                },
+                scrollbarWidth: "none",
+              }}
+            >
               <Box maxW="100%" h="100vh">
                 <Box pt={"25px"} mb="12px">
                   <Stack direction="row" spacing="12px" align="center" justify="center">
