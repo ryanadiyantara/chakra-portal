@@ -118,88 +118,79 @@ const ChangePassword = () => {
           py="20px"
           w="100%"
           spacing={{ base: "20px", xl: "30px" }}
-          alignItems="start"
+          alignItems={{ base: "center", xl: "start" }}
           minHeight="85vh"
         >
           {/* Input Form */}
-          <VStack w="400px">
-            <Flex alignItems="center" justifyContent="center" mb="60px">
-              <Flex
-                direction="column"
-                w="400px"
-                background="transparent"
-                borderRadius="15px"
-                p="40px"
-                bg={bgForm}
-              >
-                <FormControl>
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Old Password
-                  </FormLabel>
-                  <InputGroup size="lg" mb="24px">
-                    <Input
-                      fontSize="sm"
-                      ms="4px"
-                      type={showPassword.oldPassword ? "text" : "password"}
-                      mb="24px"
-                      size="lg"
-                      placeholder="Your old password"
-                      name="old_password"
-                      value={newUser.old_password}
-                      onChange={(e) => setNewUser({ ...newUser, old_password: e.target.value })}
-                      borderColor={errors.old_password ? "red.500" : "gray.200"}
+          <VStack>
+            <Flex direction="column" w="325px" borderRadius="15px" p="40px" bg={bgForm} mb="60px">
+              <FormControl>
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Old Password
+                </FormLabel>
+                <InputGroup size="lg" mb="24px">
+                  <Input
+                    fontSize="sm"
+                    ms="4px"
+                    type={showPassword.oldPassword ? "text" : "password"}
+                    mb="24px"
+                    size="lg"
+                    placeholder="Your old password"
+                    name="old_password"
+                    value={newUser.old_password}
+                    onChange={(e) => setNewUser({ ...newUser, old_password: e.target.value })}
+                    borderColor={errors.old_password ? "red.500" : "gray.200"}
+                  />
+                  <InputRightElement>
+                    <IconButton
+                      aria-label={
+                        showPassword.oldPassword ? "Hide old password" : "Show old password"
+                      }
+                      icon={showPassword.oldPassword ? <ViewOffIcon /> : <ViewIcon />}
+                      onClick={() => togglePasswordVisibility("oldPassword")}
+                      variant="ghost"
                     />
-                    <InputRightElement>
-                      <IconButton
-                        aria-label={
-                          showPassword.oldPassword ? "Hide old password" : "Show old password"
-                        }
-                        icon={showPassword.oldPassword ? <ViewOffIcon /> : <ViewIcon />}
-                        onClick={() => togglePasswordVisibility("oldPassword")}
-                        variant="ghost"
-                      />
-                    </InputRightElement>
-                  </InputGroup>
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    New Password
-                  </FormLabel>
-                  <InputGroup size="lg" mb="24px">
-                    <Input
-                      fontSize="sm"
-                      ms="4px"
-                      type={showPassword.newPassword ? "text" : "password"}
-                      mb="24px"
-                      size="lg"
-                      placeholder="Your new password"
-                      name="new_password"
-                      value={newUser.new_password}
-                      onChange={(e) => setNewUser({ ...newUser, new_password: e.target.value })}
-                      borderColor={errors.new_password ? "red.500" : "gray.200"}
+                  </InputRightElement>
+                </InputGroup>
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  New Password
+                </FormLabel>
+                <InputGroup size="lg" mb="24px">
+                  <Input
+                    fontSize="sm"
+                    ms="4px"
+                    type={showPassword.newPassword ? "text" : "password"}
+                    mb="24px"
+                    size="lg"
+                    placeholder="Your new password"
+                    name="new_password"
+                    value={newUser.new_password}
+                    onChange={(e) => setNewUser({ ...newUser, new_password: e.target.value })}
+                    borderColor={errors.new_password ? "red.500" : "gray.200"}
+                  />
+                  <InputRightElement>
+                    <IconButton
+                      aria-label={
+                        showPassword.newPassword ? "Hide new password" : "Show new password"
+                      }
+                      icon={showPassword.newPassword ? <ViewOffIcon /> : <ViewIcon />}
+                      onClick={() => togglePasswordVisibility("newPassword")}
+                      variant="ghost"
                     />
-                    <InputRightElement>
-                      <IconButton
-                        aria-label={
-                          showPassword.newPassword ? "Hide new password" : "Show new password"
-                        }
-                        icon={showPassword.newPassword ? <ViewOffIcon /> : <ViewIcon />}
-                        onClick={() => togglePasswordVisibility("newPassword")}
-                        variant="ghost"
-                      />
-                    </InputRightElement>
-                  </InputGroup>
-                  <Button
-                    fontSize="14px"
-                    variant="dark"
-                    fontWeight="bold"
-                    w="100%"
-                    h="45"
-                    mt="24px"
-                    onClick={handleSubmit}
-                  >
-                    Log In
-                  </Button>
-                </FormControl>
-              </Flex>
+                  </InputRightElement>
+                </InputGroup>
+                <Button
+                  fontSize="14px"
+                  variant="dark"
+                  fontWeight="bold"
+                  w="100%"
+                  h="45"
+                  mt="24px"
+                  onClick={handleSubmit}
+                >
+                  Submit
+                </Button>
+              </FormControl>
             </Flex>
           </VStack>
         </HStack>

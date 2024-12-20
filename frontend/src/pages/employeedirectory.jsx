@@ -66,15 +66,11 @@ const EmployeeDirectory = () => {
 
         {/* Content */}
         <HStack
-          flexDirection={{
-            base: "column",
-            xl: "row",
-          }}
           justifyContent="space-between"
           px={{ base: "30px", xl: "40px" }}
           w="100%"
           spacing={{ base: "20px", xl: "30px" }}
-          alignItems="start"
+          alignItems={{ base: "center", xl: "start" }}
           minHeight="85vh"
         >
           {/* Table Data */}
@@ -82,171 +78,151 @@ const EmployeeDirectory = () => {
             spacing={2}
             alignItems={"left"}
             w="100%"
-            background="white"
-            px={{ base: "10px", xl: "20px" }}
-            py="20px"
+            p="20px"
             borderRadius="16px"
             bg={bgForm}
+            overflowX={{ sm: "scroll", xl: "hidden" }}
           >
-            <Box overflowX={{ sm: "scroll", xl: "hidden" }} pb="0px">
-              <Flex align="center" justify="space-between" p="0px">
-                <Box p="6px 0px 22px 0px">
-                  <Text fontSize="xl" color={textColor} fontWeight="bold">
-                    Employee List
-                  </Text>
-                </Box>
-                {/* Search Input */}
-                <Box>
-                  <Input
-                    placeholder="Search on list..."
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    size="sm"
-                    borderRadius="5px"
-                    w="100%"
-                  />
-                </Box>
-              </Flex>
+            <Flex align="center" justify="space-between" p="6px 0px 22px 0px">
+              <Text fontSize="xl" color={textColor} fontWeight="bold">
+                Employee List
+              </Text>
               <Box>
-                <Table variant="simple" color={textColor}>
-                  <Thead>
-                    <Tr my=".8rem" pl="0px" color="gray.400">
-                      <Th pl="0px" borderColor={borderColor} color="gray.400">
-                        Name & Email
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Department & Position
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Employee ID
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Birth Date
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Employed
-                      </Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {users
-                      .filter((user) => !user.na)
-                      .filter((user) => {
-                        const startDate = new Date(user.startDate);
-                        const birthDate = new Date(user.dateBirth);
+                <Input
+                  placeholder="Search on list.."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  size="sm"
+                  borderRadius="5px"
+                  w={{ base: "85%", md: "100%" }}
+                  ml={{ base: "15%", md: "0%" }}
+                />
+              </Box>
+            </Flex>
+            <Box>
+              <Table variant="simple" color={textColor}>
+                <Thead>
+                  <Tr my=".8rem" pl="0px" color="gray.400">
+                    <Th pl="0px" borderColor={borderColor} color="gray.400">
+                      Name & Email
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Department & Position
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Employee ID
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Birth Date
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Employed
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {users
+                    .filter((user) => !user.na)
+                    .filter((user) => {
+                      const startDate = new Date(user.startDate);
+                      const birthDate = new Date(user.dateBirth);
 
-                        const formattedBirthDate = birthDate
-                          .toLocaleDateString("en-GB", {
-                            day: "2-digit",
-                            month: "long",
-                            year: "numeric",
-                          })
-                          .toLowerCase();
+                      const formattedBirthDate = birthDate
+                        .toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                        })
+                        .toLowerCase();
 
-                        const formattedStartDate = startDate
-                          .toLocaleDateString("en-GB", {
-                            day: "2-digit",
-                            month: "long",
-                            year: "numeric",
-                          })
-                          .toLowerCase();
+                      const formattedStartDate = startDate
+                        .toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                        })
+                        .toLowerCase();
 
-                        return (
-                          user.user_name.toLowerCase().includes(searchQuery) ||
-                          user.email.toLowerCase().includes(searchQuery) ||
-                          user.user_id.toLowerCase().includes(searchQuery) ||
-                          user.department_id.department_name.toLowerCase().includes(searchQuery) ||
-                          user.position_id.position_name.toLowerCase().includes(searchQuery) ||
-                          formattedBirthDate.includes(searchQuery.toLowerCase()) ||
-                          formattedStartDate.includes(searchQuery.toLowerCase())
-                        );
-                      })
-                      .map((user) => {
-                        return (
-                          <Tr
-                            key={user._id}
-                            _hover={{ backgroundColor: "gray.100", cursor: "pointer" }}
+                      return (
+                        user.user_name.toLowerCase().includes(searchQuery) ||
+                        user.email.toLowerCase().includes(searchQuery) ||
+                        user.user_id.toLowerCase().includes(searchQuery) ||
+                        user.department_id.department_name.toLowerCase().includes(searchQuery) ||
+                        user.position_id.position_name.toLowerCase().includes(searchQuery) ||
+                        formattedBirthDate.includes(searchQuery.toLowerCase()) ||
+                        formattedStartDate.includes(searchQuery.toLowerCase())
+                      );
+                    })
+                    .map((user) => {
+                      return (
+                        <Tr
+                          key={user._id}
+                          _hover={{ backgroundColor: "gray.100", cursor: "pointer" }}
+                        >
+                          <Td
+                            borderColor={borderColor}
+                            width={{ base: "auto", xl: "200px" }}
+                            p="0px"
                           >
-                            <Td
-                              borderColor={borderColor}
-                              width={{ base: "auto", xl: "200px" }}
-                              p="0px"
-                            >
-                              <Flex direction="row">
-                                <Image
-                                  src={"/public/uploads/" + user.profilePicture}
-                                  alt={user.profilePicture}
-                                  boxSize="50px"
-                                  objectFit="cover"
-                                  borderRadius="lg"
-                                  width="40px"
-                                  height="40px"
-                                  mr="10px"
-                                />
-                                <Flex direction="column" width={{ base: "auto", sm: "200px" }}>
-                                  <Text fontSize="md" color={textColor} fontWeight="bold">
-                                    {user.user_name}
-                                  </Text>
-                                  <Text fontSize="sm" color="gray.400" fontWeight="normal">
-                                    {user.email}
-                                  </Text>
-                                </Flex>
-                              </Flex>
-                            </Td>
-                            <Td borderColor={borderColor}>
-                              <Flex direction="column">
+                            <Flex direction="row">
+                              <Image
+                                src={"/public/uploads/" + user.profilePicture}
+                                alt={user.profilePicture}
+                                boxSize="50px"
+                                objectFit="cover"
+                                borderRadius="lg"
+                                width="40px"
+                                height="40px"
+                                mr="10px"
+                              />
+                              <Flex direction="column" width={{ base: "auto", sm: "200px" }}>
                                 <Text fontSize="md" color={textColor} fontWeight="bold">
-                                  {user.department_id.department_name}
+                                  {user.user_name}
                                 </Text>
                                 <Text fontSize="sm" color="gray.400" fontWeight="normal">
-                                  {user.position_id.position_name}
+                                  {user.email}
                                 </Text>
                               </Flex>
-                            </Td>
-                            <Td borderColor={borderColor}>
-                              <Text
-                                fontSize="md"
-                                color={textColor}
-                                fontWeight="bold"
-                                minWidth="100%"
-                              >
-                                {user.user_id}
+                            </Flex>
+                          </Td>
+                          <Td borderColor={borderColor}>
+                            <Flex direction="column">
+                              <Text fontSize="md" color={textColor} fontWeight="bold">
+                                {user.department_id.department_name}
                               </Text>
-                            </Td>
-                            <Td borderColor={borderColor}>
-                              <Text
-                                fontSize="md"
-                                color={textColor}
-                                fontWeight="bold"
-                                minWidth="100%"
-                              >
-                                {new Date(user.dateBirth).toLocaleDateString("en-GB", {
-                                  day: "2-digit",
-                                  month: "long",
-                                  year: "numeric",
-                                })}
+                              <Text fontSize="sm" color="gray.400" fontWeight="normal">
+                                {user.position_id.position_name}
                               </Text>
-                            </Td>
-                            <Td borderColor={borderColor}>
-                              <Text
-                                fontSize="md"
-                                color={textColor}
-                                fontWeight="bold"
-                                minWidth="100%"
-                              >
-                                {new Date(user.startDate).toLocaleDateString("en-GB", {
-                                  day: "2-digit",
-                                  month: "long",
-                                  year: "numeric",
-                                })}
-                              </Text>
-                            </Td>
-                          </Tr>
-                        );
-                      })}
-                  </Tbody>
-                </Table>
-              </Box>
+                            </Flex>
+                          </Td>
+                          <Td borderColor={borderColor}>
+                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                              {user.user_id}
+                            </Text>
+                          </Td>
+                          <Td borderColor={borderColor}>
+                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                              {new Date(user.dateBirth).toLocaleDateString("en-GB", {
+                                day: "2-digit",
+                                month: "long",
+                                year: "numeric",
+                              })}
+                            </Text>
+                          </Td>
+                          <Td borderColor={borderColor}>
+                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                              {new Date(user.startDate).toLocaleDateString("en-GB", {
+                                day: "2-digit",
+                                month: "long",
+                                year: "numeric",
+                              })}
+                            </Text>
+                          </Td>
+                        </Tr>
+                      );
+                    })}
+                </Tbody>
+              </Table>
             </Box>
           </VStack>
         </HStack>

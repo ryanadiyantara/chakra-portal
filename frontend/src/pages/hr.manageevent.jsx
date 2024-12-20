@@ -295,7 +295,7 @@ const ManageEvent = () => {
           px={{ base: "30px", xl: "40px" }}
           w="100%"
           spacing={{ base: "20px", xl: "30px" }}
-          alignItems="start"
+          alignItems={{ base: "center", xl: "start" }}
           minHeight="85vh"
         >
           {/* Table Data */}
@@ -304,334 +304,326 @@ const ManageEvent = () => {
             alignItems={"left"}
             w="100%"
             background="white"
-            px={{ base: "10px", xl: "20px" }}
-            py="20px"
+            p="20px"
             borderRadius="16px"
             bg={bgForm}
+            overflowX="scroll"
           >
-            <Box overflowX={{ sm: "scroll", xl: "hidden" }} pb="0px">
-              <Box p="6px 0px 22px 0px">
-                <Flex align="center" justify="space-between" p="0px">
-                  <Text fontSize="xl" color={textColor} fontWeight="bold">
-                    Event List
-                  </Text>
-                  <Flex align="center" justify="space-between" p="0px" gap="20px">
-                    <Button
-                      fontSize="xs"
-                      as={Link}
-                      to="/hr/eventhistory"
-                      variant="primary"
-                      maxH="30px"
-                      borderRadius="5px"
-                    >
-                      Event History
-                    </Button>
-                    {/* Search Input */}
-                    <Box>
-                      <Input
-                        placeholder="Search on list..."
-                        value={searchQuery}
-                        onChange={handleSearchChange}
-                        size="sm"
-                        borderRadius="5px"
-                        w="100%"
-                      />
-                    </Box>
-                  </Flex>
-                </Flex>
-              </Box>
-              <Box>
-                <Table variant="simple" color={textColor}>
-                  <Thead>
-                    <Tr my=".8rem" pl="0px" color="gray.400">
-                      <Th pl="0px" borderColor={borderColor} color="gray.400">
-                        Poster
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Event Name
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Start Date
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        End Date
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Description
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Action
-                      </Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {events
-                      .filter((event) => !event.na)
-                      .filter((event) => !event.del)
-                      .filter((event) => {
-                        const startDate = new Date(event.event_startDate);
-                        const endDate = new Date(event.event_endDate);
+            <Flex align="center" justify="space-between" p="6px 0px 22px 0px">
+              <Text fontSize="xl" color={textColor} fontWeight="bold">
+                Event List
+              </Text>
+              <Flex
+                align="center"
+                justify="space-between"
+                p="0px"
+                gap={{ base: "0px", md: "20px" }}
+              >
+                <Button
+                  fontSize="xs"
+                  as={Link}
+                  to="/hr/eventhistory"
+                  variant="primary"
+                  maxH="30px"
+                  borderRadius="5px"
+                >
+                  Event History
+                </Button>
+                <Box>
+                  <Input
+                    placeholder="Search on list.."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    size="sm"
+                    borderRadius="5px"
+                    w={{ base: "85%", md: "100%" }}
+                    ml={{ base: "15%", md: "0%" }}
+                  />
+                </Box>
+              </Flex>
+            </Flex>
+            <Box>
+              <Table variant="simple" color={textColor}>
+                <Thead>
+                  <Tr my=".8rem" pl="0px" color="gray.400">
+                    <Th pl="0px" borderColor={borderColor} color="gray.400">
+                      Poster
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Event Name
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Start Date
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      End Date
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Description
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Action
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {events
+                    .filter((event) => !event.na)
+                    .filter((event) => !event.del)
+                    .filter((event) => {
+                      const startDate = new Date(event.event_startDate);
+                      const endDate = new Date(event.event_endDate);
 
-                        const formattedStartDate = startDate
-                          .toLocaleDateString("en-GB", {
-                            weekday: "long",
-                            day: "2-digit",
-                            month: "long",
-                            year: "numeric",
-                          })
-                          .toLowerCase();
+                      const formattedStartDate = startDate
+                        .toLocaleDateString("en-GB", {
+                          weekday: "long",
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                        })
+                        .toLowerCase();
 
-                        const formattedEndDate = endDate
-                          .toLocaleDateString("en-GB", {
-                            weekday: "long",
-                            day: "2-digit",
-                            month: "long",
-                            year: "numeric",
-                          })
-                          .toLowerCase();
+                      const formattedEndDate = endDate
+                        .toLocaleDateString("en-GB", {
+                          weekday: "long",
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                        })
+                        .toLowerCase();
 
-                        return (
-                          event.event_name.toLowerCase().includes(searchQuery) ||
-                          formattedStartDate.includes(searchQuery.toLowerCase()) ||
-                          formattedEndDate.includes(searchQuery.toLowerCase()) ||
-                          event.description.toLowerCase().includes(searchQuery)
-                        );
-                      })
-                      .filter((event) => new Date(event.event_startDate) > new Date())
-                      .sort((a, b) => new Date(a.event_startDate) - new Date(b.event_startDate))
-                      .map((event) => (
-                        <Tr
-                          key={event._id}
-                          _hover={{ backgroundColor: "gray.100", cursor: "pointer" }}
-                        >
-                          <Td pl="0px" borderColor={borderColor} py={5}>
-                            <Box
-                              width="200px"
-                              height="100px"
-                              position="relative"
-                              borderRadius="lg"
-                              overflow="hidden"
+                      return (
+                        event.event_name.toLowerCase().includes(searchQuery) ||
+                        formattedStartDate.includes(searchQuery.toLowerCase()) ||
+                        formattedEndDate.includes(searchQuery.toLowerCase()) ||
+                        event.description.toLowerCase().includes(searchQuery)
+                      );
+                    })
+                    .filter((event) => new Date(event.event_startDate) > new Date())
+                    .sort((a, b) => new Date(a.event_startDate) - new Date(b.event_startDate))
+                    .map((event) => (
+                      <Tr
+                        key={event._id}
+                        _hover={{ backgroundColor: "gray.100", cursor: "pointer" }}
+                      >
+                        <Td pl="0px" borderColor={borderColor} py={5}>
+                          <Box
+                            width="200px"
+                            height="100px"
+                            position="relative"
+                            borderRadius="lg"
+                            overflow="hidden"
+                          >
+                            <Image
+                              src={"/public/uploads/" + event.poster_path}
+                              alt={event.poster_path}
+                              layout="fill"
+                              objectFit="cover"
+                            />
+                          </Box>
+                        </Td>
+                        <Td borderColor={borderColor}>
+                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                            {event.event_name}
+                          </Text>
+                        </Td>
+                        <Td borderColor={borderColor}>
+                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                            {new Date(event.event_startDate)
+                              .toLocaleDateString("en-GB", {
+                                weekday: "long",
+                                day: "2-digit",
+                                month: "long",
+                                year: "numeric",
+                              })
+                              .replace(" ", ", ")}
+                          </Text>
+                        </Td>
+                        <Td borderColor={borderColor}>
+                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                            {new Date(event.event_endDate)
+                              .toLocaleDateString("en-GB", {
+                                weekday: "long",
+                                day: "2-digit",
+                                month: "long",
+                                year: "numeric",
+                              })
+                              .replace(" ", ", ")}
+                          </Text>
+                        </Td>
+                        <Td borderColor={borderColor}>
+                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                            {event.description}
+                          </Text>
+                        </Td>
+                        <Td borderColor={borderColor}>
+                          <Flex direction="row" p="0px" alignItems="center" gap="4">
+                            <Flex
+                              alignItems="center"
+                              gap="1"
+                              as="button"
+                              onClick={() => handleEditClick(event)}
                             >
-                              <Image
-                                src={"/public/uploads/" + event.poster_path}
-                                alt={event.poster_path}
-                                layout="fill"
-                                objectFit="cover"
-                              />
-                            </Box>
-                          </Td>
-                          <Td borderColor={borderColor}>
-                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {event.event_name}
-                            </Text>
-                          </Td>
-                          <Td borderColor={borderColor}>
-                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {new Date(event.event_startDate)
-                                .toLocaleDateString("en-GB", {
-                                  weekday: "long",
-                                  day: "2-digit",
-                                  month: "long",
-                                  year: "numeric",
-                                })
-                                .replace(" ", ", ")}
-                            </Text>
-                          </Td>
-                          <Td borderColor={borderColor}>
-                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {new Date(event.event_endDate)
-                                .toLocaleDateString("en-GB", {
-                                  weekday: "long",
-                                  day: "2-digit",
-                                  month: "long",
-                                  year: "numeric",
-                                })
-                                .replace(" ", ", ")}
-                            </Text>
-                          </Td>
-                          <Td borderColor={borderColor}>
-                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {event.description}
-                            </Text>
-                          </Td>
-                          <Td borderColor={borderColor}>
-                            <Flex direction="row" p="0px" alignItems="center" gap="4">
-                              <Flex
-                                alignItems="center"
-                                gap="1"
-                                as="button"
-                                onClick={() => handleEditClick(event)}
-                              >
-                                <FaPen size="14" color={iconColor} />
-                                <Text fontSize="14px" color={textColor} fontWeight="bold">
-                                  EDIT
-                                </Text>
-                              </Flex>
-                              <Flex
-                                alignItems="center"
-                                gap="1"
-                                as="button"
-                                onClick={() => openDeleteModal(event.event_name)}
-                              >
-                                <FaTrash size="14" color="#E53E3E" />
-                                <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
-                                  DELETE
-                                </Text>
-                              </Flex>
-                              {/* Modal Delete */}
-                              <CustomModal
-                                isOpen={isOpen}
-                                onClose={handleClose}
-                                title="Delete Event"
-                                bodyContent={
-                                  <p>
-                                    To delete a event named{" "}
-                                    <span style={{ fontWeight: "bold" }}>{selectedEventName}</span>,
-                                    type the name to confirm.
-                                  </p>
-                                }
-                                modalBgColor="blackAlpha.800"
-                                modalBackdropFilter="blur(2px)"
-                                inputValue={inputValue}
-                                onInputChange={(e) => setInputValue(e.target.value)}
-                                onConfirm={() => handleDeleteEvent(event._id)}
-                              />
+                              <FaPen size="14" color={iconColor} />
+                              <Text fontSize="14px" color={textColor} fontWeight="bold">
+                                EDIT
+                              </Text>
                             </Flex>
-                          </Td>
-                        </Tr>
-                      ))}
-                  </Tbody>
-                </Table>
-              </Box>
+                            <Flex
+                              alignItems="center"
+                              gap="1"
+                              as="button"
+                              onClick={() => openDeleteModal(event.event_name)}
+                            >
+                              <FaTrash size="14" color="#E53E3E" />
+                              <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
+                                DELETE
+                              </Text>
+                            </Flex>
+                            {/* Modal Delete */}
+                            <CustomModal
+                              isOpen={isOpen}
+                              onClose={handleClose}
+                              title="Delete Event"
+                              bodyContent={
+                                <p>
+                                  To delete a event named{" "}
+                                  <span style={{ fontWeight: "bold" }}>{selectedEventName}</span>,
+                                  type the name to confirm.
+                                </p>
+                              }
+                              modalBgColor="blackAlpha.800"
+                              modalBackdropFilter="blur(2px)"
+                              inputValue={inputValue}
+                              onInputChange={(e) => setInputValue(e.target.value)}
+                              onConfirm={() => handleDeleteEvent(event._id)}
+                            />
+                          </Flex>
+                        </Td>
+                      </Tr>
+                    ))}
+                </Tbody>
+              </Table>
             </Box>
           </VStack>
 
           {/* Input Form */}
-          <VStack w="400px">
-            <Flex alignItems="center" justifyContent="center" mb="60px">
-              <Flex
-                direction="column"
-                w="400px"
-                background="transparent"
-                borderRadius="15px"
-                p="40px"
-                bg={bgForm}
-              >
-                <Text fontSize="xl" color={textColor} fontWeight="bold" mb="22px">
-                  {isEditing ? "Edit Event" : "Add New Event"}
+          <VStack>
+            <Flex direction="column" w="325px" borderRadius="15px" p="40px" bg={bgForm} mb="60px">
+              <Text fontSize="xl" color={textColor} fontWeight="bold" mb="22px">
+                {isEditing ? "Edit Event" : "Add New Event"}
+              </Text>
+              <FormControl>
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Event Name
+                </FormLabel>
+                <Input
+                  fontSize="sm"
+                  ms="4px"
+                  type="text"
+                  mb="24px"
+                  size="lg"
+                  placeholder="Event name"
+                  name="event_name"
+                  value={newEvent.event_name}
+                  onChange={(e) => setNewEvent({ ...newEvent, event_name: e.target.value })}
+                  borderColor={errors.event_name ? "red.500" : "gray.200"}
+                />
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Poster
+                </FormLabel>
+                <Input
+                  fontSize="sm"
+                  ms="4px"
+                  type="file"
+                  size="lg"
+                  name="poster"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "8px 12px",
+                  }}
+                  onChange={handleFileChange}
+                  borderColor={errors.poster ? "red.500" : "gray.200"}
+                />
+                <Text fontSize="xs" color="red.500" ms="4px" fontStyle="italic">
+                  * Accepted file types: JPG, JPEG, PNG.
                 </Text>
-                <FormControl>
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Event Name
-                  </FormLabel>
-                  <Input
-                    fontSize="sm"
-                    ms="4px"
-                    type="text"
-                    mb="24px"
-                    size="lg"
-                    placeholder="Event name"
-                    name="event_name"
-                    value={newEvent.event_name}
-                    onChange={(e) => setNewEvent({ ...newEvent, event_name: e.target.value })}
-                    borderColor={errors.event_name ? "red.500" : "gray.200"}
-                  />
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Poster
-                  </FormLabel>
-                  <Input
-                    fontSize="sm"
-                    ms="4px"
-                    type="file"
-                    size="lg"
-                    name="poster"
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "8px 12px",
-                    }}
-                    onChange={handleFileChange}
-                    borderColor={errors.poster ? "red.500" : "gray.200"}
-                  />
-                  <Text fontSize="xs" color="red.500" ms="4px" fontStyle="italic">
-                    * Accepted file types: JPG, JPEG, PNG.
-                  </Text>
-                  <Text fontSize="xs" color="red.500" ms="4px" mb="24px" fontStyle="italic">
-                    * Recommended aspect ratio: 2:1.
-                  </Text>
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Start Date
-                  </FormLabel>
-                  <Input
-                    fontSize="sm"
-                    ms="4px"
-                    type="date"
-                    mb="24px"
-                    size="lg"
-                    placeholder="Start Date"
-                    name="event_startDate"
-                    value={newEvent.event_startDate}
-                    onChange={handleDateChange}
-                    borderColor={errors.event_startDate ? "red.500" : "gray.200"}
-                  />
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    End Date
-                  </FormLabel>
-                  <Input
-                    fontSize="sm"
-                    ms="4px"
-                    type="date"
-                    mb="24px"
-                    size="lg"
-                    placeholder="End Date"
-                    name="event_endDate"
-                    value={newEvent.event_endDate}
-                    onChange={handleDateChange}
-                    borderColor={errors.event_endDate ? "red.500" : "gray.200"}
-                  />
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Description
-                  </FormLabel>
-                  <Input
-                    fontSize="sm"
-                    ms="4px"
-                    type="text"
-                    mb="24px"
-                    size="lg"
-                    placeholder="Description"
-                    name="description"
-                    value={newEvent.description}
-                    onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
-                    borderColor={errors.description ? "red.500" : "gray.200"}
-                  />
+                <Text fontSize="xs" color="red.500" ms="4px" mb="24px" fontStyle="italic">
+                  * Recommended aspect ratio: 2:1.
+                </Text>
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Start Date
+                </FormLabel>
+                <Input
+                  fontSize="sm"
+                  ms="4px"
+                  type="date"
+                  mb="24px"
+                  size="lg"
+                  placeholder="Start Date"
+                  name="event_startDate"
+                  value={newEvent.event_startDate}
+                  onChange={handleDateChange}
+                  borderColor={errors.event_startDate ? "red.500" : "gray.200"}
+                />
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  End Date
+                </FormLabel>
+                <Input
+                  fontSize="sm"
+                  ms="4px"
+                  type="date"
+                  mb="24px"
+                  size="lg"
+                  placeholder="End Date"
+                  name="event_endDate"
+                  value={newEvent.event_endDate}
+                  onChange={handleDateChange}
+                  borderColor={errors.event_endDate ? "red.500" : "gray.200"}
+                />
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Description
+                </FormLabel>
+                <Input
+                  fontSize="sm"
+                  ms="4px"
+                  type="text"
+                  mb="24px"
+                  size="lg"
+                  placeholder="Description"
+                  name="description"
+                  value={newEvent.description}
+                  onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
+                  borderColor={errors.description ? "red.500" : "gray.200"}
+                />
+                <Button
+                  fontSize="14px"
+                  variant="dark"
+                  fontWeight="bold"
+                  w="100%"
+                  h="45"
+                  mt="24px"
+                  onClick={handleSubmit}
+                >
+                  {isEditing ? "Update" : "Submit"}
+                </Button>
+                {isEditing && (
                   <Button
                     fontSize="14px"
-                    variant="dark"
+                    variant="solid"
                     fontWeight="bold"
                     w="100%"
                     h="45"
-                    mt="24px"
-                    onClick={handleSubmit}
+                    mt="4"
+                    onClick={handleCancelEdit}
+                    colorScheme="gray"
                   >
-                    {isEditing ? "Update" : "Submit"}
+                    Cancel
                   </Button>
-                  {isEditing && (
-                    <Button
-                      fontSize="14px"
-                      variant="solid"
-                      fontWeight="bold"
-                      w="100%"
-                      h="45"
-                      mt="4"
-                      onClick={handleCancelEdit}
-                      colorScheme="gray"
-                    >
-                      Cancel
-                    </Button>
-                  )}
-                </FormControl>
-              </Flex>
+                )}
+              </FormControl>
             </Flex>
           </VStack>
         </HStack>

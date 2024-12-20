@@ -238,13 +238,13 @@ const LeaveApp = () => {
         <HStack
           flexDirection={{
             base: "column",
-            xl: "row",
+            lg: "row",
           }}
           justifyContent="space-between"
           px={{ base: "30px", xl: "40px" }}
           w="100%"
           spacing={{ base: "20px", xl: "30px" }}
-          alignItems="start"
+          alignItems={{ base: "center", lg: "start" }}
           minHeight="85vh"
         >
           {/* Table Data */}
@@ -253,312 +253,297 @@ const LeaveApp = () => {
             alignItems={"left"}
             w="100%"
             background="white"
-            px={{ base: "10px", xl: "20px" }}
-            py="20px"
+            p="20px"
             borderRadius="16px"
             bg={bgForm}
+            overflowX="scroll"
           >
-            <Box overflowX={{ sm: "scroll", xl: "hidden" }} pb="0px">
-              <Box p="6px 0px 22px 0px">
-                <Flex align="center" justify="space-between" p="0px">
-                  <Text fontSize="xl" color={textColor} fontWeight="bold">
-                    Leave Application History
-                  </Text>
-                  {/* Search Input */}
-                  <Box>
-                    <Input
-                      placeholder="Search on list..."
-                      value={searchQuery}
-                      onChange={handleSearchChange}
-                      size="sm"
-                      borderRadius="5px"
-                      w="100%"
-                    />
-                  </Box>
-                </Flex>
-              </Box>
+            <Flex align="center" justify="space-between" p="6px 0px 22px 0px">
+              <Text fontSize="xl" color={textColor} fontWeight="bold">
+                Leave Application History
+              </Text>
               <Box>
-                <Table variant="simple" color={textColor}>
-                  <Thead>
-                    <Tr my=".8rem" pl="0px" color="gray.400">
-                      <Th pl="0px" borderColor={borderColor} color="gray.400">
-                        Leave Application Id
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Types of Leave
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Leave Start Date
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Leave End Date
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Attachment
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Status
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Action
-                      </Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {leaveapps
-                      .filter((leaveapp) => !leaveapp.na)
-                      .filter((leaveapp) => !leaveapp.del)
-                      .filter((leaveapp) => leaveapp.leaveAppId.includes(currentUsers.user_id))
-                      .filter((leaveapp) => {
-                        const startDate = new Date(leaveapp.leave_startDate);
-                        const endDate = new Date(leaveapp.leave_endDate);
+                <Input
+                  placeholder="Search on list.."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  size="sm"
+                  borderRadius="5px"
+                  w={{ base: "85%", md: "100%" }}
+                  ml={{ base: "15%", md: "0%" }}
+                />
+              </Box>
+            </Flex>
+            <Box>
+              <Table variant="simple" color={textColor}>
+                <Thead>
+                  <Tr my=".8rem" pl="0px" color="gray.400">
+                    <Th pl="0px" borderColor={borderColor} color="gray.400">
+                      Leave Application Id
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Types of Leave
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Leave Start Date
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Leave End Date
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Attachment
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Status
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Action
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {leaveapps
+                    .filter((leaveapp) => !leaveapp.na)
+                    .filter((leaveapp) => !leaveapp.del)
+                    .filter((leaveapp) => leaveapp.leaveAppId.includes(currentUsers.user_id))
+                    .filter((leaveapp) => {
+                      const startDate = new Date(leaveapp.leave_startDate);
+                      const endDate = new Date(leaveapp.leave_endDate);
 
-                        const formattedStartDate = startDate
-                          .toLocaleDateString("en-GB", {
-                            weekday: "long",
-                            day: "2-digit",
-                            month: "long",
-                            year: "numeric",
-                          })
-                          .toLowerCase();
+                      const formattedStartDate = startDate
+                        .toLocaleDateString("en-GB", {
+                          weekday: "long",
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                        })
+                        .toLowerCase();
 
-                        const formattedEndDate = endDate
-                          .toLocaleDateString("en-GB", {
-                            weekday: "long",
-                            day: "2-digit",
-                            month: "long",
-                            year: "numeric",
-                          })
-                          .toLowerCase();
+                      const formattedEndDate = endDate
+                        .toLocaleDateString("en-GB", {
+                          weekday: "long",
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                        })
+                        .toLowerCase();
 
-                        return (
-                          leaveapp.leaveAppId.toLowerCase().includes(searchQuery) ||
-                          leaveapp.type.toLowerCase().includes(searchQuery) ||
-                          formattedStartDate.includes(searchQuery.toLowerCase()) ||
-                          formattedEndDate.includes(searchQuery.toLowerCase()) ||
-                          leaveapp.leave_status.toLowerCase().includes(searchQuery)
-                        );
-                      })
-                      .map((leaveapp, index) => (
-                        <Tr
-                          key={leaveapp._id}
-                          _hover={{ backgroundColor: "gray.100", cursor: "pointer" }}
-                        >
-                          <Td width={{ sm: "50px" }} pl="0px" borderColor={borderColor} py={5}>
-                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {leaveapp.leaveAppId}
+                      return (
+                        leaveapp.leaveAppId.toLowerCase().includes(searchQuery) ||
+                        leaveapp.type.toLowerCase().includes(searchQuery) ||
+                        formattedStartDate.includes(searchQuery.toLowerCase()) ||
+                        formattedEndDate.includes(searchQuery.toLowerCase()) ||
+                        leaveapp.leave_status.toLowerCase().includes(searchQuery)
+                      );
+                    })
+                    .map((leaveapp, index) => (
+                      <Tr
+                        key={leaveapp._id}
+                        _hover={{ backgroundColor: "gray.100", cursor: "pointer" }}
+                      >
+                        <Td width={{ sm: "50px" }} pl="0px" borderColor={borderColor} py={5}>
+                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                            {leaveapp.leaveAppId}
+                          </Text>
+                        </Td>
+                        <Td borderColor={borderColor}>
+                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                            {leaveapp.type}
+                          </Text>
+                        </Td>
+                        <Td borderColor={borderColor}>
+                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                            {new Date(leaveapp.leave_startDate)
+                              .toLocaleDateString("en-GB", {
+                                weekday: "long",
+                                day: "2-digit",
+                                month: "long",
+                                year: "numeric",
+                              })
+                              .replace(" ", ", ")}
+                          </Text>
+                        </Td>
+                        <Td borderColor={borderColor}>
+                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                            {new Date(leaveapp.leave_endDate)
+                              .toLocaleDateString("en-GB", {
+                                weekday: "long",
+                                day: "2-digit",
+                                month: "long",
+                                year: "numeric",
+                              })
+                              .replace(" ", ", ")}
+                          </Text>
+                        </Td>
+                        <Td borderColor={borderColor}>
+                          <Flex
+                            alignItems="center"
+                            gap="1"
+                            as="button"
+                            onClick={() => {
+                              if (leaveapp.attachment && leaveapp.attachment !== "-") {
+                                const filePath = leaveapp.attachment.replace("/ess", "");
+                                const fullPath = `http://localhost:5000/public/uploads/${filePath}`;
+
+                                window.open(fullPath, "_blank");
+                              }
+                            }}
+                            cursor={
+                              !leaveapp.attachment || leaveapp.attachment === "-"
+                                ? "not-allowed"
+                                : "pointer"
+                            }
+                            opacity={!leaveapp.attachment || leaveapp.attachment === "-" ? 0.4 : 1}
+                          >
+                            <Text fontSize="14px" color={textColor} fontWeight="bold">
+                              SEE
                             </Text>
-                          </Td>
-                          <Td borderColor={borderColor}>
-                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {leaveapp.type}
-                            </Text>
-                          </Td>
-                          <Td borderColor={borderColor}>
-                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {new Date(leaveapp.leave_startDate)
-                                .toLocaleDateString("en-GB", {
-                                  weekday: "long",
-                                  day: "2-digit",
-                                  month: "long",
-                                  year: "numeric",
-                                })
-                                .replace(" ", ", ")}
-                            </Text>
-                          </Td>
-                          <Td borderColor={borderColor}>
-                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {new Date(leaveapp.leave_endDate)
-                                .toLocaleDateString("en-GB", {
-                                  weekday: "long",
-                                  day: "2-digit",
-                                  month: "long",
-                                  year: "numeric",
-                                })
-                                .replace(" ", ", ")}
-                            </Text>
-                          </Td>
-                          <Td borderColor={borderColor}>
+                            <FaFile size="14" color={iconColor} />
+                          </Flex>
+                        </Td>
+                        <Td borderColor={borderColor}>
+                          <Badge
+                            bg={statusColors[leaveapp.leave_status] || "gray.400"}
+                            color={"white"}
+                            fontSize="16px"
+                            p="3px 10px"
+                            borderRadius="8px"
+                          >
+                            {leaveapp.leave_status}
+                          </Badge>
+                        </Td>
+                        <Td borderColor={borderColor}>
+                          <Flex direction="row" p="0px" alignItems="center" gap="4">
                             <Flex
                               alignItems="center"
                               gap="1"
                               as="button"
                               onClick={() => {
-                                if (leaveapp.attachment && leaveapp.attachment !== "-") {
-                                  const filePath = leaveapp.attachment.replace("/ess", "");
-                                  const fullPath = `http://localhost:5000/public/uploads/${filePath}`;
-
-                                  window.open(fullPath, "_blank");
+                                if (leaveapp.leave_status == "Pending") {
+                                  handleEditClick(leaveapp);
                                 }
                               }}
                               cursor={
-                                !leaveapp.attachment || leaveapp.attachment === "-"
-                                  ? "not-allowed"
-                                  : "pointer"
+                                leaveapp.leave_status !== "Pending" ? "not-allowed" : "pointer"
                               }
-                              opacity={
-                                !leaveapp.attachment || leaveapp.attachment === "-" ? 0.4 : 1
-                              }
+                              opacity={leaveapp.leave_status !== "Pending" ? 0.4 : 1}
+                              disabled={leaveapp.leave_status !== "Pending"}
                             >
+                              <FaPen size="14" color={iconColor} />
                               <Text fontSize="14px" color={textColor} fontWeight="bold">
-                                SEE
+                                EDIT
                               </Text>
-                              <FaFile size="14" color={iconColor} />
                             </Flex>
-                          </Td>
-                          <Td borderColor={borderColor}>
-                            <Badge
-                              bg={statusColors[leaveapp.leave_status] || "gray.400"}
-                              color={"white"}
-                              fontSize="16px"
-                              p="3px 10px"
-                              borderRadius="8px"
-                            >
-                              {leaveapp.leave_status}
-                            </Badge>
-                          </Td>
-                          <Td borderColor={borderColor}>
-                            <Flex direction="row" p="0px" alignItems="center" gap="4">
-                              <Flex
-                                alignItems="center"
-                                gap="1"
-                                as="button"
-                                onClick={() => {
-                                  if (leaveapp.leave_status == "Pending") {
-                                    handleEditClick(leaveapp);
-                                  }
-                                }}
-                                cursor={
-                                  leaveapp.leave_status !== "Pending" ? "not-allowed" : "pointer"
-                                }
-                                opacity={leaveapp.leave_status !== "Pending" ? 0.4 : 1}
-                                disabled={leaveapp.leave_status !== "Pending"}
-                              >
-                                <FaPen size="14" color={iconColor} />
-                                <Text fontSize="14px" color={textColor} fontWeight="bold">
-                                  EDIT
-                                </Text>
-                              </Flex>
-                            </Flex>
-                          </Td>
-                        </Tr>
-                      ))}
-                  </Tbody>
-                </Table>
-              </Box>
+                          </Flex>
+                        </Td>
+                      </Tr>
+                    ))}
+                </Tbody>
+              </Table>
             </Box>
           </VStack>
 
           {/* Input Form */}
-          <VStack w="400px">
-            <Flex alignItems="center" justifyContent="center" mb="60px">
-              <Flex
-                direction="column"
-                w="400px"
-                background="transparent"
-                borderRadius="15px"
-                p="40px"
-                bg={bgForm}
-              >
-                <Text fontSize="xl" color={textColor} fontWeight="bold" mb="22px">
-                  {isEditing ? "Edit Leave Application" : "Request Leave Application"}
+          <VStack>
+            <Flex direction="column" w="325px" borderRadius="15px" p="40px" bg={bgForm} mb="60px">
+              <Text fontSize="xl" color={textColor} fontWeight="bold" mb="22px">
+                {isEditing ? "Edit Leave Application" : "Request Leave Application"}
+              </Text>
+              <FormControl>
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Types of Leave
+                </FormLabel>
+                <Select
+                  fontSize="sm"
+                  ms="4px"
+                  mb="24px"
+                  size="lg"
+                  placeholder="Select Leave Type"
+                  name="type"
+                  value={newLeaveApp.type}
+                  onChange={(e) => setNewLeaveApp({ ...newLeaveApp, type: e.target.value })}
+                  borderColor={errors.type ? "red.500" : "gray.200"}
+                >
+                  <option value="Annual Leave">Annual Leave</option>
+                  <option value="Sick Leave">Sick Leave</option>
+                </Select>
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Leave Start Date
+                </FormLabel>
+                <Input
+                  fontSize="sm"
+                  ms="4px"
+                  type="date"
+                  mb="24px"
+                  size="lg"
+                  placeholder="Leave Start Date"
+                  name="leave_startDate"
+                  value={newLeaveApp.leave_startDate}
+                  onChange={handleDateChange}
+                  borderColor={errors.leave_startDate ? "red.500" : "gray.200"}
+                />
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Leave End Date
+                </FormLabel>
+                <Input
+                  fontSize="sm"
+                  ms="4px"
+                  type="date"
+                  mb="24px"
+                  size="lg"
+                  placeholder="End Date"
+                  name="leave_endDate"
+                  value={newLeaveApp.leave_endDate}
+                  onChange={handleDateChange}
+                  borderColor={errors.leave_endDate ? "red.500" : "gray.200"}
+                />
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Attachment (optional)
+                </FormLabel>
+                <Input
+                  fontSize="sm"
+                  ms="4px"
+                  type="file"
+                  size="lg"
+                  name="attachment"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "8px 12px",
+                  }}
+                  onChange={handleFileChange}
+                  borderColor={errors.attachment ? "red.500" : "gray.200"}
+                />
+                <Text fontSize="xs" color="red.500" ms="4px" mb="24px" fontStyle="italic">
+                  * File must be in PDF format.
                 </Text>
-                <FormControl>
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Types of Leave
-                  </FormLabel>
-                  <Select
-                    fontSize="sm"
-                    ms="4px"
-                    mb="24px"
-                    size="lg"
-                    placeholder="Select Leave Type"
-                    name="type"
-                    value={newLeaveApp.type}
-                    onChange={(e) => setNewLeaveApp({ ...newLeaveApp, type: e.target.value })}
-                    borderColor={errors.type ? "red.500" : "gray.200"}
-                  >
-                    <option value="Annual Leave">Annual Leave</option>
-                    <option value="Sick Leave">Sick Leave</option>
-                  </Select>
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Leave Start Date
-                  </FormLabel>
-                  <Input
-                    fontSize="sm"
-                    ms="4px"
-                    type="date"
-                    mb="24px"
-                    size="lg"
-                    placeholder="Leave Start Date"
-                    name="leave_startDate"
-                    value={newLeaveApp.leave_startDate}
-                    onChange={handleDateChange}
-                    borderColor={errors.leave_startDate ? "red.500" : "gray.200"}
-                  />
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Leave End Date
-                  </FormLabel>
-                  <Input
-                    fontSize="sm"
-                    ms="4px"
-                    type="date"
-                    mb="24px"
-                    size="lg"
-                    placeholder="End Date"
-                    name="leave_endDate"
-                    value={newLeaveApp.leave_endDate}
-                    onChange={handleDateChange}
-                    borderColor={errors.leave_endDate ? "red.500" : "gray.200"}
-                  />
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Attachment (optional)
-                  </FormLabel>
-                  <Input
-                    fontSize="sm"
-                    ms="4px"
-                    type="file"
-                    size="lg"
-                    name="attachment"
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "8px 12px",
-                    }}
-                    onChange={handleFileChange}
-                    borderColor={errors.attachment ? "red.500" : "gray.200"}
-                  />
-                  <Text fontSize="xs" color="red.500" ms="4px" mb="24px" fontStyle="italic">
-                    * File must be in PDF format.
-                  </Text>
+                <Button
+                  fontSize="14px"
+                  variant="dark"
+                  fontWeight="bold"
+                  w="100%"
+                  h="45"
+                  mt="24px"
+                  onClick={handleSubmit}
+                >
+                  {isEditing ? "Update" : "Submit"}
+                </Button>
+                {isEditing && (
                   <Button
                     fontSize="14px"
-                    variant="dark"
+                    variant="solid"
                     fontWeight="bold"
                     w="100%"
                     h="45"
-                    mt="24px"
-                    onClick={handleSubmit}
+                    mt="4"
+                    onClick={handleCancelEdit}
+                    colorScheme="gray"
                   >
-                    {isEditing ? "Update" : "Submit"}
+                    Cancel
                   </Button>
-                  {isEditing && (
-                    <Button
-                      fontSize="14px"
-                      variant="solid"
-                      fontWeight="bold"
-                      w="100%"
-                      h="45"
-                      mt="4"
-                      onClick={handleCancelEdit}
-                      colorScheme="gray"
-                    >
-                      Cancel
-                    </Button>
-                  )}
-                </FormControl>
-              </Flex>
+                )}
+              </FormControl>
             </Flex>
           </VStack>
         </HStack>

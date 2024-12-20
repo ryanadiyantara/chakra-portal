@@ -68,15 +68,11 @@ const EventHistory = () => {
 
         {/* Content */}
         <HStack
-          flexDirection={{
-            base: "column",
-            xl: "row",
-          }}
           justifyContent="space-between"
           px={{ base: "30px", xl: "40px" }}
           w="100%"
           spacing={{ base: "20px", xl: "30px" }}
-          alignItems="start"
+          alignItems={{ base: "center", xl: "start" }}
           minHeight="85vh"
         >
           {/* Table Data */}
@@ -84,154 +80,154 @@ const EventHistory = () => {
             spacing={2}
             alignItems={"left"}
             w="100%"
-            background="white"
-            px={{ base: "10px", xl: "20px" }}
-            py="20px"
+            p="20px"
             borderRadius="16px"
             bg={bgForm}
+            overflowX={{ sm: "scroll", xl: "hidden" }}
           >
-            <Box overflowX={{ sm: "scroll", xl: "hidden" }} pb="0px">
-              <Box p="6px 0px 22px 0px">
-                <Flex align="center" justify="space-between" p="0px">
-                  <Text fontSize="xl" color={textColor} fontWeight="bold">
-                    Event History
-                  </Text>
-                  <Flex align="center" justify="space-between" p="0px" gap="20px">
-                    <Button
-                      fontSize="xs"
-                      as={Link}
-                      to="/hr/manageevent"
-                      variant="primary"
-                      maxH="30px"
-                      borderRadius="5px"
-                    >
-                      Manage Event
-                    </Button>
-                    {/* Search Input */}
-                    <Box>
-                      <Input
-                        placeholder="Search on list..."
-                        value={searchQuery}
-                        onChange={handleSearchChange}
-                        size="sm"
-                        borderRadius="5px"
-                        w="100%"
-                      />
-                    </Box>
-                  </Flex>
-                </Flex>
-              </Box>
-              <Box>
-                <Table variant="simple" color={textColor}>
-                  <Thead>
-                    <Tr my=".8rem" pl="0px" color="gray.400">
-                      <Th pl="0px" borderColor={borderColor} color="gray.400">
-                        Poster
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Event Name
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Start Date
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        End Date
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Description
-                      </Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {events
-                      .filter((event) => !event.na)
-                      .filter((event) => !event.del)
-                      .filter((event) => {
-                        const startDate = new Date(event.event_startDate);
-                        const endDate = new Date(event.event_endDate);
+            <Flex align="center" justify="space-between" p="6px 0px 22px 0px">
+              <Text fontSize="xl" color={textColor} fontWeight="bold">
+                Event History
+              </Text>
+              <Flex
+                align="center"
+                justify="space-between"
+                p="0px"
+                gap={{ base: "0px", md: "20px" }}
+              >
+                <Button
+                  fontSize="xs"
+                  as={Link}
+                  to="/hr/manageevent"
+                  variant="primary"
+                  maxH="30px"
+                  borderRadius="5px"
+                >
+                  Manage Event
+                </Button>
+                <Box>
+                  <Input
+                    placeholder="Search on list.."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    size="sm"
+                    borderRadius="5px"
+                    w={{ base: "85%", md: "100%" }}
+                    ml={{ base: "15%", md: "0%" }}
+                  />
+                </Box>
+              </Flex>
+            </Flex>
+            <Box>
+              <Table variant="simple" color={textColor}>
+                <Thead>
+                  <Tr my=".8rem" pl="0px" color="gray.400">
+                    <Th pl="0px" borderColor={borderColor} color="gray.400">
+                      Poster
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Event Name
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Start Date
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      End Date
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Description
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {events
+                    .filter((event) => !event.na)
+                    .filter((event) => !event.del)
+                    .filter((event) => {
+                      const startDate = new Date(event.event_startDate);
+                      const endDate = new Date(event.event_endDate);
 
-                        const formattedStartDate = startDate
-                          .toLocaleDateString("en-GB", {
-                            weekday: "long",
-                            day: "2-digit",
-                            month: "long",
-                            year: "numeric",
-                          })
-                          .toLowerCase();
+                      const formattedStartDate = startDate
+                        .toLocaleDateString("en-GB", {
+                          weekday: "long",
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                        })
+                        .toLowerCase();
 
-                        const formattedEndDate = endDate
-                          .toLocaleDateString("en-GB", {
-                            weekday: "long",
-                            day: "2-digit",
-                            month: "long",
-                            year: "numeric",
-                          })
-                          .toLowerCase();
+                      const formattedEndDate = endDate
+                        .toLocaleDateString("en-GB", {
+                          weekday: "long",
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                        })
+                        .toLowerCase();
 
-                        return (
-                          event.event_name.toLowerCase().includes(searchQuery) ||
-                          formattedStartDate.includes(searchQuery.toLowerCase()) ||
-                          formattedEndDate.includes(searchQuery.toLowerCase()) ||
-                          event.description.toLowerCase().includes(searchQuery)
-                        );
-                      })
-                      .sort((a, b) => new Date(a.event_startDate) - new Date(b.event_startDate))
-                      .map((event) => (
-                        <Tr
-                          key={event._id}
-                          _hover={{ backgroundColor: "gray.100", cursor: "pointer" }}
-                        >
-                          <Td pl="0px" borderColor={borderColor} py={5}>
-                            <Image
-                              src={"/public/uploads/" + event.poster_path}
-                              alt={event.poster_path}
-                              boxSize="200px"
-                              objectFit="cover"
-                              borderRadius="lg"
-                              width="200px"
-                              height="100px"
-                            />
-                          </Td>
-                          <Td borderColor={borderColor}>
-                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {event.event_name}
-                            </Text>
-                          </Td>
-                          <Td borderColor={borderColor}>
-                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {new Date(event.event_startDate)
-                                .toLocaleDateString("en-GB", {
-                                  weekday: "long",
-                                  day: "2-digit",
-                                  month: "long",
-                                  year: "numeric",
-                                })
-                                .replace(" ", ", ")}
-                            </Text>
-                          </Td>
+                      return (
+                        event.event_name.toLowerCase().includes(searchQuery) ||
+                        formattedStartDate.includes(searchQuery.toLowerCase()) ||
+                        formattedEndDate.includes(searchQuery.toLowerCase()) ||
+                        event.description.toLowerCase().includes(searchQuery)
+                      );
+                    })
+                    .sort((a, b) => new Date(a.event_startDate) - new Date(b.event_startDate))
+                    .map((event) => (
+                      <Tr
+                        key={event._id}
+                        _hover={{ backgroundColor: "gray.100", cursor: "pointer" }}
+                      >
+                        <Td pl="0px" borderColor={borderColor} py={5}>
+                          <Image
+                            src={"/public/uploads/" + event.poster_path}
+                            alt={event.poster_path}
+                            boxSize="200px"
+                            objectFit="cover"
+                            borderRadius="lg"
+                            width="200px"
+                            height="100px"
+                          />
+                        </Td>
+                        <Td borderColor={borderColor}>
+                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                            {event.event_name}
+                          </Text>
+                        </Td>
+                        <Td borderColor={borderColor}>
+                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                            {new Date(event.event_startDate)
+                              .toLocaleDateString("en-GB", {
+                                weekday: "long",
+                                day: "2-digit",
+                                month: "long",
+                                year: "numeric",
+                              })
+                              .replace(" ", ", ")}
+                          </Text>
+                        </Td>
 
-                          <Td borderColor={borderColor}>
-                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {new Date(event.event_endDate)
-                                .toLocaleDateString("en-GB", {
-                                  weekday: "long",
-                                  day: "2-digit",
-                                  month: "long",
-                                  year: "numeric",
-                                })
-                                .replace(" ", ", ")}
-                            </Text>
-                          </Td>
-                          <Td borderColor={borderColor}>
-                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {event.description}
-                            </Text>
-                          </Td>
-                        </Tr>
-                      ))}
-                  </Tbody>
-                </Table>
-              </Box>
+                        <Td borderColor={borderColor}>
+                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                            {new Date(event.event_endDate)
+                              .toLocaleDateString("en-GB", {
+                                weekday: "long",
+                                day: "2-digit",
+                                month: "long",
+                                year: "numeric",
+                              })
+                              .replace(" ", ", ")}
+                          </Text>
+                        </Td>
+                        <Td borderColor={borderColor}>
+                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                            {event.description}
+                          </Text>
+                        </Td>
+                      </Tr>
+                    ))}
+                </Tbody>
+              </Table>
             </Box>
           </VStack>
         </HStack>

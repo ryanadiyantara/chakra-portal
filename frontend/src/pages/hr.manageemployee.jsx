@@ -302,7 +302,7 @@ const ManageEmployee = () => {
           px={{ base: "30px", xl: "40px" }}
           w="100%"
           spacing={{ base: "20px", xl: "30px" }}
-          alignItems="start"
+          alignItems={{ base: "center", xl: "start" }}
           minHeight="85vh"
         >
           {/* Table Data */}
@@ -311,399 +311,371 @@ const ManageEmployee = () => {
             alignItems={"left"}
             w="100%"
             background="white"
-            px={{ base: "10px", xl: "20px" }}
-            py="20px"
+            p="20px"
             borderRadius="16px"
             bg={bgForm}
+            overflowX="scroll"
           >
-            <Box overflowX={{ sm: "scroll", xl: "hidden" }} pb="0px">
-              <Flex align="center" justify="space-between" p="0px">
-                <Box p="6px 0px 22px 0px">
-                  <Text fontSize="xl" color={textColor} fontWeight="bold">
-                    Employee List
-                  </Text>
-                </Box>
-                {/* Search Input */}
-                <Box>
-                  <Input
-                    placeholder="Search on list..."
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    size="sm"
-                    borderRadius="5px"
-                    w="100%"
-                  />
-                </Box>
-              </Flex>
+            <Flex align="center" justify="space-between" p="6px 0px 22px 0px">
+              <Text fontSize="xl" color={textColor} fontWeight="bold">
+                Employee List
+              </Text>
               <Box>
-                <Table variant="simple" color={textColor}>
-                  <Thead>
-                    <Tr my=".8rem" pl="0px" color="gray.400">
-                      <Th pl="0px" borderColor={borderColor} color="gray.400">
-                        Name & Email
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Employee ID
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Department & Position
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Birth Date
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Employed
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Action
-                      </Th>
-                    </Tr>
-                  </Thead>
+                <Input
+                  placeholder="Search on list.."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  size="sm"
+                  borderRadius="5px"
+                  w={{ base: "85%", md: "100%" }}
+                  ml={{ base: "15%", md: "0%" }}
+                />
+              </Box>
+            </Flex>
+            <Box>
+              <Table variant="simple" color={textColor}>
+                <Thead>
+                  <Tr my=".8rem" pl="0px" color="gray.400">
+                    <Th pl="0px" borderColor={borderColor} color="gray.400">
+                      Name & Email
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Employee ID
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Department & Position
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Birth Date
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Employed
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Action
+                    </Th>
+                  </Tr>
+                </Thead>
 
-                  <Tbody>
-                    {users
-                      .filter((user) => !user.na)
-                      .filter((user) => {
-                        const startDate = new Date(user.startDate);
-                        const birthDate = new Date(user.dateBirth);
+                <Tbody>
+                  {users
+                    .filter((user) => !user.na)
+                    .filter((user) => {
+                      const startDate = new Date(user.startDate);
+                      const birthDate = new Date(user.dateBirth);
 
-                        const formattedBirthDate = birthDate
-                          .toLocaleDateString("en-GB", {
-                            day: "2-digit",
-                            month: "long",
-                            year: "numeric",
-                          })
-                          .toLowerCase();
+                      const formattedBirthDate = birthDate
+                        .toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                        })
+                        .toLowerCase();
 
-                        const formattedStartDate = startDate
-                          .toLocaleDateString("en-GB", {
-                            day: "2-digit",
-                            month: "long",
-                            year: "numeric",
-                          })
-                          .toLowerCase();
+                      const formattedStartDate = startDate
+                        .toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                        })
+                        .toLowerCase();
 
-                        return (
-                          user.user_name.toLowerCase().includes(searchQuery) ||
-                          user.email.toLowerCase().includes(searchQuery) ||
-                          user.user_id.toLowerCase().includes(searchQuery) ||
-                          user.department_id.department_name.toLowerCase().includes(searchQuery) ||
-                          user.position_id.position_name.toLowerCase().includes(searchQuery) ||
-                          formattedBirthDate.includes(searchQuery.toLowerCase()) ||
-                          formattedStartDate.includes(searchQuery.toLowerCase())
-                        );
-                      })
-                      .map((user) => {
-                        return (
-                          <Tr
-                            key={user._id}
-                            _hover={{ backgroundColor: "gray.100", cursor: "pointer" }}
+                      return (
+                        user.user_name.toLowerCase().includes(searchQuery) ||
+                        user.email.toLowerCase().includes(searchQuery) ||
+                        user.user_id.toLowerCase().includes(searchQuery) ||
+                        user.department_id.department_name.toLowerCase().includes(searchQuery) ||
+                        user.position_id.position_name.toLowerCase().includes(searchQuery) ||
+                        formattedBirthDate.includes(searchQuery.toLowerCase()) ||
+                        formattedStartDate.includes(searchQuery.toLowerCase())
+                      );
+                    })
+                    .map((user) => {
+                      return (
+                        <Tr
+                          key={user._id}
+                          _hover={{ backgroundColor: "gray.100", cursor: "pointer" }}
+                        >
+                          <Td
+                            borderColor={borderColor}
+                            width={{ base: "100px", xl: "200px" }}
+                            p="0px"
                           >
-                            <Td
-                              borderColor={borderColor}
-                              width={{ base: "100px", xl: "200px" }}
-                              p="0px"
-                            >
-                              <Flex direction="row">
-                                <Image
-                                  src={"/public/uploads/" + user.profilePicture}
-                                  alt={user.profilePicture}
-                                  boxSize="50px"
-                                  objectFit="cover"
-                                  borderRadius="lg"
-                                  width="40px"
-                                  height="40px"
-                                  mr="10px"
-                                />
-                                <Flex direction="column" width={{ base: "auto", sm: "150px" }}>
-                                  <Text fontSize="md" color={textColor} fontWeight="bold">
-                                    {user.user_name}
-                                  </Text>
-                                  <Text fontSize="sm" color="gray.400" fontWeight="normal">
-                                    {user.email}
-                                  </Text>
-                                </Flex>
-                              </Flex>
-                            </Td>
-                            <Td borderColor={borderColor}>
-                              <Text
-                                fontSize="md"
-                                color={textColor}
-                                fontWeight="bold"
-                                minWidth="100%"
-                              >
-                                {user.user_id}
-                              </Text>
-                            </Td>
-                            <Td borderColor={borderColor}>
-                              <Flex direction="column">
+                            <Flex direction="row">
+                              <Image
+                                src={"/public/uploads/" + user.profilePicture}
+                                alt={user.profilePicture}
+                                boxSize="50px"
+                                objectFit="cover"
+                                borderRadius="lg"
+                                width="40px"
+                                height="40px"
+                                mr="10px"
+                              />
+                              <Flex direction="column" width={{ base: "auto", sm: "150px" }}>
                                 <Text fontSize="md" color={textColor} fontWeight="bold">
-                                  {user.department_id.department_name}
+                                  {user.user_name}
                                 </Text>
                                 <Text fontSize="sm" color="gray.400" fontWeight="normal">
-                                  {user.position_id.position_name}
+                                  {user.email}
                                 </Text>
                               </Flex>
-                            </Td>
-                            <Td borderColor={borderColor}>
-                              <Text
-                                fontSize="md"
-                                color={textColor}
-                                fontWeight="bold"
-                                minWidth="100%"
-                              >
-                                {new Date(user.dateBirth).toLocaleDateString("en-GB", {
-                                  day: "2-digit",
-                                  month: "long",
-                                  year: "numeric",
-                                })}
+                            </Flex>
+                          </Td>
+                          <Td borderColor={borderColor}>
+                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                              {user.user_id}
+                            </Text>
+                          </Td>
+                          <Td borderColor={borderColor}>
+                            <Flex direction="column">
+                              <Text fontSize="md" color={textColor} fontWeight="bold">
+                                {user.department_id.department_name}
                               </Text>
-                            </Td>
-                            <Td borderColor={borderColor}>
-                              <Text
-                                fontSize="md"
-                                color={textColor}
-                                fontWeight="bold"
-                                minWidth="100%"
-                              >
-                                {new Date(user.startDate).toLocaleDateString("en-GB", {
-                                  day: "2-digit",
-                                  month: "long",
-                                  year: "numeric",
-                                })}
+                              <Text fontSize="sm" color="gray.400" fontWeight="normal">
+                                {user.position_id.position_name}
                               </Text>
-                            </Td>
+                            </Flex>
+                          </Td>
+                          <Td borderColor={borderColor}>
+                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                              {new Date(user.dateBirth).toLocaleDateString("en-GB", {
+                                day: "2-digit",
+                                month: "long",
+                                year: "numeric",
+                              })}
+                            </Text>
+                          </Td>
+                          <Td borderColor={borderColor}>
+                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                              {new Date(user.startDate).toLocaleDateString("en-GB", {
+                                day: "2-digit",
+                                month: "long",
+                                year: "numeric",
+                              })}
+                            </Text>
+                          </Td>
 
-                            {/* Action */}
-                            <Td borderColor={borderColor}>
-                              <Flex direction="row" p="0px" alignItems="center" gap="4">
-                                {/* Button for Edit */}
-                                <Flex
-                                  alignItems="center"
-                                  gap="1"
-                                  as="button"
-                                  onClick={() => handleEditClick(user)}
-                                >
-                                  <FaPen size="14" color={iconColor} />
-                                  <Text fontSize="14px" color={textColor} fontWeight="bold">
-                                    EDIT
-                                  </Text>
-                                </Flex>
-
-                                {/* Button for Delete */}
-                                <Flex
-                                  alignItems="center"
-                                  gap="1"
-                                  as="button"
-                                  onClick={() => openDeleteModal(user.user_name)}
-                                >
-                                  <FaTrash size="14" color="#E53E3E" />
-                                  <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
-                                    TERMINATED
-                                  </Text>
-                                </Flex>
-                                {/* Modal Delete */}
-                                <CustomModal
-                                  isOpen={isOpen}
-                                  onClose={handleClose}
-                                  title="Delete User"
-                                  bodyContent={
-                                    <p>
-                                      To delete a user named{" "}
-                                      <span style={{ fontWeight: "bold" }}>{selectedUserName}</span>
-                                      , type the name to confirm.
-                                    </p>
-                                  }
-                                  modalBgColor="blackAlpha.400"
-                                  modalBackdropFilter="blur(1px)"
-                                  inputValue={inputValue}
-                                  onInputChange={(e) => setInputValue(e.target.value)}
-                                  onConfirm={() => handleTerminatedUser(user._id)}
-                                />
+                          {/* Action */}
+                          <Td borderColor={borderColor}>
+                            <Flex direction="row" p="0px" alignItems="center" gap="4">
+                              {/* Button for Edit */}
+                              <Flex
+                                alignItems="center"
+                                gap="1"
+                                as="button"
+                                onClick={() => handleEditClick(user)}
+                              >
+                                <FaPen size="14" color={iconColor} />
+                                <Text fontSize="14px" color={textColor} fontWeight="bold">
+                                  EDIT
+                                </Text>
                               </Flex>
-                            </Td>
-                          </Tr>
-                        );
-                      })}
-                  </Tbody>
-                </Table>
-              </Box>
+
+                              {/* Button for Delete */}
+                              <Flex
+                                alignItems="center"
+                                gap="1"
+                                as="button"
+                                onClick={() => openDeleteModal(user.user_name)}
+                              >
+                                <FaTrash size="14" color="#E53E3E" />
+                                <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
+                                  TERMINATED
+                                </Text>
+                              </Flex>
+                              {/* Modal Delete */}
+                              <CustomModal
+                                isOpen={isOpen}
+                                onClose={handleClose}
+                                title="Delete User"
+                                bodyContent={
+                                  <p>
+                                    To delete a user named{" "}
+                                    <span style={{ fontWeight: "bold" }}>{selectedUserName}</span>,
+                                    type the name to confirm.
+                                  </p>
+                                }
+                                modalBgColor="blackAlpha.400"
+                                modalBackdropFilter="blur(1px)"
+                                inputValue={inputValue}
+                                onInputChange={(e) => setInputValue(e.target.value)}
+                                onConfirm={() => handleTerminatedUser(user._id)}
+                              />
+                            </Flex>
+                          </Td>
+                        </Tr>
+                      );
+                    })}
+                </Tbody>
+              </Table>
             </Box>
           </VStack>
 
           {/* Input Form */}
-          <VStack w="400px">
-            <Flex alignItems="center" justifyContent="center" mb="60px">
-              <Flex
-                direction="column"
-                w="400px"
-                background="transparent"
-                borderRadius="15px"
-                p="40px"
-                bg={bgForm}
-              >
-                <Text fontSize="xl" color={textColor} fontWeight="bold" mb="22px">
-                  {isEditing ? "Edit Employee" : "Add New Employee"}
+          <VStack>
+            <Flex direction="column" w="325px" borderRadius="15px" p="40px" bg={bgForm} mb="60px">
+              <Text fontSize="xl" color={textColor} fontWeight="bold" mb="22px">
+                {isEditing ? "Edit Employee" : "Add New Employee"}
+              </Text>
+              <FormControl>
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Employee Name
+                </FormLabel>
+                <Input
+                  fontSize="sm"
+                  ms="4px"
+                  type="text"
+                  mb="24px"
+                  size="lg"
+                  placeholder="Employee name"
+                  name="user_name"
+                  value={newUser.user_name}
+                  onChange={(e) => setNewUser({ ...newUser, user_name: e.target.value })}
+                  borderColor={errors.user_name ? "red.500" : "gray.200"}
+                />
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Email
+                </FormLabel>
+                <Input
+                  fontSize="sm"
+                  ms="4px"
+                  type="email"
+                  mb="24px"
+                  size="lg"
+                  placeholder="Email"
+                  name="email"
+                  value={newUser.email}
+                  onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                  borderColor={errors.email ? "red.500" : "gray.200"}
+                />
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Birth Date
+                </FormLabel>
+                <Input
+                  fontSize="sm"
+                  ms="4px"
+                  type="date"
+                  mb="24px"
+                  size="lg"
+                  placeholder="Birth date"
+                  name="dateBirth"
+                  value={newUser.dateBirth}
+                  borderColor={errors.dateBirth ? "red.500" : "gray.200"}
+                  onChange={(e) => setNewUser({ ...newUser, dateBirth: e.target.value })}
+                />
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Department
+                </FormLabel>
+                <Select
+                  fontSize="sm"
+                  ms="4px"
+                  mb="24px"
+                  size="lg"
+                  placeholder="Select Department"
+                  name="department_id"
+                  value={newUser.department_id}
+                  onChange={(e) => setNewUser({ ...newUser, department_id: e.target.value })}
+                  borderColor={errors.department_id ? "red.500" : "gray.200"}
+                >
+                  {departments
+                    .filter((department) => !department.na)
+                    .filter((department) => !department.del)
+                    .map((department) => (
+                      <option key={department._id} value={department._id}>
+                        {department.department_name}
+                      </option>
+                    ))}
+                </Select>
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Position
+                </FormLabel>
+                <Select
+                  fontSize="sm"
+                  ms="4px"
+                  mb="24px"
+                  size="lg"
+                  placeholder="Select Position"
+                  name="position_id"
+                  value={newUser.position_id}
+                  onChange={(e) => setNewUser({ ...newUser, position_id: e.target.value })}
+                  borderColor={errors.position_id ? "red.500" : "gray.200"}
+                  isDisabled={!newUser.department_id}
+                >
+                  {filteredPositions
+                    .filter((position) => !position.na)
+                    .filter((position) => !position.del)
+                    .map((position) => (
+                      <option key={position._id} value={position._id}>
+                        {position.position_name}
+                      </option>
+                    ))}
+                </Select>
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Profile Picture
+                </FormLabel>
+                <Input
+                  fontSize="sm"
+                  ms="4px"
+                  type="file"
+                  size="lg"
+                  name="poster"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "8px 12px",
+                  }}
+                  onChange={handleFileChange}
+                  borderColor={errors.profilePicture ? "red.500" : "gray.200"}
+                />
+                <Text fontSize="xs" color="red.500" ms="4px" fontStyle="italic">
+                  * Accepted file types: JPG, JPEG, PNG.
                 </Text>
-                <FormControl>
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Employee Name
-                  </FormLabel>
-                  <Input
-                    fontSize="sm"
-                    ms="4px"
-                    type="text"
-                    mb="24px"
-                    size="lg"
-                    placeholder="Employee name"
-                    name="user_name"
-                    value={newUser.user_name}
-                    onChange={(e) => setNewUser({ ...newUser, user_name: e.target.value })}
-                    borderColor={errors.user_name ? "red.500" : "gray.200"}
-                  />
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Email
-                  </FormLabel>
-                  <Input
-                    fontSize="sm"
-                    ms="4px"
-                    type="email"
-                    mb="24px"
-                    size="lg"
-                    placeholder="Email"
-                    name="email"
-                    value={newUser.email}
-                    onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
-                    borderColor={errors.email ? "red.500" : "gray.200"}
-                  />
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Birth Date
-                  </FormLabel>
-                  <Input
-                    fontSize="sm"
-                    ms="4px"
-                    type="date"
-                    mb="24px"
-                    size="lg"
-                    placeholder="Birth date"
-                    name="dateBirth"
-                    value={newUser.dateBirth}
-                    borderColor={errors.dateBirth ? "red.500" : "gray.200"}
-                    onChange={(e) => setNewUser({ ...newUser, dateBirth: e.target.value })}
-                  />
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Department
-                  </FormLabel>
-                  <Select
-                    fontSize="sm"
-                    ms="4px"
-                    mb="24px"
-                    size="lg"
-                    placeholder="Select Department"
-                    name="department_id"
-                    value={newUser.department_id}
-                    onChange={(e) => setNewUser({ ...newUser, department_id: e.target.value })}
-                    borderColor={errors.department_id ? "red.500" : "gray.200"}
-                  >
-                    {departments
-                      .filter((department) => !department.na)
-                      .filter((department) => !department.del)
-                      .map((department) => (
-                        <option key={department._id} value={department._id}>
-                          {department.department_name}
-                        </option>
-                      ))}
-                  </Select>
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Position
-                  </FormLabel>
-                  <Select
-                    fontSize="sm"
-                    ms="4px"
-                    mb="24px"
-                    size="lg"
-                    placeholder="Select Position"
-                    name="position_id"
-                    value={newUser.position_id}
-                    onChange={(e) => setNewUser({ ...newUser, position_id: e.target.value })}
-                    borderColor={errors.position_id ? "red.500" : "gray.200"}
-                    isDisabled={!newUser.department_id}
-                  >
-                    {filteredPositions
-                      .filter((position) => !position.na)
-                      .filter((position) => !position.del)
-                      .map((position) => (
-                        <option key={position._id} value={position._id}>
-                          {position.position_name}
-                        </option>
-                      ))}
-                  </Select>
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Profile Picture
-                  </FormLabel>
-                  <Input
-                    fontSize="sm"
-                    ms="4px"
-                    type="file"
-                    size="lg"
-                    name="poster"
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "8px 12px",
-                    }}
-                    onChange={handleFileChange}
-                    borderColor={errors.profilePicture ? "red.500" : "gray.200"}
-                  />
-                  <Text fontSize="xs" color="red.500" ms="4px" fontStyle="italic">
-                    * Accepted file types: JPG, JPEG, PNG.
-                  </Text>
-                  <Text fontSize="xs" color="red.500" ms="4px" mb="24px" fontStyle="italic">
-                    * Recommended aspect ratio: 1:1.
-                  </Text>
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Start Date
-                  </FormLabel>
-                  <Input
-                    fontSize="sm"
-                    ms="4px"
-                    type="date"
-                    mb="24px"
-                    size="lg"
-                    placeholder="Start date"
-                    name="startDate"
-                    value={newUser.startDate}
-                    borderColor={errors.startDate ? "red.500" : "gray.200"}
-                    onChange={(e) => setNewUser({ ...newUser, startDate: e.target.value })}
-                  />
+                <Text fontSize="xs" color="red.500" ms="4px" mb="24px" fontStyle="italic">
+                  * Recommended aspect ratio: 1:1.
+                </Text>
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Start Date
+                </FormLabel>
+                <Input
+                  fontSize="sm"
+                  ms="4px"
+                  type="date"
+                  mb="24px"
+                  size="lg"
+                  placeholder="Start date"
+                  name="startDate"
+                  value={newUser.startDate}
+                  borderColor={errors.startDate ? "red.500" : "gray.200"}
+                  onChange={(e) => setNewUser({ ...newUser, startDate: e.target.value })}
+                />
+                <Button
+                  fontSize="14px"
+                  variant="dark"
+                  fontWeight="bold"
+                  w="100%"
+                  h="45"
+                  mt="24px"
+                  onClick={handleSubmit}
+                >
+                  {isEditing ? "Update" : "Submit"}
+                </Button>
+                {isEditing && (
                   <Button
                     fontSize="14px"
-                    variant="dark"
+                    variant="solid"
                     fontWeight="bold"
                     w="100%"
                     h="45"
-                    mt="24px"
-                    onClick={handleSubmit}
+                    mt="4"
+                    onClick={handleCancelEdit}
+                    colorScheme="gray"
                   >
-                    {isEditing ? "Update" : "Submit"}
+                    Cancel
                   </Button>
-                  {isEditing && (
-                    <Button
-                      fontSize="14px"
-                      variant="solid"
-                      fontWeight="bold"
-                      w="100%"
-                      h="45"
-                      mt="4"
-                      onClick={handleCancelEdit}
-                      colorScheme="gray"
-                    >
-                      Cancel
-                    </Button>
-                  )}
-                </FormControl>
-              </Flex>
+                )}
+              </FormControl>
             </Flex>
           </VStack>
         </HStack>

@@ -199,13 +199,13 @@ const MasterDepartment = () => {
         <HStack
           flexDirection={{
             base: "column",
-            xl: "row",
+            lg: "row",
           }}
           justifyContent="space-between"
           px={{ base: "30px", xl: "40px" }}
           w="100%"
           spacing={{ base: "20px", xl: "30px" }}
-          alignItems="start"
+          alignItems={{ base: "center", lg: "start" }}
           minHeight="85vh"
         >
           {/* Table Data */}
@@ -214,180 +214,167 @@ const MasterDepartment = () => {
             alignItems={"left"}
             w="100%"
             background="white"
-            px={{ base: "10px", xl: "20px" }}
-            py="20px"
+            p="20px"
             borderRadius="16px"
             bg={bgForm}
+            overflowX="scroll"
           >
-            <Box overflowX={{ sm: "scroll", xl: "hidden" }} pb="0px">
-              <Flex align="center" justify="space-between" p="0px">
-                <Box p="6px 0px 22px 0px">
-                  <Text fontSize="xl" color={textColor} fontWeight="bold">
-                    Department List
-                  </Text>
-                </Box>
-                {/* Search Input */}
-                <Box>
-                  <Input
-                    placeholder="Search on list..."
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    size="sm"
-                    borderRadius="5px"
-                    w="100%"
-                  />
-                </Box>
-              </Flex>
+            <Flex align="center" justify="space-between" p="6px 0px 22px 0px">
+              <Text fontSize="xl" color={textColor} fontWeight="bold">
+                Department List
+              </Text>
               <Box>
-                <Table variant="simple" color={textColor}>
-                  <Thead>
-                    <Tr my=".8rem" pl="0px" color="gray.400">
-                      <Th pl="0px" borderColor={borderColor} color="gray.400">
-                        No.
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Department Name
-                      </Th>
-                      <Th borderColor={borderColor} color="gray.400">
-                        Action
-                      </Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {departments
-                      .filter((department) => !department.na)
-                      .filter((department) => !department.del)
-                      .filter((department) =>
-                        department.department_name.toLowerCase().includes(searchQuery)
-                      )
-                      .map((department, index) => (
-                        <Tr
-                          key={department._id}
-                          _hover={{ backgroundColor: "gray.100", cursor: "pointer" }}
-                        >
-                          <Td width={{ sm: "50px" }} pl="0px" borderColor={borderColor} py={5}>
-                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {index + 1}
-                            </Text>
-                          </Td>
-                          <Td borderColor={borderColor}>
-                            <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
-                              {department.department_name}
-                            </Text>
-                          </Td>
-                          <Td borderColor={borderColor}>
-                            <Flex direction="row" p="0px" alignItems="center" gap="4">
-                              <Flex
-                                alignItems="center"
-                                gap="1"
-                                as="button"
-                                onClick={() => handleEditClick(department)}
-                              >
-                                <FaPen size="14" color={iconColor} />
-                                <Text fontSize="14px" color={textColor} fontWeight="bold">
-                                  EDIT
-                                </Text>
-                              </Flex>
-                              <Flex
-                                alignItems="center"
-                                gap="1"
-                                as="button"
-                                onClick={() => openDeleteModal(department.department_name)}
-                              >
-                                <FaTrash size="14" color="#E53E3E" />
-                                <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
-                                  DELETE
-                                </Text>
-                              </Flex>
-                              {/* Modal Delete */}
-                              <CustomModal
-                                isOpen={isOpen}
-                                onClose={handleClose}
-                                title="Delete Department"
-                                bodyContent={
-                                  <p>
-                                    To delete a department named{" "}
-                                    <span style={{ fontWeight: "bold" }}>
-                                      {selectedDepartmentName}
-                                    </span>
-                                    , type the name to confirm.
-                                  </p>
-                                }
-                                modalBgColor="blackAlpha.400"
-                                modalBackdropFilter="blur(1px)"
-                                inputValue={inputValue}
-                                onInputChange={(e) => setInputValue(e.target.value)}
-                                onConfirm={() => handleDeleteDepartment(department._id)}
-                              />
-                            </Flex>
-                          </Td>
-                        </Tr>
-                      ))}
-                  </Tbody>
-                </Table>
+                <Input
+                  placeholder="Search on list.."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  size="sm"
+                  borderRadius="5px"
+                  w={{ base: "85%", md: "100%" }}
+                  ml={{ base: "15%", md: "0%" }}
+                />
               </Box>
+            </Flex>
+            <Box>
+              <Table variant="simple" color={textColor}>
+                <Thead>
+                  <Tr my=".8rem" pl="0px" color="gray.400">
+                    <Th pl="0px" borderColor={borderColor} color="gray.400">
+                      No.
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Department Name
+                    </Th>
+                    <Th borderColor={borderColor} color="gray.400">
+                      Action
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {departments
+                    .filter((department) => !department.na)
+                    .filter((department) => !department.del)
+                    .filter((department) =>
+                      department.department_name.toLowerCase().includes(searchQuery)
+                    )
+                    .map((department, index) => (
+                      <Tr
+                        key={department._id}
+                        _hover={{ backgroundColor: "gray.100", cursor: "pointer" }}
+                      >
+                        <Td width={{ sm: "50px" }} pl="0px" borderColor={borderColor} py={5}>
+                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                            {index + 1}
+                          </Text>
+                        </Td>
+                        <Td borderColor={borderColor}>
+                          <Text fontSize="md" color={textColor} fontWeight="bold" minWidth="100%">
+                            {department.department_name}
+                          </Text>
+                        </Td>
+                        <Td borderColor={borderColor}>
+                          <Flex direction="row" p="0px" alignItems="center" gap="4">
+                            <Flex
+                              alignItems="center"
+                              gap="1"
+                              as="button"
+                              onClick={() => handleEditClick(department)}
+                            >
+                              <FaPen size="14" color={iconColor} />
+                              <Text fontSize="14px" color={textColor} fontWeight="bold">
+                                EDIT
+                              </Text>
+                            </Flex>
+                            <Flex
+                              alignItems="center"
+                              gap="1"
+                              as="button"
+                              onClick={() => openDeleteModal(department.department_name)}
+                            >
+                              <FaTrash size="14" color="#E53E3E" />
+                              <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
+                                DELETE
+                              </Text>
+                            </Flex>
+                            {/* Modal Delete */}
+                            <CustomModal
+                              isOpen={isOpen}
+                              onClose={handleClose}
+                              title="Delete Department"
+                              bodyContent={
+                                <p>
+                                  To delete a department named{" "}
+                                  <span style={{ fontWeight: "bold" }}>
+                                    {selectedDepartmentName}
+                                  </span>
+                                  , type the name to confirm.
+                                </p>
+                              }
+                              modalBgColor="blackAlpha.400"
+                              modalBackdropFilter="blur(1px)"
+                              inputValue={inputValue}
+                              onInputChange={(e) => setInputValue(e.target.value)}
+                              onConfirm={() => handleDeleteDepartment(department._id)}
+                            />
+                          </Flex>
+                        </Td>
+                      </Tr>
+                    ))}
+                </Tbody>
+              </Table>
             </Box>
           </VStack>
 
           {/* Input Form */}
-          <VStack w="400px">
-            <Flex alignItems="center" justifyContent="center" mb="60px">
-              <Flex
-                direction="column"
-                w="400px"
-                background="transparent"
-                borderRadius="15px"
-                p="40px"
-                bg={bgForm}
-              >
-                <Text fontSize="xl" color={textColor} fontWeight="bold" mb="22px">
-                  {isEditing ? "Edit Department" : "Add New Department"}
-                </Text>
-                <FormControl>
-                  <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                    Department Name
-                  </FormLabel>
-                  <Input
-                    fontSize="sm"
-                    ms="4px"
-                    type="text"
-                    mb="24px"
-                    size="lg"
-                    placeholder="Department name"
-                    name="department_name"
-                    value={newDepartment.department_name}
-                    onChange={(e) =>
-                      setNewDepartment({ ...newDepartment, department_name: e.target.value })
-                    }
-                    borderColor={errors.department_name ? "red.500" : "gray.200"}
-                  />
+          <VStack>
+            <Flex direction="column" w="325px" borderRadius="15px" p="40px" bg={bgForm} mb="60px">
+              <Text fontSize="xl" color={textColor} fontWeight="bold" mb="22px">
+                {isEditing ? "Edit Department" : "Add New Department"}
+              </Text>
+              <FormControl>
+                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                  Department Name
+                </FormLabel>
+                <Input
+                  fontSize="sm"
+                  ms="4px"
+                  type="text"
+                  mb="24px"
+                  size="lg"
+                  placeholder="Department name"
+                  name="department_name"
+                  value={newDepartment.department_name}
+                  onChange={(e) =>
+                    setNewDepartment({ ...newDepartment, department_name: e.target.value })
+                  }
+                  borderColor={errors.department_name ? "red.500" : "gray.200"}
+                />
+                <Button
+                  fontSize="14px"
+                  variant="dark"
+                  fontWeight="bold"
+                  w="100%"
+                  h="45"
+                  mt="24px"
+                  onClick={handleSubmit}
+                >
+                  {isEditing ? "Update" : "Submit"}
+                </Button>
+                {isEditing && (
                   <Button
                     fontSize="14px"
-                    variant="dark"
+                    variant="solid"
                     fontWeight="bold"
                     w="100%"
                     h="45"
-                    mt="24px"
-                    onClick={handleSubmit}
+                    mt="4"
+                    onClick={handleCancelEdit}
+                    colorScheme="gray"
                   >
-                    {isEditing ? "Update" : "Submit"}
+                    Cancel
                   </Button>
-                  {isEditing && (
-                    <Button
-                      fontSize="14px"
-                      variant="solid"
-                      fontWeight="bold"
-                      w="100%"
-                      h="45"
-                      mt="4"
-                      onClick={handleCancelEdit}
-                      colorScheme="gray"
-                    >
-                      Cancel
-                    </Button>
-                  )}
-                </FormControl>
-              </Flex>
+                )}
+              </FormControl>
             </Flex>
           </VStack>
         </HStack>
