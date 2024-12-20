@@ -14,8 +14,9 @@ import {
   DrawerContent,
   DrawerCloseButton,
   DrawerBody,
+  useToast,
 } from "@chakra-ui/react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { HomeIcon, PersonIcon, DocumentIcon, RocketIcon, SupportIcon } from "./Icons/Icons";
 import IconBox from "./Icons/IconBox";
@@ -25,8 +26,6 @@ import Logo2 from "../assets/img/logo2.png";
 import { HSeparator } from "./Separator";
 
 import { useUserStore } from "../store/user";
-import { useDepartmentStore } from "../store/department";
-import { usePositionStore } from "../store/position";
 import { HamburgerIcon } from "@chakra-ui/icons";
 
 function Sidebar() {
@@ -59,6 +58,7 @@ function Sidebar() {
         { path: "/hr/masterposition", name: "Master Position", icon: <SupportIcon /> },
         { path: "/hr/manageemployee", name: "Manage Employee", icon: <PersonIcon /> },
         { path: "/hr/manageevent", name: "Manage Event", icon: <HomeIcon /> },
+        { path: "/hr/eventhistory", name: "Event History", hidden: true },
         { path: "/hr/employeeterminated", name: "Employee Terminated", icon: <PersonIcon /> },
         { path: "/hr/leaveapproval", name: "Leave Approval", icon: <RocketIcon /> },
       ],
@@ -83,6 +83,9 @@ function Sidebar() {
 
   const { colorMode } = useColorMode();
   const location = useLocation();
+  const navigate = useNavigate();
+  const toast = useToast();
+  const [isUserLoaded, setIsUserLoaded] = useState(false);
   const activeBg = useColorModeValue("white", "navy.700");
   const inactiveBg = useColorModeValue("white", "navy.800");
   const activeColor = useColorModeValue("gray.700", "white");
@@ -92,16 +95,47 @@ function Sidebar() {
 
   // Services
   useEffect(() => {
-    fetchCurrentUser();
+    const checkAccess = async () => {
+      await fetchCurrentUser();
+      setIsUserLoaded(true);
+    };
+
+    checkAccess();
   }, [fetchCurrentUser]);
 
-  const filteredRoutes = routes.filter((route) => {
-    return (
-      route.name === "ESS" ||
-      route.name === "" ||
-      route.name === currentUsers?.department_id?.department_name
-    );
-  });
+  useEffect(() => {
+    if (isUserLoaded && currentUsers) {
+      const activeRoute = routes.find((route) =>
+        route.views.some((view) => view.path === location.pathname)
+      );
+      if (
+        activeRoute &&
+        activeRoute.name !== "" &&
+        activeRoute.name !== "ESS" &&
+        currentUsers?.department_id?.department_name !== activeRoute.name
+      ) {
+        navigate("/dashboard");
+        toast({
+          title: "Error",
+          description: "You are not allowed to access this page",
+          status: "error",
+          isClosable: true,
+        });
+      }
+    }
+  }, [isUserLoaded, currentUsers, location, navigate]);
+  const filteredRoutes = routes
+    .filter((route) => {
+      return (
+        route.name === "ESS" ||
+        route.name === "" ||
+        route.name === currentUsers?.department_id?.department_name
+      );
+    })
+    .map((route) => ({
+      ...route,
+      views: route.views.filter((view) => !view.hidden),
+    }));
 
   return (
     <Box display={{ sm: "none", xl: "block" }} position="fixed">
