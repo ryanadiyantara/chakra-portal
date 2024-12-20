@@ -181,7 +181,6 @@ const Login = () => {
                   fontWeight="bold"
                   w="100%"
                   h="45"
-                  mt="24px"
                   onClick={handleSubmit}
                 >
                   Log In
