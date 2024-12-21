@@ -1,6 +1,19 @@
 import { createIcon } from "@chakra-ui/icons";
 import React, { Component } from "react";
 
+export const DateIcon = createIcon({
+  displayName: "DateIcon",
+  viewBox: "0 0 24 24",
+  path: (
+    <g>
+      <rect x="4" y="4" width="16" height="16" rx="2" ry="2" fill="#E2E8F0" />
+      <path d="M6 2h1v4H6V2z" fill="#2D3748" />
+      <path d="M17 2h1v4h-1V2z" fill="#2D3748" />
+      <rect x="4" y="8" width="16" height="2" fill="#CBD5E0" />
+    </g>
+  ),
+});
+
 export const AdobexdLogo = createIcon({
   displayName: "AdobexdLogo",
   viewBox: "0 0 24 24",

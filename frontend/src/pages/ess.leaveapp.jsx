@@ -19,6 +19,11 @@ import {
   Td,
   Select,
   Badge,
+  SimpleGrid,
+  Card,
+  Stat,
+  StatLabel,
+  StatNumber,
 } from "@chakra-ui/react";
 import { FaFile, FaPen } from "react-icons/fa";
 
@@ -29,6 +34,8 @@ import Footer from "../components/Footer";
 
 import { useLeaveAppStore } from "../store/leaveapp";
 import { useUserStore } from "../store/user";
+import IconBox from "../components/Icons/IconBox";
+import { DateIcon, GlobeIcon, WalletIcon } from "../components/Icons/Icons";
 
 const LeaveApp = () => {
   // Utils
@@ -40,6 +47,8 @@ const LeaveApp = () => {
   const iconColor = useColorModeValue("black", "white");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const bgForm = useColorModeValue("white", "navy.800");
+  const iconBlue = useColorModeValue("blue.500", "blue.500");
+  const iconBoxInside = useColorModeValue("white", "white");
 
   const statusColors = {
     Approved: "green.400",
@@ -234,6 +243,68 @@ const LeaveApp = () => {
       >
         <Navbar />
 
+        <Box px={{ base: "30px", xl: "40px" }} w="100%">
+          <SimpleGrid columns={{ sm: 1, md: 2, xl: 4 }} spacing="24px" mb="20px">
+            <Card borderRadius="16px" p="20px">
+              <Flex direction="column">
+                <Flex flexDirection="row" align="center" justify="center" w="100%" mb="5px">
+                  <Stat me="5px">
+                    <StatLabel
+                      fontSize="xs"
+                      color="gray.400"
+                      fontWeight="bold"
+                      textTransform="uppercase"
+                    >
+                      REMAINING LEAVE DAYS
+                    </StatLabel>
+                    <Flex>
+                      <StatNumber fontSize="xl" color={textColor} fontWeight="bold">
+                        10 DAYS
+                      </StatNumber>
+                    </Flex>
+                  </Stat>
+                  <IconBox borderRadius="8px" as="box" h={"45px"} w={"45px"} bg={iconBlue}>
+                    <DateIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+                  </IconBox>
+                </Flex>
+                <Text color="gray.400" fontSize="sm">
+                  <Text as="span" color="green.400" fontWeight="bold">
+                    2 Leave days{" "}
+                  </Text>
+                  have been used this year
+                </Text>
+              </Flex>
+            </Card>
+            <Card borderRadius="16px" p="20px">
+              <Flex direction="column">
+                <Flex flexDirection="row" align="center" justify="center" w="100%" mb="5px">
+                  <Stat me="5px">
+                    <StatLabel
+                      fontSize="xs"
+                      color="gray.400"
+                      fontWeight="bold"
+                      textTransform="uppercase"
+                    >
+                      TOTAL SICK LEAVE
+                    </StatLabel>
+                    <Flex>
+                      <StatNumber fontSize="xl" color={textColor} fontWeight="bold">
+                        6 Days
+                      </StatNumber>
+                    </Flex>
+                  </Stat>
+                  <IconBox borderRadius="8px" as="box" h={"45px"} w={"45px"} bg={iconBlue}>
+                    <DateIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+                  </IconBox>
+                </Flex>
+                <Text color="gray.400" fontSize="sm">
+                  This year
+                </Text>
+              </Flex>
+            </Card>
+          </SimpleGrid>
+        </Box>
+
         {/* Content */}
         <HStack
           flexDirection={{
@@ -256,7 +327,7 @@ const LeaveApp = () => {
             p="20px"
             borderRadius="16px"
             bg={bgForm}
-            overflowX="scroll"
+            overflowX={{ base: "scroll", "2xl": "hidden" }}
           >
             <Flex align="center" justify="space-between" p="6px 0px 22px 0px">
               <Text fontSize="xl" color={textColor} fontWeight="bold">
