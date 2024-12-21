@@ -70,7 +70,7 @@ const EmployeeTerminated = () => {
           px={{ base: "30px", xl: "40px" }}
           w="100%"
           spacing={{ base: "20px", xl: "30px" }}
-          align={{ base: "center", xl: "start" }}
+          align="start"
           minHeight="85vh"
         >
           {/* Table Data */}
@@ -81,7 +81,7 @@ const EmployeeTerminated = () => {
             p="20px"
             borderRadius="16px"
             bg={bgForm}
-            overflowX={{ sm: "scroll", xl: "hidden" }}
+            overflowX={{ base: "scroll", lg: "hidden" }}
           >
             <Flex align="center" justify="space-between" p="6px 0px 22px 0px">
               <Text fontSize="xl" color={textColor} fontWeight="bold">

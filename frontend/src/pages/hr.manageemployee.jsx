@@ -314,7 +314,7 @@ const ManageEmployee = () => {
             p="20px"
             borderRadius="16px"
             bg={bgForm}
-            overflowX="scroll"
+            overflowX={{ base: "scroll", lg: "hidden" }}
           >
             <Flex align="center" justify="space-between" p="6px 0px 22px 0px">
               <Text fontSize="xl" color={textColor} fontWeight="bold">
