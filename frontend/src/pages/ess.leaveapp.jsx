@@ -111,22 +111,6 @@ const LeaveApp = () => {
     return new Date(date).toISOString().split("T")[0];
   };
 
-  const handleDateChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "leave_endDate" && new Date(value) < new Date(newLeaveApp.leave_startDate)) {
-      toast({
-        title: "Error",
-        description: "End Date cannot be before Start Date.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-      e.target.value = "";
-      return;
-    }
-    setNewLeaveApp({ ...newLeaveApp, [name]: value });
-  };
-
   const handleEditClick = (leaveapp) => {
     setNewLeaveApp({
       leave_startDate: formatDate(leaveapp.leave_startDate),
@@ -221,6 +205,93 @@ const LeaveApp = () => {
     }
   };
 
+  const calculateDaysInYear = (startDate, endDate, year) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    let count = 0;
+
+    for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
+      const day = date.getDay();
+      const currentYear = date.getFullYear();
+
+      if (currentYear === year && day !== 0 && day !== 6) {
+        count++;
+      }
+    }
+
+    return count;
+  };
+
+  const currentYear = new Date().getFullYear();
+
+  // Annual Leave
+  const usedLeaveDays = leaveapps
+    .filter((leaveapp) => !leaveapp.na)
+    .filter((leaveapp) => !leaveapp.del)
+    .filter((leaveapp) => leaveapp.leaveAppId.includes(currentUsers.user_id))
+    .filter((leaveapp) => leaveapp.leave_status === "Approved" && leaveapp.type === "Annual Leave")
+    .reduce(
+      (total, leaveapp) =>
+        total + calculateDaysInYear(leaveapp.leave_startDate, leaveapp.leave_endDate, currentYear),
+      0
+    );
+
+  const MAX_LEAVE_DAYS = 12;
+  const remainingLeaveDays = Math.max(0, MAX_LEAVE_DAYS - usedLeaveDays);
+
+  // Sick Leave
+  const sickLeaveDays = leaveapps
+    .filter((leaveapp) => !leaveapp.na)
+    .filter((leaveapp) => !leaveapp.del)
+    .filter((leaveapp) => leaveapp.leaveAppId.includes(currentUsers.user_id))
+    .filter((leaveapp) => leaveapp.leave_status === "Approved" && leaveapp.type === "Sick Leave")
+    .reduce(
+      (total, leaveapp) =>
+        total + calculateDaysInYear(leaveapp.leave_startDate, leaveapp.leave_endDate, currentYear),
+      0
+    );
+
+  const handleDateChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "leave_endDate" && new Date(value) < new Date(newLeaveApp.leave_startDate)) {
+      toast({
+        title: "Error",
+        description: "End Date cannot be before Start Date.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      e.target.value = "";
+      return;
+    }
+
+    if (newLeaveApp.leave_startDate && (name === "leave_endDate" || name === "leave_startDate")) {
+      const startDate = name === "leave_startDate" ? value : newLeaveApp.leave_startDate;
+      const endDate = name === "leave_endDate" ? value : newLeaveApp.leave_endDate;
+
+      if (startDate && endDate) {
+        if (newLeaveApp.type === "Annual Leave") {
+          const selectedDays = calculateDaysInYear(startDate, endDate, currentYear);
+
+          if (selectedDays > remainingLeaveDays) {
+            toast({
+              title: "Error",
+              description: `You have selected ${selectedDays} leave days, which exceeds your remaining leave allowance of ${remainingLeaveDays} days. Please adjust the dates accordingly.`,
+              status: "error",
+              duration: 3000,
+              isClosable: true,
+            });
+            e.target.value = "";
+            return;
+          }
+        }
+      }
+    }
+
+    setNewLeaveApp({ ...newLeaveApp, [name]: value });
+  };
+
   return (
     <>
       <Background />
@@ -259,7 +330,7 @@ const LeaveApp = () => {
                     </StatLabel>
                     <Flex>
                       <StatNumber fontSize="xl" color={textColor} fontWeight="bold">
-                        10 DAYS
+                        {remainingLeaveDays} DAYS
                       </StatNumber>
                     </Flex>
                   </Stat>
@@ -269,7 +340,7 @@ const LeaveApp = () => {
                 </Flex>
                 <Text color="gray.400" fontSize="sm">
                   <Text as="span" color="green.400" fontWeight="bold">
-                    2 Leave days{" "}
+                    {usedLeaveDays} Leave days{" "}
                   </Text>
                   have been used this year
                 </Text>
@@ -289,7 +360,7 @@ const LeaveApp = () => {
                     </StatLabel>
                     <Flex>
                       <StatNumber fontSize="xl" color={textColor} fontWeight="bold">
-                        6 Days
+                        {sickLeaveDays} Days
                       </StatNumber>
                     </Flex>
                   </Stat>
@@ -532,10 +603,19 @@ const LeaveApp = () => {
                   placeholder="Select Leave Type"
                   name="type"
                   value={newLeaveApp.type}
-                  onChange={(e) => setNewLeaveApp({ ...newLeaveApp, type: e.target.value })}
+                  onChange={(e) => {
+                    setNewLeaveApp({
+                      ...newLeaveApp,
+                      type: e.target.value,
+                      leave_startDate: e.target.value === null,
+                      leave_endDate: e.target.value === null,
+                    });
+                  }}
                   borderColor={errors.type ? "red.500" : "gray.200"}
                 >
-                  <option value="Annual Leave">Annual Leave</option>
+                  <option value="Annual Leave" disabled={remainingLeaveDays === 0}>
+                    Annual Leave
+                  </option>
                   <option value="Sick Leave">Sick Leave</option>
                 </Select>
                 <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
@@ -552,6 +632,7 @@ const LeaveApp = () => {
                   value={newLeaveApp.leave_startDate}
                   onChange={handleDateChange}
                   borderColor={errors.leave_startDate ? "red.500" : "gray.200"}
+                  isDisabled={!newLeaveApp.type}
                 />
                 <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                   Leave End Date
@@ -567,6 +648,7 @@ const LeaveApp = () => {
                   value={newLeaveApp.leave_endDate}
                   onChange={handleDateChange}
                   borderColor={errors.leave_endDate ? "red.500" : "gray.200"}
+                  isDisabled={!newLeaveApp.type}
                 />
                 <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                   Attachment (optional)
