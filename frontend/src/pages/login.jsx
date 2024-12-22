@@ -16,7 +16,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import Footer from "../components/Footer";
 import Logo1 from "../assets/img/logo1.png";
@@ -186,7 +186,14 @@ const Login = () => {
                   Log In
                 </Button>
               </FormControl>
-              <Text fontSize="sm" color={textColor} fontWeight="bold" mt="22px">
+              <Text
+                fontSize="sm"
+                color={textColor}
+                as={Link}
+                to="/login/forgotpassword"
+                fontWeight="bold"
+                mt="22px"
+              >
                 Forgot password?
               </Text>
             </Flex>

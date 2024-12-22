@@ -256,4 +256,23 @@ export const useUserStore = create((set) => ({
 
     return { success: false, message: "Failed to logout. Please try again." };
   },
+
+  forgotPassword: async (newUser) => {
+    if (!newUser.email) {
+      return { success: false, message: "Please fill in all fields." };
+    }
+
+    const res = await fetch("/api/auth/forgotpassword", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newUser),
+    });
+
+    const data = await res.json();
+    if (!data.success) return { success: false, message: data.message };
+
+    return { success: true, message: data.message };
+  },
 }));
