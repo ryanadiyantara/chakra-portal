@@ -13,6 +13,13 @@ import {
   InputGroup,
   InputRightElement,
   IconButton,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
@@ -36,6 +43,7 @@ const ChangePassword = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [isOpen, setIsOpen] = useState(false);
 
   const [showPassword, setShowPassword] = useState({
     oldPassword: false,
@@ -44,6 +52,14 @@ const ChangePassword = () => {
 
   const togglePasswordVisibility = (field) => {
     setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
+
+  const openApprovalModal = () => {
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
   };
 
   // Services
@@ -75,6 +91,7 @@ const ChangePassword = () => {
         old_password: "",
         new_password: "",
       });
+      setIsOpen(false);
     } else {
       toast({
         title: "Error",
@@ -82,6 +99,7 @@ const ChangePassword = () => {
         status: "error",
         isClosable: true,
       });
+      setIsOpen(false);
     }
   };
 
@@ -186,11 +204,33 @@ const ChangePassword = () => {
                   w="100%"
                   h="45"
                   mt="24px"
-                  onClick={handleSubmit}
+                  onClick={() => openApprovalModal()}
                 >
                   Submit
                 </Button>
               </FormControl>
+
+              {/* Modal Delete */}
+              <Modal isOpen={isOpen} onClose={handleClose} motionPreset="slideInBottom">
+                <ModalOverlay bg="blackAlpha.800" backdropFilter="blur(2px)" />
+                <ModalContent borderRadius="15px" boxShadow="none" p={4} maxW="400px" w="90%">
+                  <ModalHeader>Change Password</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <p>
+                      Are you sure you want to change your password? This action cannot be undone.
+                    </p>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button colorScheme="blue" mr={3} onClick={handleClose}>
+                      Cancel
+                    </Button>
+                    <Button colorScheme="green" onClick={handleSubmit}>
+                      Change
+                    </Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
             </Flex>
           </VStack>
         </HStack>
