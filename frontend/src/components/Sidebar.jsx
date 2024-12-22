@@ -92,6 +92,7 @@ function Sidebar() {
   const inactiveColor = useColorModeValue("gray.400", "white");
   const hoverBg = useColorModeValue("gray.200", "navy.700");
   const sidebarBg = useColorModeValue("white", "navy.800");
+  const activeBoxShadow = useColorModeValue("0px 7px 11px rgba(0, 0, 0, 0.04)", "none");
 
   // Services
   useEffect(() => {
@@ -196,11 +197,7 @@ function Sidebar() {
                         ps={{ sm: "10px", xl: "16px" }}
                         py="12px"
                         borderRadius="15px"
-                        boxShadow={
-                          isActive
-                            ? useColorModeValue("0px 7px 11px rgba(0, 0, 0, 0.04)", "none")
-                            : "none"
-                        }
+                        boxShadow={isActive ? activeBoxShadow : "none"}
                         w="100%"
                         _hover={{ bg: isActive ? activeBg : hoverBg }}
                         _active={{
@@ -307,6 +304,7 @@ export function SidebarResponsive({}) {
   const inactiveColor = useColorModeValue("gray.400", "white");
   const hoverBg = useColorModeValue("gray.200", "navy.700");
   const sidebarBg = useColorModeValue("white", "navy.800");
+  const activeBoxShadow = useColorModeValue("0px 7px 11px rgba(0, 0, 0, 0.04)", "none");
 
   // Services
   useEffect(() => {
@@ -385,11 +383,7 @@ export function SidebarResponsive({}) {
                                 ps={{ sm: "10px", xl: "16px" }}
                                 py="12px"
                                 borderRadius="15px"
-                                boxShadow={
-                                  isActive
-                                    ? useColorModeValue("0px 7px 11px rgba(0, 0, 0, 0.04)", "none")
-                                    : "none"
-                                }
+                                boxShadow={isActive ? activeBoxShadow : "none"}
                                 w="100%"
                                 _hover={{ bg: isActive ? activeBg : hoverBg }}
                                 _active={{
