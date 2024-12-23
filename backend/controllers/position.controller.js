@@ -15,7 +15,13 @@ export const createPositions = async (req, res) => {
     const newPosition = new Position(position);
     await newPosition.save();
 
-    res.status(201).json({ success: true, data: newPosition });
+    // Populate department details
+    const populatedPosition = await Position.findById(newPosition._id).populate(
+      "department_id",
+      "department_name"
+    );
+
+    res.status(201).json({ success: true, data: populatedPosition });
   } catch (error) {
     console.error("Error in Create position:", error, message);
     res.status(500).json({ success: false, message: "Server Error" });
@@ -46,10 +52,10 @@ export const updatePositions = async (req, res) => {
   }
 
   try {
-    // Update the position by ID
+    // Update the position by ID and populate department details
     const updatedPosition = await Position.findByIdAndUpdate(id, position, {
       new: true,
-    });
+    }).populate("department_id", "department_name");
 
     res.status(200).json({ success: true, data: updatedPosition });
   } catch (error) {

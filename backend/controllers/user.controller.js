@@ -88,7 +88,12 @@ export const createUsers = async (req, res) => {
       const newUser = new User(user);
       await newUser.save();
 
-      res.status(201).json({ success: true, data: newUser });
+      // Populate department and position details
+      const populatedUser = await User.findById(newUser._id)
+        .populate("department_id", "department_name")
+        .populate("position_id", "position_name");
+
+      res.status(201).json({ success: true, data: populatedUser });
     } catch (error) {
       console.error("Error in Create user:", error, message);
 
@@ -200,10 +205,12 @@ export const updateUsers = async (req, res) => {
     }
 
     try {
-      // Update the user by ID
+      // Update the user by ID and populate department and position details
       const updatedUser = await User.findByIdAndUpdate(id, user, {
         new: true,
-      });
+      })
+        .populate("department_id", "department_name")
+        .populate("position_id", "position_name");
 
       res.status(200).json({ success: true, data: updatedUser });
     } catch (error) {
