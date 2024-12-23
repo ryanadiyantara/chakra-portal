@@ -161,11 +161,18 @@ const Dashboard = () => {
                         borderRadius="15px"
                         minHeight="420px"
                       >
-                        <Box aspectRatio={2 / 1} mb="20px" position="relative" borderRadius="15px">
+                        <Box
+                          aspectRatio={2 / 1}
+                          mb="20px"
+                          position="relative"
+                          borderRadius="15px"
+                          overflow="hidden"
+                        >
                           <Image
                             src={"/public/uploads/" + event.poster_path}
                             alt={event.poster_path}
                             borderRadius="15px"
+                            layout="fill"
                             objectFit="cover"
                           />
                           <Box
