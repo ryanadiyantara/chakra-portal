@@ -50,6 +50,7 @@ const MasterDepartment = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [selectedDepartmentName, setSelectedDepartmentName] = useState(null);
+  const [selectedDepartmentPid, setSelectedDepartmentPid] = useState(null);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
@@ -69,8 +70,9 @@ const MasterDepartment = () => {
     setEditingDepartmentId(null);
   };
 
-  const openDeleteModal = (name) => {
+  const openDeleteModal = (name, pid) => {
     setSelectedDepartmentName(name);
+    setSelectedDepartmentPid(pid);
     setIsOpen(true);
   };
 
@@ -78,6 +80,7 @@ const MasterDepartment = () => {
     setIsOpen(false);
     setInputValue("");
     setSelectedDepartmentName(null);
+    setSelectedDepartmentPid(null);
   };
 
   // Services
@@ -162,6 +165,7 @@ const MasterDepartment = () => {
       setIsOpen(false);
       setInputValue("");
       setSelectedDepartmentName(null);
+      setSelectedDepartmentPid(null);
     } else {
       toast({
         title: "Error",
@@ -289,7 +293,9 @@ const MasterDepartment = () => {
                               alignItems="center"
                               gap="1"
                               as="button"
-                              onClick={() => openDeleteModal(department.department_name)}
+                              onClick={() =>
+                                openDeleteModal(department.department_name, department._id)
+                              }
                             >
                               <FaTrash size="14" color="#E53E3E" />
                               <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
@@ -314,7 +320,7 @@ const MasterDepartment = () => {
                               modalBackdropFilter="blur(1px)"
                               inputValue={inputValue}
                               onInputChange={(e) => setInputValue(e.target.value)}
-                              onConfirm={() => handleDeleteDepartment(department._id)}
+                              onConfirm={() => handleDeleteDepartment(selectedDepartmentPid)}
                             />
                           </Flex>
                         </Td>

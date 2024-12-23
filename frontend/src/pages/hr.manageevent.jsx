@@ -55,6 +55,7 @@ const ManageEvent = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [selectedEventName, setSelectedEventName] = useState(null);
+  const [selectedEventPid, setSelectedEventPid] = useState(null);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
@@ -142,8 +143,9 @@ const ManageEvent = () => {
     setEditingEventId(null);
   };
 
-  const openDeleteModal = (name) => {
+  const openDeleteModal = (name, pid) => {
     setSelectedEventName(name);
+    setSelectedEventPid(pid);
     setIsOpen(true);
   };
 
@@ -151,6 +153,7 @@ const ManageEvent = () => {
     setIsOpen(false);
     setInputValue("");
     setSelectedEventName(null);
+    setSelectedEventPid(null);
   };
 
   // Services
@@ -252,6 +255,7 @@ const ManageEvent = () => {
       setIsOpen(false);
       setInputValue("");
       setSelectedEventName(null);
+      setSelectedEventPid(null);
     } else {
       toast({
         title: "Error",
@@ -473,7 +477,7 @@ const ManageEvent = () => {
                               alignItems="center"
                               gap="1"
                               as="button"
-                              onClick={() => openDeleteModal(event.event_name)}
+                              onClick={() => openDeleteModal(event.event_name, event._id)}
                             >
                               <FaTrash size="14" color="#E53E3E" />
                               <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
@@ -496,7 +500,7 @@ const ManageEvent = () => {
                               modalBackdropFilter="blur(2px)"
                               inputValue={inputValue}
                               onInputChange={(e) => setInputValue(e.target.value)}
-                              onConfirm={() => handleDeleteEvent(event._id)}
+                              onConfirm={() => handleDeleteEvent(selectedEventPid)}
                             />
                           </Flex>
                         </Td>

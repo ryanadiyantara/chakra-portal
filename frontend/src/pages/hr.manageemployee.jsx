@@ -61,6 +61,7 @@ const ManageEmployee = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [selectedUserName, setSelectedUserName] = useState(null);
+  const [selectedUserPid, setSelectedUserPid] = useState(null);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
@@ -110,8 +111,8 @@ const ManageEmployee = () => {
       user_name: user.user_name,
       email: user.email,
       dateBirth: formatDate(user.dateBirth),
-      department_id: user.department_id,
-      position_id: user.position_id,
+      department_id: user.department_id._id,
+      position_id: user.position_id._id,
       profilePicture: user.profilePicture,
       startDate: formatDate(user.startDate),
     });
@@ -136,8 +137,9 @@ const ManageEmployee = () => {
     setEditingUserId(null);
   };
 
-  const openDeleteModal = (name) => {
+  const openDeleteModal = (name, pid) => {
     setSelectedUserName(name);
+    setSelectedUserPid(pid);
     setIsOpen(true);
   };
 
@@ -145,6 +147,7 @@ const ManageEmployee = () => {
     setIsOpen(false);
     setInputValue("");
     setSelectedUserName(null);
+    setSelectedUserPid(null);
   };
 
   // Services
@@ -155,7 +158,7 @@ const ManageEmployee = () => {
   }, [fetchUser, fetchDepartment, fetchPosition]);
 
   const filteredPositions = positions.filter(
-    (position) => position.department_id === newUser.department_id
+    (position) => position.department_id._id === newUser.department_id
   );
 
   const handleSubmit = async () => {
@@ -259,6 +262,7 @@ const ManageEmployee = () => {
       setIsOpen(false);
       setInputValue("");
       setSelectedUserName(null);
+      setSelectedUserPid(null);
     } else {
       toast({
         title: "Error",
@@ -477,7 +481,7 @@ const ManageEmployee = () => {
                                 alignItems="center"
                                 gap="1"
                                 as="button"
-                                onClick={() => openDeleteModal(user.user_name)}
+                                onClick={() => openDeleteModal(user.user_name, user._id)}
                               >
                                 <FaTrash size="14" color="#E53E3E" />
                                 <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
@@ -500,7 +504,7 @@ const ManageEmployee = () => {
                                 modalBackdropFilter="blur(1px)"
                                 inputValue={inputValue}
                                 onInputChange={(e) => setInputValue(e.target.value)}
-                                onConfirm={() => handleTerminatedUser(user._id)}
+                                onConfirm={() => handleTerminatedUser(selectedUserPid)}
                               />
                             </Flex>
                           </Td>

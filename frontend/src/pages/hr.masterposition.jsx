@@ -55,6 +55,7 @@ const MasterPosition = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [selectedPositionName, setSelectedPositionName] = useState(null);
+  const [selectedPositionPid, setSelectedPositionPid] = useState(null);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
@@ -63,7 +64,7 @@ const MasterPosition = () => {
   const handleEditClick = (position) => {
     setNewPosition({
       position_name: position.position_name,
-      department_id: position.department_id,
+      department_id: position.department_id._id,
     });
     setErrors({});
     setIsEditing(true);
@@ -77,8 +78,9 @@ const MasterPosition = () => {
     setEditingPositionId(null);
   };
 
-  const openDeleteModal = (names) => {
+  const openDeleteModal = (names, pid) => {
     setSelectedPositionName(names);
+    setSelectedPositionPid(pid);
     setIsOpen(true);
   };
 
@@ -86,6 +88,7 @@ const MasterPosition = () => {
     setIsOpen(false);
     setInputValue("");
     setSelectedPositionName(null);
+    setSelectedPositionPid(null);
   };
 
   // Services
@@ -172,6 +175,7 @@ const MasterPosition = () => {
       setIsOpen(false);
       setInputValue("");
       setSelectedPositionName(null);
+      setSelectedPositionPid(null);
     } else {
       toast({
         title: "Error",
@@ -272,16 +276,13 @@ const MasterPosition = () => {
                         position.position_name.toLowerCase().includes(searchQuery) ||
                         departments.some(
                           (department) =>
-                            department._id === position.department_id &&
+                            department._id === position.department_id._id &&
                             department.department_name
                               .toLowerCase()
                               .includes(searchQuery.toLowerCase())
                         )
                     )
                     .map((position, index) => {
-                      const department = departments.find(
-                        (dept) => dept._id === position.department_id
-                      );
                       return (
                         <Tr
                           key={position._id}
@@ -319,7 +320,9 @@ const MasterPosition = () => {
                                 alignItems="center"
                                 gap="1"
                                 as="button"
-                                onClick={() => openDeleteModal(position.position_name)}
+                                onClick={() =>
+                                  openDeleteModal(position.position_name, position._id)
+                                }
                               >
                                 <FaTrash size="14" color="#E53E3E" />
                                 <Text fontSize="14px" color="#E53E3E" fontWeight="bold">
@@ -344,7 +347,7 @@ const MasterPosition = () => {
                                 modalBackdropFilter="blur(0.6px)"
                                 inputValue={inputValue}
                                 onInputChange={(e) => setInputValue(e.target.value)}
-                                onConfirm={() => handleDeletePosition(position._id)}
+                                onConfirm={() => handleDeletePosition(selectedPositionPid)}
                               />
                             </Flex>
                           </Td>
@@ -391,9 +394,9 @@ const MasterPosition = () => {
                   placeholder="Select Department"
                   name="department_id"
                   value={newPosition.department_id}
-                  onChange={(e) =>
-                    setNewPosition({ ...newPosition, department_id: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setNewPosition({ ...newPosition, department_id: e.target.value });
+                  }}
                   borderColor={errors.department_id ? "red.500" : "gray.200"}
                 >
                   {departments
