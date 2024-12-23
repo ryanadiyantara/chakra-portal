@@ -34,7 +34,7 @@ const eventsSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, //createdAt. updatedAt
+    timestamps: true, // Automatically add createdAt and updatedAt fields
   }
 );
 

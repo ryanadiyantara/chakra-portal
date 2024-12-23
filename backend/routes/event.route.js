@@ -9,8 +9,10 @@ import verifyJWT from "../middleware/verifyJWT.js";
 
 const router = express.Router();
 
+// Verify JWT
 router.use(verifyJWT);
 
+// Routes
 router.get("/", getEvents);
 router.post("/", createEvents);
 router.put("/:id", updateEvents);
