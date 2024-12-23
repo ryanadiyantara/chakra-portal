@@ -48,10 +48,24 @@ const Login = () => {
   // Services
   useEffect(() => {
     const loginMessage = searchParams.get("message");
-    if (loginMessage) {
+    if (loginMessage === "Session Expired") {
       toast({
         title: "Error",
         description: "Session expired, please log in again",
+        status: "error",
+        isClosable: true,
+      });
+    } else if (loginMessage === "Password reset successfully") {
+      toast({
+        title: "Success",
+        description: "Password reset successfully, please log in again",
+        status: "success",
+        isClosable: true,
+      });
+    } else if (loginMessage === "Token is invalid") {
+      toast({
+        title: "Error",
+        description: "Token is invalid or expired",
         status: "error",
         isClosable: true,
       });

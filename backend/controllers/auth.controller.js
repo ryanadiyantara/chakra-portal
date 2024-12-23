@@ -135,12 +135,14 @@ export const forgotPassword = asyncHandler(async (req, res) => {
   const mailOptions = {
     from: "adiyantararyan@gmail.com",
     to: email,
-    subject: "Password Reset",
-    html: `<p>You requested to reset your password.</p>
-           <p>Click the link below to reset your password:</p>
-           <a href="facebook.com">TEST FB</a>
-           <a href="${resetURL}">${resetURL}</a>
-           <p>If you didn't request this, please ignore this email.</p>`,
+    subject: "Password Reset Request",
+    html: `<p>Hello,</p>
+    <p>We received a request to reset your password. Please click the link below to reset your password:</p>
+    <a href="${resetURL}">Reset Password</a>
+    <p>If you click the reset link, your password will be reset to: chakra1234</p>
+    <p>If you did not request a password reset, please ignore this email and do not click the reset password link.</p>
+    <p>Thank you,</p>
+    <p>Chakra Cosmetics.</p>`,
   };
 
   try {
@@ -177,6 +179,7 @@ export const resetPassword = asyncHandler(async (req, res) => {
   }).exec();
 
   if (!user) {
+    res.redirect("/login?message=Token is invalid");
     return res.status(400).json({ success: false, message: "Token is invalid or expired" });
   }
 
@@ -186,5 +189,5 @@ export const resetPassword = asyncHandler(async (req, res) => {
   user.passwordResetExpires = undefined;
   await user.save();
 
-  res.redirect("/login");
+  res.redirect("/login?message=Password reset successfully");
 });
