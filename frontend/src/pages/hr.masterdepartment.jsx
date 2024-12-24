@@ -38,12 +38,10 @@ const MasterDepartment = () => {
   const iconColor = useColorModeValue("black", "white");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const bgForm = useColorModeValue("white", "navy.800");
-
   const [searchQuery, setSearchQuery] = useState("");
   const [newDepartment, setNewDepartment] = useState({
     department_name: "",
   });
-
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingDepartmentId, setEditingDepartmentId] = useState(null);
@@ -98,6 +96,7 @@ const MasterDepartment = () => {
     if (isEditing && editingDepartmentId) {
       // Update department
       const { success, message } = await updateDepartment(editingDepartmentId, newDepartment);
+
       if (success) {
         toast({
           title: "Success",
@@ -120,6 +119,7 @@ const MasterDepartment = () => {
     } else {
       // Create new department
       const { success, message } = await createDepartment(newDepartment);
+
       if (success) {
         toast({
           title: "Success",
@@ -154,6 +154,7 @@ const MasterDepartment = () => {
     }
 
     const { success, message } = await deleteDepartment(pid);
+
     if (success) {
       toast({
         title: "Success",

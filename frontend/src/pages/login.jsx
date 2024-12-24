@@ -35,14 +35,13 @@ const Login = () => {
   const colorMode = useColorMode();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
   const [newUser, setNewUser] = useState({
     email: "",
     user_password: "",
   });
-
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   // Services

@@ -36,15 +36,12 @@ const ChangePassword = () => {
 
   const toast = useToast();
   const bgForm = useColorModeValue("white", "navy.800");
-
   const [newUser, setNewUser] = useState({
     old_password: "",
     new_password: "",
   });
-
   const [errors, setErrors] = useState({});
   const [isOpen, setIsOpen] = useState(false);
-
   const [showPassword, setShowPassword] = useState({
     oldPassword: false,
     newPassword: false,

@@ -12,7 +12,7 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import Footer from "../components/Footer";
 import Logo1 from "../assets/img/logo1.png";
@@ -30,27 +30,12 @@ const ForgotPassword = () => {
   const bgForm = useColorModeValue("white", "navy.800");
   const colorMode = useColorMode();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-
   const [newUser, setNewUser] = useState({
     email: "",
   });
-
   const [errors, setErrors] = useState({});
 
   // Services
-  useEffect(() => {
-    const loginMessage = searchParams.get("message");
-    if (loginMessage) {
-      toast({
-        title: "Error",
-        description: "Session expired, please log in again",
-        status: "error",
-        isClosable: true,
-      });
-    }
-  }, [searchParams]);
-
   const handleResetLink = async () => {
     const currentErrors = {
       email: !newUser.email,

@@ -258,29 +258,34 @@ const Dashboard = () => {
                     );
                   })}
               </Grid>
-              <Flex justify="center" mt="20px">
-                {!showAll && events.length > 4 && (
-                  <Button
-                    fontSize="xs"
-                    borderRadius="5px"
-                    variant="primary"
-                    onClick={() => setShowAll(true)}
-                  >
-                    Show More
-                  </Button>
-                )}
-                {showAll && (
-                  <Button
-                    fontSize="xs"
-                    borderRadius="5px"
-                    variant="primary"
-                    onClick={() => setShowAll(false)}
-                    ml="4"
-                  >
-                    Show Less
-                  </Button>
-                )}
-              </Flex>
+              {events
+                .filter((event) => !event.na)
+                .filter((event) => !event.del)
+                .filter((event) => new Date(event.event_startDate) > new Date()).length > 4 && (
+                <Flex justify="center" mt="20px">
+                  {!showAll && (
+                    <Button
+                      fontSize="xs"
+                      borderRadius="5px"
+                      variant="primary"
+                      onClick={() => setShowAll(true)}
+                    >
+                      Show More
+                    </Button>
+                  )}
+                  {showAll && (
+                    <Button
+                      fontSize="xs"
+                      borderRadius="5px"
+                      variant="primary"
+                      onClick={() => setShowAll(false)}
+                      ml="4"
+                    >
+                      Show Less
+                    </Button>
+                  )}
+                </Flex>
+              )}
             </CardBody>
           </Card>
         </VStack>

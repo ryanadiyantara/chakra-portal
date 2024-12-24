@@ -27,6 +27,7 @@ export const useUserStore = create((set) => ({
   currentUsers: [],
   setUser: (users) => set({ users }),
 
+  // Function to create a new user
   createUser: async (newUser) => {
     if (
       !newUser.user_name ||
@@ -69,6 +70,7 @@ export const useUserStore = create((set) => ({
     return { success: true, message: "User created successfully" };
   },
 
+  // Function to fetch all users
   fetchUser: async () => {
     const res = await fetch("/api/users", {
       method: "GET",
@@ -83,9 +85,11 @@ export const useUserStore = create((set) => ({
     }
 
     const data = await res.json();
+
     set({ users: data.data });
   },
 
+  // Function to fetch current user
   fetchCurrentUser: async () => {
     const res = await fetch(`/api/users/${userInfo.pid}`, {
       method: "GET",
@@ -100,9 +104,11 @@ export const useUserStore = create((set) => ({
     }
 
     const data = await res.json();
+
     set({ currentUsers: data.data });
   },
 
+  // Function to update a user by ID
   updateUser: async (pid, updatedUser) => {
     if (
       !updatedUser.user_name ||
@@ -148,37 +154,7 @@ export const useUserStore = create((set) => ({
     return { success: true, message: data.message };
   },
 
-  terminatedUser: async (pid) => {
-    const now = new Date();
-    const formattedDate = now.toISOString();
-
-    const formData = new FormData();
-    formData.append("endDate", formattedDate);
-    formData.append("na", true);
-
-    const res = await fetch(`/api/users/${pid}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    });
-
-    if (res.status === 401 || res.status === 403) {
-      window.location.href = `/login?message=Session Expired`;
-      return;
-    }
-
-    const data = await res.json();
-    if (!data.success) return { success: false, message: data.message };
-
-    // update the ui immediately, without needing a refresh
-    set((state) => ({
-      users: state.users.filter((user) => user._id !== pid),
-    }));
-    return { success: true, message: data.message };
-  },
-
+  // Function to update a user's password by ID
   changePassword: async (pid, currentEmail, changedPassword) => {
     if (!changedPassword.old_password || !changedPassword.new_password) {
       return { success: false, message: "Please fill in all fields." };
@@ -212,7 +188,40 @@ export const useUserStore = create((set) => ({
     return { success: true, message: data.message };
   },
 
-  // Auth
+  // Function to update termination status of a user by ID
+  terminatedUser: async (pid) => {
+    const now = new Date();
+    const formattedDate = now.toISOString();
+
+    const formData = new FormData();
+    formData.append("endDate", formattedDate);
+    formData.append("na", true);
+
+    const res = await fetch(`/api/users/${pid}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (res.status === 401 || res.status === 403) {
+      window.location.href = `/login?message=Session Expired`;
+      return;
+    }
+
+    const data = await res.json();
+    if (!data.success) return { success: false, message: data.message };
+
+    // update the ui immediately, without needing a refresh
+    set((state) => ({
+      users: state.users.filter((user) => user._id !== pid),
+    }));
+    return { success: true, message: data.message };
+  },
+
+  // Auth functions
+  // Function to login a user
   loginUser: async (newUser) => {
     if (!newUser.email || !newUser.user_password) {
       return { success: false, message: "Please fill in all fields." };
@@ -239,6 +248,7 @@ export const useUserStore = create((set) => ({
     return { success: true, message: "Login successfully" };
   },
 
+  // Function to logout a user
   logoutUser: async () => {
     const res = await fetch("/api/auth/logout", {
       method: "POST",
@@ -248,15 +258,17 @@ export const useUserStore = create((set) => ({
     });
 
     const data = await res.json();
-    if (data.success) {
-      localStorage.removeItem("accessToken");
-      set({ users: [] });
-      return { success: true, message: "Logout successfully" };
+
+    if (!data.success) {
+      return { success: false, message: "Failed to logout. Please try again." };
     }
 
-    return { success: false, message: "Failed to logout. Please try again." };
+    localStorage.removeItem("accessToken");
+    set({ users: [] });
+    return { success: true, message: "Logout successfully" };
   },
 
+  // Function to handle forgot password
   forgotPassword: async (newUser) => {
     if (!newUser.email) {
       return { success: false, message: "Please fill in all fields." };

@@ -6,6 +6,7 @@ export const useEventStore = create((set) => ({
   events: [],
   setEvent: (events) => set({ events }),
 
+  // Function to create a new event
   createEvent: async (newEvent) => {
     if (
       !newEvent.event_name ||
@@ -40,6 +41,7 @@ export const useEventStore = create((set) => ({
     const data = await res.json();
     if (!data.success) return { success: false, message: data.message };
 
+    // update the ui immediately, without needing a refresh
     set((state) => ({ events: [...state.events, data.data] }));
     return { success: true, message: "Event created successfully" };
   },
@@ -58,6 +60,7 @@ export const useEventStore = create((set) => ({
     }
 
     const data = await res.json();
+
     set({ events: data.data });
   },
 

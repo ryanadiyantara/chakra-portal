@@ -30,7 +30,6 @@ const EmployeeTerminated = () => {
   const textColor = useColorModeValue("gray.700", "white");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const bgForm = useColorModeValue("white", "navy.800");
-
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearchChange = (event) => {

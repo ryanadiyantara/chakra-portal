@@ -6,6 +6,7 @@ export const useDepartmentStore = create((set) => ({
   departments: [],
   setDepartment: (departments) => set({ departments }),
 
+  // Function to create a new department
   createDepartment: async (newDepartment) => {
     if (!newDepartment.department_name) {
       return { success: false, message: "Please fill in all fields." };
@@ -26,10 +27,14 @@ export const useDepartmentStore = create((set) => ({
     }
 
     const data = await res.json();
+    if (!data.success) return { success: false, message: data.message };
+
+    // update the ui immediately, without needing a refresh
     set((state) => ({ departments: [...state.departments, data.data] }));
     return { success: true, message: "Department created successfully" };
   },
 
+  // Function to fetch all departments
   fetchDepartment: async () => {
     const res = await fetch("/api/departments", {
       method: "GET",
@@ -44,9 +49,11 @@ export const useDepartmentStore = create((set) => ({
     }
 
     const data = await res.json();
+
     set({ departments: data.data });
   },
 
+  // Function to update a department by ID
   updateDepartment: async (pid, updatedDepartment) => {
     if (!updatedDepartment.department_name) {
       return { success: false, message: "Please fill in all fields." };
@@ -78,6 +85,7 @@ export const useDepartmentStore = create((set) => ({
     return { success: true, message: data.message };
   },
 
+  // Function to delete a department by ID
   deleteDepartment: async (pid) => {
     const deletedDepartment = {
       na: true,

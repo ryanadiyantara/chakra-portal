@@ -39,7 +39,6 @@ const ManageEvent = () => {
   const iconColor = useColorModeValue("black", "white");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const bgForm = useColorModeValue("white", "navy.800");
-
   const [searchQuery, setSearchQuery] = useState("");
   const [newEvent, setNewEvent] = useState({
     event_name: "",
@@ -48,7 +47,6 @@ const ManageEvent = () => {
     event_endDate: "",
     description: "",
   });
-
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingEventId, setEditingEventId] = useState(null);
@@ -175,6 +173,7 @@ const ManageEvent = () => {
     if (isEditing && editingEventId) {
       // Update event
       const { success, message } = await updateEvent(editingEventId, newEvent);
+
       if (success) {
         toast({
           title: "Success",
@@ -203,6 +202,7 @@ const ManageEvent = () => {
     } else {
       // Create new event
       const { success, message } = await createEvent(newEvent);
+
       if (success) {
         toast({
           title: "Success",
@@ -244,6 +244,7 @@ const ManageEvent = () => {
     }
 
     const { success, message } = await deleteEvent(pid);
+
     if (success) {
       toast({
         title: "Success",

@@ -34,7 +34,6 @@ const MasterPosition = () => {
   // Utils
   const { positions, createPosition, fetchPosition, updatePosition, deletePosition } =
     usePositionStore();
-
   const { departments, fetchDepartment } = useDepartmentStore();
 
   const toast = useToast();
@@ -42,13 +41,11 @@ const MasterPosition = () => {
   const iconColor = useColorModeValue("black", "white");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const bgForm = useColorModeValue("white", "navy.800");
-
   const [searchQuery, setSearchQuery] = useState("");
   const [newPosition, setNewPosition] = useState({
     position_name: "",
     department_id: "",
   });
-
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingPositionId, setEditingPositionId] = useState(null);
@@ -108,6 +105,7 @@ const MasterPosition = () => {
     if (isEditing && editingPositionId) {
       // Update position
       const { success, message } = await updatePosition(editingPositionId, newPosition);
+
       if (success) {
         toast({
           title: "Success",
@@ -130,6 +128,7 @@ const MasterPosition = () => {
     } else {
       // Create new position
       const { success, message } = await createPosition(newPosition);
+
       if (success) {
         toast({
           title: "Success",
@@ -164,6 +163,7 @@ const MasterPosition = () => {
     }
 
     const { success, message } = await deletePosition(pid);
+
     if (success) {
       toast({
         title: "Success",
@@ -329,6 +329,7 @@ const MasterPosition = () => {
                                   DELETE
                                 </Text>
                               </Flex>
+
                               {/* Modal Delete */}
                               <CustomModal
                                 isOpen={isOpen}

@@ -35,7 +35,7 @@ import Footer from "../components/Footer";
 import { useLeaveAppStore } from "../store/leaveapp";
 import { useUserStore } from "../store/user";
 import IconBox from "../components/Icons/IconBox";
-import { DateIcon, GlobeIcon, WalletIcon } from "../components/Icons/Icons";
+import { DateIcon } from "../components/Icons/Icons";
 
 const LeaveApp = () => {
   // Utils

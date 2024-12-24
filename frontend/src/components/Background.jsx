@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, useColorMode } from "@chakra-ui/react";
 
 import Backgrounds from "../assets/img/background.png";

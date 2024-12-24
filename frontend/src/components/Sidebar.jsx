@@ -16,17 +16,17 @@ import {
   DrawerBody,
   useToast,
 } from "@chakra-ui/react";
+import { HamburgerIcon } from "@chakra-ui/icons";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { HomeIcon, PersonIcon, DocumentIcon, RocketIcon, SupportIcon } from "./Icons/Icons";
 import IconBox from "./Icons/IconBox";
+import { HSeparator } from "./Separator";
 
 import Logo1 from "../assets/img/logo1.png";
 import Logo2 from "../assets/img/logo2.png";
-import { HSeparator } from "./Separator";
 
 import { useUserStore } from "../store/user";
-import { HamburgerIcon } from "@chakra-ui/icons";
 
 function Sidebar() {
   // Utils
@@ -323,7 +323,6 @@ export function SidebarResponsive({}) {
     <>
       <Flex display={{ sm: "flex", xl: "none" }} alignItems="center" mr="10px">
         <HamburgerIcon color="white" w="18px" h="18px" onClick={onOpen} />
-
         <Drawer isOpen={isOpen} onClose={onClose} placement="left">
           <DrawerOverlay />
           <DrawerContent
@@ -405,7 +404,6 @@ export function SidebarResponsive({}) {
                                   >
                                     {view.icon}
                                   </IconBox>
-
                                   <Text
                                     color={isActive ? activeColor : inactiveColor}
                                     my="auto"

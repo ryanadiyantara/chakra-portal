@@ -80,6 +80,7 @@ const LeaveApproval = () => {
 
   const handleApproval = async () => {
     const { success, message } = await approvalLeaveApp(leaveAppId, selectedApproval);
+
     if (success) {
       toast({
         title: "Success",

@@ -43,7 +43,6 @@ const ManageEmployee = () => {
   const iconColor = useColorModeValue("black", "white");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const bgForm = useColorModeValue("white", "navy.800");
-
   const [searchQuery, setSearchQuery] = useState("");
   const [newUser, setNewUser] = useState({
     user_name: "",
@@ -54,7 +53,6 @@ const ManageEmployee = () => {
     profilePicture: "",
     startDate: "",
   });
-
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editingUserId, setEditingUserId] = useState(null);
@@ -177,6 +175,7 @@ const ManageEmployee = () => {
     if (isEditing && editingUserId) {
       // Update user
       const { success, message } = await updateUser(editingUserId, newUser);
+
       if (success) {
         toast({
           title: "Success",
@@ -208,6 +207,7 @@ const ManageEmployee = () => {
     } else {
       // Create new user
       const { success, message } = await createUser(newUser);
+
       if (success) {
         toast({
           title: "Success",
@@ -463,7 +463,6 @@ const ManageEmployee = () => {
                           {/* Action */}
                           <Td borderColor={borderColor}>
                             <Flex direction="row" p="0px" alignItems="center" gap="4">
-                              {/* Button for Edit */}
                               <Flex
                                 alignItems="center"
                                 gap="1"
@@ -475,8 +474,6 @@ const ManageEmployee = () => {
                                   EDIT
                                 </Text>
                               </Flex>
-
-                              {/* Button for Delete */}
                               <Flex
                                 alignItems="center"
                                 gap="1"
@@ -488,6 +485,7 @@ const ManageEmployee = () => {
                                   TERMINATED
                                 </Text>
                               </Flex>
+
                               {/* Modal Delete */}
                               <CustomModal
                                 isOpen={isOpen}

@@ -18,11 +18,12 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
+
 import { SettingsIcon } from "./Icons/Icons";
 import { HSeparator } from "./Separator";
+import { SidebarResponsive } from "./Sidebar";
 
 import { useUserStore } from "../store/user";
-import { SidebarResponsive } from "./Sidebar";
 
 function Navbar() {
   // Utils
@@ -128,7 +129,6 @@ function Navbar() {
                 Pages
               </BreadcrumbLink>
             </BreadcrumbItem>
-
             {activeRoute.category && (
               <BreadcrumbItem color="white">
                 <BreadcrumbLink href="/dashboard" color="white">
@@ -136,14 +136,12 @@ function Navbar() {
                 </BreadcrumbLink>
               </BreadcrumbItem>
             )}
-
             <BreadcrumbItem color={"white"}>
               <BreadcrumbLink href={activeRoute.path} color={"white"}>
                 {activeRoute ? activeRoute.name : "Page Not Found"}
               </BreadcrumbLink>
             </BreadcrumbItem>
           </Breadcrumb>
-
           <Link
             color={"white"}
             href="#"

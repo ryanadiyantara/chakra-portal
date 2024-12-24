@@ -6,6 +6,7 @@ export const useLeaveAppStore = create((set) => ({
   leaveapps: [],
   setLeaveApp: (leaveapps) => set({ leaveapps }),
 
+  // Function to create a new leave application
   createLeaveApp: async (newLeaveApp, currentId) => {
     if (!newLeaveApp.type || !newLeaveApp.leave_startDate || !newLeaveApp.leave_endDate) {
       return { success: false, message: "Please fill in all fields." };
@@ -34,10 +35,12 @@ export const useLeaveAppStore = create((set) => ({
     const data = await res.json();
     if (!data.success) return { success: false, message: data.message };
 
+    // update the ui immediately, without needing a refresh
     set((state) => ({ leaveapps: [...state.leaveapps, data.data] }));
     return { success: true, message: "Leave Application created successfully" };
   },
 
+  // Function to fetch all leave applications
   fetchLeaveApp: async () => {
     const res = await fetch("/api/leaveapps", {
       method: "GET",
@@ -52,9 +55,11 @@ export const useLeaveAppStore = create((set) => ({
     }
 
     const data = await res.json();
+
     set({ leaveapps: data.data });
   },
 
+  // Function to update a leave application by ID
   updateLeaveApp: async (pid, updatedLeaveApp) => {
     if (
       !updatedLeaveApp.type ||
@@ -93,6 +98,7 @@ export const useLeaveAppStore = create((set) => ({
     return { success: true, message: data.message };
   },
 
+  // Function to update approval status of a leave application by ID
   approvalLeaveApp: async (pid, approval) => {
     const formData = new FormData();
     formData.append("leave_status", approval);
@@ -117,6 +123,6 @@ export const useLeaveAppStore = create((set) => ({
     set((state) => ({
       leaveapps: state.leaveapps.map((leaveapp) => (leaveapp._id === pid ? data.data : leaveapp)),
     }));
-    return { success: true, message: data.message, message2: "Berhasil coyy" };
+    return { success: true, message: data.message };
   },
 }));
