@@ -282,7 +282,7 @@ const LeaveApproval = () => {
                               onClick={() => {
                                 if (leaveapp.attachment && leaveapp.attachment !== "-") {
                                   const filePath = leaveapp.attachment.replace("/ess", "");
-                                  const fullPath = `http://localhost:5000/public/uploads/${filePath}`;
+                                  const fullPath = `${window.location.origin}/public/uploads/${filePath}`;
 
                                   window.open(fullPath, "_blank");
                                 }

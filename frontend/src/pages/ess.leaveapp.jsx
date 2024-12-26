@@ -526,6 +526,7 @@ const LeaveApp = () => {
                               if (leaveapp.attachment && leaveapp.attachment !== "-") {
                                 const filePath = leaveapp.attachment.replace("/ess", "");
                                 const fullPath = `${window.location.origin}/public/uploads/${filePath}`;
+
                                 window.open(fullPath, "_blank");
                               }
                             }}
