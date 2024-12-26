@@ -61,12 +61,10 @@ export const createLeaveApps = async (req, res) => {
     }
 
     // Check if file is uploaded
-    if (!req.file) {
-      return res.status(400).json({ success: false, message: "No file uploaded" });
+    if (req.file) {
+      const filePath = path.relative("public/uploads", req.file.path);
+      leaveApp.attachment = filePath;
     }
-
-    const filePath = path.relative("public/uploads", req.file.path);
-    leaveApp.attachment = filePath;
 
     try {
       // Add next user ID
