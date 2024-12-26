@@ -14,10 +14,10 @@ export const login = asyncHandler(async (req, res) => {
     return res.status(400).json({ success: false, message: "Please provide all fields" });
   }
 
-  // Check if email user exists
+  // Check if user exists and if user is deactivated
   const foundUser = await User.findOne({ email }).exec();
 
-  if (!foundUser) {
+  if (!foundUser || foundUser.na === true) {
     return res.status(401).json({ success: false, message: "Unauthorized" });
   }
 
