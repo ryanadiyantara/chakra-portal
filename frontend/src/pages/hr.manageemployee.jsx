@@ -402,7 +402,7 @@ const ManageEmployee = () => {
                         >
                           <Td
                             borderColor={borderColor}
-                            width={{ base: "100px", xl: "200px" }}
+                            width={{ base: "100px", xl: "300px" }}
                             p="0px"
                           >
                             <Flex direction="row">
@@ -416,7 +416,7 @@ const ManageEmployee = () => {
                                 height="40px"
                                 mr="10px"
                               />
-                              <Flex direction="column" width={{ base: "auto", sm: "150px" }}>
+                              <Flex direction="column" width={{ base: "100px", xl: "300px" }}>
                                 <Text fontSize="md" color={textColor} fontWeight="bold">
                                   {user.user_name}
                                 </Text>
