@@ -54,6 +54,7 @@ const ManageEvent = () => {
   const [inputValue, setInputValue] = useState("");
   const [selectedEventName, setSelectedEventName] = useState(null);
   const [selectedEventPid, setSelectedEventPid] = useState(null);
+  const [showPastEvents, setShowPastEvents] = useState(false);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase());
@@ -141,6 +142,21 @@ const ManageEvent = () => {
     setEditingEventId(null);
   };
 
+  const handleSwitchEvent = () => {
+    setShowPastEvents((prev) => !prev);
+    setNewEvent({
+      event_name: "",
+      poster: "",
+      event_startDate: "",
+      event_endDate: "",
+      description: "",
+    });
+    document.querySelector('input[type="file"]').value = "";
+    setErrors({});
+    setIsEditing(false);
+    setEditingEventId(null);
+  };
+
   const openDeleteModal = (name, pid) => {
     setSelectedEventName(name);
     setSelectedEventPid(pid);
@@ -158,6 +174,12 @@ const ManageEvent = () => {
   useEffect(() => {
     fetchEvent();
   }, [fetchEvent]);
+
+  const filteredEvents = events.filter((event) =>
+    showPastEvents
+      ? new Date(event.event_startDate) < new Date()
+      : new Date(event.event_startDate) > new Date()
+  );
 
   const handleSubmit = async () => {
     const currentErrors = {
@@ -327,12 +349,12 @@ const ManageEvent = () => {
                 <Button
                   fontSize="xs"
                   as={Link}
-                  to="/hr/eventhistory"
+                  onClick={handleSwitchEvent}
                   variant="primary"
                   maxH="30px"
                   borderRadius="5px"
                 >
-                  Event History
+                  {showPastEvents ? "Show Upcoming Events" : "Show Past Events"}
                 </Button>
                 <Box>
                   <Input
@@ -372,7 +394,7 @@ const ManageEvent = () => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {events
+                  {filteredEvents
                     .filter((event) => !event.na)
                     .filter((event) => !event.del)
                     .filter((event) => {
@@ -404,7 +426,6 @@ const ManageEvent = () => {
                         event.description.toLowerCase().includes(searchQuery)
                       );
                     })
-                    .filter((event) => new Date(event.event_startDate) > new Date())
                     .sort((a, b) => new Date(a.event_startDate) - new Date(b.event_startDate))
                     .map((event) => (
                       <Tr
