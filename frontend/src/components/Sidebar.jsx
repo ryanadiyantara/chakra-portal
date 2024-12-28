@@ -58,7 +58,6 @@ function Sidebar() {
         { path: "/hr/masterposition", name: "Master Position", icon: <SupportIcon /> },
         { path: "/hr/manageemployee", name: "Manage Employee", icon: <PersonIcon /> },
         { path: "/hr/manageevent", name: "Manage Event", icon: <HomeIcon /> },
-        { path: "/hr/eventhistory", name: "Event History", hidden: true },
         { path: "/hr/employeeterminated", name: "Employee Terminated", icon: <PersonIcon /> },
         { path: "/hr/leaveapproval", name: "Leave Approval", icon: <RocketIcon /> },
       ],

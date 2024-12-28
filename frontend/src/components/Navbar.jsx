@@ -38,7 +38,6 @@ function Navbar() {
     { path: "/hr/masterdepartment", name: "Master Department", category: "Human Resource" },
     { path: "/hr/masterposition", name: "Master Position", category: "Human Resource" },
     { path: "/hr/manageevent", name: "Manage Event", category: "Human Resource" },
-    { path: "/hr/eventhistory", name: "Event History", category: "Human Resource" },
     { path: "/hr/manageemployee", name: "Manage Employee", category: "Human Resource" },
     { path: "/hr/employeeterminated", name: "Employee Terminated", category: "Human Resource" },
     { path: "/hr/leaveapproval", name: "Leave Approval", category: "Human Resource" },
